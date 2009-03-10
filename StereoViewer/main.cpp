@@ -222,9 +222,13 @@ bool checkWiimote()
 float eye_sep_x = 0, eye_sep_y = 0, inv_eye_dist = 0;
 
 void display_scene(float, float);
+void update_user_position(int x, int y);
 
 void display(void)
 {
+    check_camera();
+    update_user_position(roi_center.x * 1024 / 640, roi_center.y * 768 / 480);
+
 	glDrawBuffer(GL_BACK_LEFT);
 	display_scene(eye_sep_x, eye_sep_y);
 	glDrawBuffer(GL_BACK_RIGHT);
@@ -256,17 +260,21 @@ void display_scene(float eye_sep_x, float eye_sep_y)
 
     glDisable(GL_LIGHTING);
     // draw grid
+    int half_w_w = w_w * .5f,
+        half_w_h = w_h * .5f,
+        grid_step = 64;
+
     glColor3f(0.7f, 0.7f, 0.7f);
     glBegin(GL_LINES);
-    for(int i=-512;i<=512;i+=32)
+    for(int i=-half_w_w; i<=half_w_w; i+=grid_step)
     {
-        glVertex3f(i,-384,0);
-        glVertex3f(i,384,0);
+        glVertex3f(i, -half_w_h, 0);
+        glVertex3f(i, half_w_h, 0);
     }
-    for(int j=-384;j<=384;j+=32)
+    for(int j=-half_w_h; j<=half_w_h; j+=grid_step)
     {
-        glVertex3f(-512,j,0);
-        glVertex3f(512,j,0);
+        glVertex3f(-half_w_w, j, 0);
+        glVertex3f(half_w_w, j, 0);
     }
 
     glEnd();
@@ -340,9 +348,9 @@ void update_user_position(int x, int y)
 //
 void Motion(int x, int y)
 {
-    if (Buttons[0])
+    /*if (Buttons[0])
         update_user_position(x, y);
-    else if (Buttons[2])
+    else*/ if (Buttons[2])
         cam_pos.z = user_height + (y-w_w*0.5);
 
 	glutPostRedisplay();
@@ -367,7 +375,7 @@ void Mouse(int b,int s,int x,int y)
 	case GLUT_LEFT_BUTTON:
 		Buttons[0] = ((GLUT_DOWN==s)?1:0);
 
-        update_user_position(x, y);
+        //update_user_position(x, y);
 
         break;
 	case GLUT_MIDDLE_BUTTON:
@@ -393,7 +401,7 @@ int main(int argc,char** argv)
 	glutInit(&argc,argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_STEREO);
 
-	if ( 1 ) //argc > 2 && strcmp(argv[2], "f") == 0)
+	if ( 0 ) //argc > 2 && strcmp(argv[2], "f") == 0)
 	{	// Enter game mode:
 		char mode_string[100];
 		sprintf(mode_string, "%dx%d:%d@%d", 1024, 768, 25, 120);
@@ -411,7 +419,7 @@ int main(int argc,char** argv)
 	//glutFullScreen();
     glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-	GLfloat LightPosition[]={ 0.0f, 1300.0f, 500.0f, 1.0f };
+	GLfloat LightPosition[]={ 0.0f, 50.0f, 500.0f, 1.0f };
 	GLfloat LightIntensity[]={ 0.2f, 0.2f, 0.2f, 1.0f };
 	glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, LightIntensity);

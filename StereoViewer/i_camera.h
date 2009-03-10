@@ -5,14 +5,12 @@
 #include <math.h>
 //#include "dc1394_control.h"
 
-#define TABLE_SCREEN_CENTER cvPoint(325, 400)
-
 IplImage *image0 = 0, *image1 = 0, *image2 = 0;
 CvCapture* capture = 0;
 CvSize size;
 
 int  w0, h0,i;
-int  ideal_int, int_tol, ideal_hue, hue_tol;
+int  ideal_int, int_tol, ideal_hue, hue_tol, top_hat_int;
 int  l,level = 4;
 int  l_comp;
 int block_size = 1000;
@@ -23,7 +21,8 @@ CvConnectedComp *cur_comp, min_comp;
 CvSeq *comp;
 CvMemStorage *storage;
 
-CvPoint roi_center = {410, 270},
+CvPoint table_center = {336, 236},
+        roi_center = {410, 270},
         roi_2 = {50, 50};
 CvPoint2D32f corners[3], prev_corners[3];  // triangle points
 int corner_ctr[3];        // number of img points belonging to a corner (for averaging)
@@ -57,7 +56,48 @@ int get_hue(const char* rgb)
     if (mx == b) return (int)(60 * (float)(r-g) / (mx-mn) + 240);
 }
 
-void ON_SEGMENT(int a)
+void copy_pixel(char* dst, float val)
+{
+    dst[0] = val; dst[1] = val; dst[2] = val;
+}
+
+void copy_pixel(char* dst, char* src, float factor = 1)
+{
+    dst[0] = src[0] * factor;
+    dst[1] = src[1] * factor;
+    dst[2] = src[2] * factor;
+}
+
+void filter_image(IplImage *src, IplImage *dst, int xs, int xe, int ys, int ye)
+{
+    int th_rad_o = 3, th_rad_i = 1, // top hat filter radii
+        nx_e, nx_s, ny_e, ny_s,
+        max_i, min_o;
+    for (int y = ys; y < ye; y++)
+        for (int x = xs; x < xe; x++)
+        {
+            ny_s = max(ys, y - th_rad_o); ny_e = min(ye, y + th_rad_o);
+            nx_s = max(xs, x - th_rad_o); nx_e = min(xe, x + th_rad_o);
+            max_i = 0; min_o = 255;
+            for (int ny = ny_s; ny < ny_e; ny++)
+                for (int nx = nx_s; nx < nx_e; nx++)
+                    if (abs(nx-x) + abs(ny-y) < th_rad_i) // nearer neighbors
+                        max_i = max( max_i, get_intensity(&src->imageData[ny*src->width*3 + nx*3]) );
+                    else
+                        min_o = min( min_o, get_intensity(&src->imageData[ny*src->width*3 + nx*3]) );
+
+            if ((max_i - min_o) > top_hat_int)
+                copy_pixel(&dst->imageData[y*src->width*3 + x*3], &src->imageData[y*src->width*3 + x*3]);
+            else
+                copy_pixel(&dst->imageData[y*src->width*3 + x*3], 0.f);
+        }
+
+    for (int y = ys; y < ye; y++)
+        for (int x = xs; x < xe; x++)
+            copy_pixel(&src->imageData[y*src->width*3 + x*3], &dst->imageData[y*src->width*3 + x*3]);
+}
+
+void apply_threshold(int a)
 {
     int i;
     // init corners:
@@ -80,6 +120,9 @@ void ON_SEGMENT(int a)
         y_end = min(image0->height, roi_center.y + roi_2.y),
         x_start = max(0, roi_center.x - roi_2.x),
         x_end = min(image0->width, roi_center.x + roi_2.x);
+
+    // apply top-hat filter to the pixels at roi
+    filter_image(image0, image1, x_start, x_end, y_start, y_end);
 
     for (int y = y_start; y < y_end; y++)
         for (int x = x_start; x < x_end; x++)
@@ -127,7 +170,7 @@ void ON_SEGMENT(int a)
     roi_center = cvPoint( (corners[0].x+corners[1].x+corners[2].x) * 0.3333f,
                           (corners[0].y+corners[1].y+corners[2].y) * 0.3333f );
 
-    cvLine( image1, roi_center, TABLE_SCREEN_CENTER, CV_RGB(255,255,255), 1, CV_AA, 0 );
+    cvLine( image1, roi_center, table_center, CV_RGB(255,255,255), 1, CV_AA, 0 );
 
     cvShowImage("MediaLab Demo", image1);
 }
@@ -172,13 +215,15 @@ void init_fiwi_camera()
     int_tol = 30;
     ideal_hue = 60;
     hue_tol = 30;
+    top_hat_int = 90;
 
     cvNamedWindow( "MediaLab Demo", CV_WINDOW_AUTOSIZE );
     //cvNamedWindow( "MediaLab Demo - Right Frame", CV_WINDOW_AUTOSIZE );
-    cvCreateTrackbar("Ideal Intensity", "MediaLab Demo", &ideal_int, 255, ON_SEGMENT);
-    cvCreateTrackbar("Intensity Tol.", "MediaLab Demo", &int_tol, 50, ON_SEGMENT);
-    cvCreateTrackbar("Ideal Hue", "MediaLab Demo", &ideal_hue, 360, ON_SEGMENT);
-    cvCreateTrackbar("Hue Tol.", "MediaLab Demo", &hue_tol, 30, ON_SEGMENT);
+    cvCreateTrackbar("Ideal Intensity", "MediaLab Demo", &ideal_int, 255, apply_threshold);
+    cvCreateTrackbar("Intensity Tol.", "MediaLab Demo", &int_tol, 50, apply_threshold);
+    cvCreateTrackbar("Ideal Hue", "MediaLab Demo", &ideal_hue, 360, apply_threshold);
+    cvCreateTrackbar("Hue Tol.", "MediaLab Demo", &hue_tol, 30, apply_threshold);
+    cvCreateTrackbar("Top-Hat Intensity Threshold", "MediaLab Demo", &top_hat_int, 255, apply_threshold);
 
     cvSetMouseCallback( "MediaLab Demo", on_mouse, 0 );
 }
@@ -214,7 +259,7 @@ void check_camera()
     cvCopy( frame, image0, 0 );
     cvCopy( image0, image1, 0 );
 
-    ON_SEGMENT(1);
+    apply_threshold(1);
 
     cvWaitKey(10);
 }
