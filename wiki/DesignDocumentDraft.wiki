@@ -50,7 +50,7 @@ class Geometry3D
     Material material;
 
     vector< Geometry* > children;
-    Vector3D translation;
+    Vector3D translation, scale;
     Rotation3D rotation; 
 
     void draw();
