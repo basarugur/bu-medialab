@@ -13,7 +13,7 @@ We shall only put the suitable _class members_, then data structure can be easil
 {{{
 class Vector3D
 {
-     float x, y, z;
+    float x, y, z;
 }
 
 class Face
