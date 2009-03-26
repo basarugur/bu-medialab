@@ -7,7 +7,7 @@
 ///-----------------------------------------------------------------------------
 
 #include <fstream>
-#include "geometry.h"
+#include "StereoAnalyzer.h"
 #include "vrml_io.h"
 #include <GL/glut.h>
 #include "wiimote.h"
@@ -15,6 +15,7 @@
 
 #define PI 3.141592654
 #define PI_HALF 1.570796327
+#define FULL_SCREEN 0
 
 class Rotation
 {
@@ -28,7 +29,7 @@ public:
 int w_w = 1024, w_h = 768;
 int user_height = 1300;     // kullanıcının ekran düzlemine göre yükseklii
 int user_to_screen = 900;   // kullanıcının ekran merkezine uzaklığı
-float user_yaw =  0.0;      // kullancının ekrana olan açısı: aşağı tıklarsan 0 saa tıklarsan 90 vs.
+float user_yaw =  0.0;      // kullanıcının ekrana olan açısı: aşağı tıklarsan 0 saa tıklarsan 90 vs.
 float K = 0.1;              // near clipping coefficient
 
 Rotation world_r(90, 0, 0), obj_r, cam_r;
@@ -43,12 +44,15 @@ unsigned char Buttons[3] = {0};
 bool object_mode = false;
 
 Geometry *g;
+StereoAnalyzer* stereo_anl;
 
 //-------------------------------------------------------------------------------
 /// \brief	Initialises the openGL scene
 ///
 void Init()
 {
+    stereo_anl = new StereoAnalyzer(43.0, 640.0, 480.0, 12.0); // actual values
+
 	init_fiwi_camera();
 }
 
@@ -221,28 +225,36 @@ bool checkWiimote()
 ///
 float eye_sep_x = 0, eye_sep_y = 0, inv_eye_dist = 0;
 
-void display_scene(float, float);
+void display_scene(float, float, float);
 void update_user_position(int x, int y);
+
+float rz1 = 0;
 
 void display(void)
 {
-    check_camera();
-    update_user_position(roi_center.x * 1024 / 640, roi_center.y * 768 / 480);
+    check_fiwi_camera();
 
-	glDrawBuffer(GL_BACK_LEFT);
-	display_scene(eye_sep_x, eye_sep_y);
+    stereo_anl->findLocationVector(cornersR, cornersL, headPosition, lookVector, coord_trans_4x4);
+    lookVector = Point::normalize(lookVector);
+    printf("HP: %01.2f %01.2f %01.2f - LV: %01.2f %01.2f %01.2f\n",
+            headPosition.x, headPosition.y, headPosition.z,
+            lookVector.x, lookVector.y, lookVector.z);
+    //update_user_position(roi_center.x * 1024 / 640, roi_center.y * 768 / 480);
+
+    glDrawBuffer(GL_BACK_LEFT);
+	display_scene(eye_sep_x, eye_sep_y, rz1);
 	glDrawBuffer(GL_BACK_RIGHT);
-	display_scene(-eye_sep_x, -eye_sep_y);
+	display_scene(-eye_sep_x, -eye_sep_y, rz1);
 }
 
-void display_scene(float eye_sep_x, float eye_sep_y)
+void display_scene(float eye_sep_x, float eye_sep_y, float rz)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	// rendele
+    // rendele
 	glFrustum( (-cam_pos.x-w_w*.5) * K, (-cam_pos.x+w_w*.5) * K,
 			   (-cam_pos.y-w_h*.5) * K, (-cam_pos.y+w_h*.5) * K,
 				user_height * K, user_height * 2);
@@ -252,8 +264,8 @@ void display_scene(float eye_sep_x, float eye_sep_y)
 
 	// sert bak
 	gluLookAt(cam_pos.x+eye_sep_x, cam_pos.y+eye_sep_y, cam_pos.z,
-			cam_pos.x+eye_sep_x, cam_pos.y+eye_sep_y, 0.0,
-			0, 1, 0.0);
+              cam_pos.x+eye_sep_x, cam_pos.y+eye_sep_y, 0.0,
+              0, 1, 0);
 
 	// kullanýcý hizasýndan ekranýn olduðu yere taþý
 	//glTranslatef(0.0, user_to_screen, 0.0);
@@ -296,6 +308,8 @@ void display_scene(float eye_sep_x, float eye_sep_y)
 
     glPushMatrix();
     glColor3f(0.7f, 1.f, 1.f);
+
+    glRotatef(rz, 0, 0, 1);
 
     // modeli çiz
     if (g != NULL)
@@ -348,9 +362,9 @@ void update_user_position(int x, int y)
 //
 void Motion(int x, int y)
 {
-    /*if (Buttons[0])
+    if (Buttons[0])
         update_user_position(x, y);
-    else*/ if (Buttons[2])
+    else if (Buttons[2])
         cam_pos.z = user_height + (y-w_w*0.5);
 
 	glutPostRedisplay();
@@ -375,7 +389,7 @@ void Mouse(int b,int s,int x,int y)
 	case GLUT_LEFT_BUTTON:
 		Buttons[0] = ((GLUT_DOWN==s)?1:0);
 
-        //update_user_position(x, y);
+        update_user_position(x, y);
 
         break;
 	case GLUT_MIDDLE_BUTTON:
@@ -398,10 +412,10 @@ void Mouse(int b,int s,int x,int y)
 ///
 int main(int argc,char** argv)
 {
-	glutInit(&argc,argv);
+    glutInit(&argc,argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_STEREO);
 
-	if ( 0 ) //argc > 2 && strcmp(argv[2], "f") == 0)
+	if ( FULL_SCREEN ) //argc > 2 && strcmp(argv[2], "f") == 0)
 	{	// Enter game mode:
 		char mode_string[100];
 		sprintf(mode_string, "%dx%d:%d@%d", 1024, 768, 25, 120);

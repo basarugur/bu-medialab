@@ -3,29 +3,40 @@
 #include "stdio.h"
 #include <algorithm>
 #include <math.h>
-//#include "dc1394_control.h"
+#include "dc1394_control.h"
 
-IplImage *image0 = 0, *image1 = 0, *image2 = 0;
+IplImage *imageL = 0, *imageR = 0, *imageBuf = 0;
 CvCapture* capture = 0;
-CvSize size;
 
-int  w0, h0,i;
 int  ideal_int, int_tol, ideal_hue, hue_tol, top_hat_int;
-int  l,level = 4;
+int  l, level = 4;
 int  l_comp;
-int block_size = 1000;
-float  parameter;
-double rezult, min_rezult;
-CvFilter filter = CV_GAUSSIAN_5x5;
-CvConnectedComp *cur_comp, min_comp;
-CvSeq *comp;
-CvMemStorage *storage;
+
+#define STEREO true
+#define SHOW_BOTH_WINDOWS true
+#define ROI_HALF 50
 
 CvPoint table_center = {336, 236},
-        roi_center = {410, 270},
-        roi_2 = {50, 50};
-CvPoint2D32f corners[3], prev_corners[3];  // triangle points
-int corner_ctr[3];        // number of img points belonging to a corner (for averaging)
+        roi_centerL = {410, 270}, roi_centerR = {410, 270},
+        roi_2 = {ROI_HALF, ROI_HALF};
+
+CvPoint2D32f cornersL[3], prev_cornersL[3],
+             cornersR[3], prev_cornersR[3];  // LED triangle corners on the image
+
+float M_data[4][4] = { {0.76537,    0.47926,  0.45804, -114.63},
+                       {0.57352,   -0.57671, -0.65950,  123.04},
+                       {0.0068819,  0.62096, -0.43108,  162.72},
+                       {0,          0,        0,        1} };
+Matrix4x4 coord_trans_4x4(M_data);
+
+int corner_ctr[3]; // number of img points belonging to a corner (for averaging)
+
+Point headPosition, lookVector; // actual 3D points
+
+raw1394handle_t rh; // firewire camera handle
+nodeid_t* nid; // camera node ids array
+
+int intensity[ROI_HALF*2][ROI_HALF*2], hue[ROI_HALF*2][ROI_HALF*2]; // buffers;
 
 using namespace std;
 
@@ -70,26 +81,48 @@ void copy_pixel(char* dst, char* src, float factor = 1)
 
 void filter_image(IplImage *src, IplImage *dst, int xs, int xe, int ys, int ye)
 {
-    int th_rad_o = 3, th_rad_i = 1, // top hat filter radii
+    int th_rad_o = 5, th_rad_i = 1, // top hat filter radii
         nx_e, nx_s, ny_e, ny_s,
-        max_i, min_o;
+        avg_i, avg_o, avg_i_ctr, avg_o_ctr,
+        max_i, min_o,
+        th_hue_tol = 15;
+
+    for (int y = ys; y < ye; y++)
+        for (int x = xs; x < xe; x++)
+        {
+            intensity[y-ys][x-xs] = get_intensity(&src->imageData[y*src->width*3 + x*3]);
+            hue[y-ys][x-xs] = get_hue(&src->imageData[y*src->width*3 + x*3]);
+        }
+
     for (int y = ys; y < ye; y++)
         for (int x = xs; x < xe; x++)
         {
             ny_s = max(ys, y - th_rad_o); ny_e = min(ye, y + th_rad_o);
             nx_s = max(xs, x - th_rad_o); nx_e = min(xe, x + th_rad_o);
+            avg_i = avg_o = avg_i_ctr = avg_o_ctr = 0;
             max_i = 0; min_o = 255;
             for (int ny = ny_s; ny < ny_e; ny++)
                 for (int nx = nx_s; nx < nx_e; nx++)
                     if (abs(nx-x) + abs(ny-y) < th_rad_i) // nearer neighbors
-                        max_i = max( max_i, get_intensity(&src->imageData[ny*src->width*3 + nx*3]) );
+                    {
+                        max_i = max( max_i, intensity[ny-ys][nx-xs] );
+                        avg_i += hue[ny-ys][nx-xs];
+                        avg_i_ctr++;
+                    }
                     else
-                        min_o = min( min_o, get_intensity(&src->imageData[ny*src->width*3 + nx*3]) );
+                    {
+                        min_o = min( min_o, intensity[ny-ys][nx-xs] );
+                        /*avg_o += get_intensity(&src->imageData[ny*src->width*3 + nx*3]);
+                        avg_o_ctr++;*/
+                    }
 
-            if ((max_i - min_o) > top_hat_int)
+            if (avg_i_ctr != 0)
+                avg_i /= avg_i_ctr;
+            //if ( max_i - min_o > top_hat_int )
+            if ( (avg_i > 60 - th_hue_tol && avg_i < 60 + th_hue_tol) && min_o < 30 && max_i > ideal_int)
                 copy_pixel(&dst->imageData[y*src->width*3 + x*3], &src->imageData[y*src->width*3 + x*3]);
             else
-                copy_pixel(&dst->imageData[y*src->width*3 + x*3], 0.f);
+                copy_pixel(&dst->imageData[y*src->width*3 + x*3], 40.f);
         }
 
     for (int y = ys; y < ye; y++)
@@ -97,7 +130,9 @@ void filter_image(IplImage *src, IplImage *dst, int xs, int xe, int ys, int ye)
             copy_pixel(&src->imageData[y*src->width*3 + x*3], &dst->imageData[y*src->width*3 + x*3]);
 }
 
-void apply_threshold(int a)
+void apply_threshold(IplImage *src, IplImage* dst,
+                     CvPoint& roi_center, CvPoint2D32f* corners, CvPoint2D32f* prev_corners,
+                     char* window_name)
 {
     int i;
     // init corners:
@@ -117,23 +152,22 @@ void apply_threshold(int a)
     cvGetRawData( image[1], &dst_data, &dst_step, &dst_size );
 */
     int y_start = max(0, roi_center.y - roi_2.y),
-        y_end = min(image0->height, roi_center.y + roi_2.y),
+        y_end = min(src->height, roi_center.y + roi_2.y),
         x_start = max(0, roi_center.x - roi_2.x),
-        x_end = min(image0->width, roi_center.x + roi_2.x);
+        x_end = min(src->width, roi_center.x + roi_2.x);
 
-    // apply top-hat filter to the pixels at roi
-    filter_image(image0, image1, x_start, x_end, y_start, y_end);
+    filter_image(src, dst, x_start, x_end, y_start, y_end);
 
     for (int y = y_start; y < y_end; y++)
         for (int x = x_start; x < x_end; x++)
         {
-            intensity = get_intensity( &image0->imageData[y*image0->width*3 + x*3] );
+            intensity = get_intensity( &src->imageData[y*src->width*3 + x*3] );
             if (intensity > ideal_int - int_tol && intensity < ideal_int + int_tol &&
-                (hue = get_hue(&image0->imageData[y*image0->width*3 + x*3])) > ideal_hue - hue_tol && hue < ideal_hue + hue_tol )
+                (hue = get_hue(&src->imageData[y*src->width*3 + x*3])) > ideal_hue - hue_tol && hue < ideal_hue + hue_tol )
             {
-                image1->imageData[y*image0->width*3 + x*3 + 0] = 255;
-                image1->imageData[y*image0->width*3 + x*3 + 1] = 255;
-                image1->imageData[y*image0->width*3 + x*3 + 2] = 255;
+                dst->imageData[y*src->width*3 + x*3 + 0] = 255;
+                dst->imageData[y*src->width*3 + x*3 + 1] = 255;
+                dst->imageData[y*src->width*3 + x*3 + 2] = 255;
                 for (i=0; i<3; i++)
                     // if in vicinity or null, assign by online averaging
                     if ( in_vicinity_or_null(cvPoint(x, y), cvPointFrom32f(corners[i])) &&
@@ -149,9 +183,9 @@ void apply_threshold(int a)
             }
             else
             {
-                image1->imageData[y*image0->width*3 + x*3 + 0] = 0;
-                image1->imageData[y*image0->width*3 + x*3 + 1] = 0;
-                image1->imageData[y*image0->width*3 + x*3 + 2] = 0;
+                dst->imageData[y*src->width*3 + x*3 + 0] = 0;
+                dst->imageData[y*src->width*3 + x*3 + 1] = 0;
+                dst->imageData[y*src->width*3 + x*3 + 2] = 0;
             }
         }
 
@@ -165,37 +199,83 @@ void apply_threshold(int a)
     }
 
     for (i=0; i<3; i++)
-        cvLine( image1, cvPointFrom32f(corners[i]), cvPointFrom32f(corners[(i+1)%3]), CV_RGB( 255*(i==0), 255*(i==1), 255*(i==2) ), 1, CV_AA, 0 );
+        cvLine( dst, cvPointFrom32f(corners[i]), cvPointFrom32f(corners[(i+1)%3]), CV_RGB( 255*(i==2), 255*(i==1), 255*(i==0) ), 1, CV_AA, 0 );
 
     roi_center = cvPoint( (corners[0].x+corners[1].x+corners[2].x) * 0.3333f,
                           (corners[0].y+corners[1].y+corners[2].y) * 0.3333f );
 
-    cvLine( image1, roi_center, table_center, CV_RGB(255,255,255), 1, CV_AA, 0 );
+    //cvLine( dst, roi_center, table_center, CV_RGB(255,255,255), 1, CV_AA, 0 );
 
-    cvShowImage("MediaLab Demo", image1);
+    /*cvPyrSegmentation(image0, image1, storage, &comp,
+                      level, threshold1+1, threshold2+1);
+*/
+
+    /*l_comp = comp->total;
+
+    i = 0;
+    min_comp.value = cvScalarAll(0);
+    while(i<l_comp)
+    {
+        cur_comp = (CvConnectedComp*)cvGetSeqElem ( comp, i );
+        if(fabs(255- min_comp.value.val[0])>
+           fabs(255- cur_comp->value.val[0]) &&
+           fabs(min_comp.value.val[1])>
+           fabs(cur_comp->value.val[1]) &&
+           fabs(min_comp.value.val[2])>
+           fabs(cur_comp->value.val[2]) )
+           min_comp = *cur_comp;
+        i++;
+    }*/
+
+    if (window_name == "MediaLab Demo" || SHOW_BOTH_WINDOWS)
+        cvShowImage(window_name, dst);
 }
 
-void on_mouse( int event, int x, int y, int flags, void* param )
+void on_mouseL( int event, int x, int y, int flags, void* param )
 {
-    if( !image0 )
-        return;
+    if( !imageL ) return;
 
-    if( image0->origin )
-        y = image0->height - y;
+    if( imageL->origin ) y = imageL->height - y;
 
     if( event == CV_EVENT_LBUTTONDOWN )
     {
-        roi_center = cvPoint(x,y);
-        for (i=0; i<3; i++)
-            prev_corners[i] = cvPoint2D32f(0, 0);
+        roi_centerL = cvPoint(x,y);
+        roi_centerR = cvPoint(x-5,y);
+
+        for (int i=0; i<3; i++)
+            prev_cornersL[i] = cvPoint2D32f(0, 0);
     }
 }
 
+void on_mouseR( int event, int x, int y, int flags, void* param )
+{
+    if( !imageR ) return;
+
+    if( imageR->origin ) y = imageL->height - y;
+
+    if( event == CV_EVENT_LBUTTONDOWN )
+    {
+        roi_centerR = cvPoint(x,y);
+        roi_centerL = cvPoint(x+5,y);
+
+        for (int i=0; i<3; i++)
+            prev_cornersR[i] = cvPoint2D32f(0, 0);
+    }
+}
+
+void on_trackbar(int foo)
+{
+    cvCopy( imageL, imageBuf, 0 );
+    apply_threshold(imageL, imageBuf, roi_centerL, cornersL, prev_cornersL, "MediaLab Demo");
+}
+
+void check_fiwi_camera();
+
 void init_fiwi_camera()
 {
-    /*raw1394handle_t rh = dc1394_create_handle( 0 );
+    rh = dc1394_create_handle( 0 );
     int num_cam;
-    nodeid_t* nid = dc1394_get_camera_nodes(rh, &num_cam, 0);*/
+    nid = dc1394_get_camera_nodes(rh, &num_cam, 0);
 
     capture = cvCaptureFromCAM( CV_CAP_ANY );
 
@@ -211,65 +291,81 @@ void init_fiwi_camera()
 
     printf( "\tPress ESC to quit the program\n" );
 
-    ideal_int = 200;
-    int_tol = 30;
+    ideal_int = 140;
+    int_tol = 90;
     ideal_hue = 60;
     hue_tol = 30;
     top_hat_int = 90;
 
     cvNamedWindow( "MediaLab Demo", CV_WINDOW_AUTOSIZE );
-    //cvNamedWindow( "MediaLab Demo - Right Frame", CV_WINDOW_AUTOSIZE );
-    cvCreateTrackbar("Ideal Intensity", "MediaLab Demo", &ideal_int, 255, apply_threshold);
-    cvCreateTrackbar("Intensity Tol.", "MediaLab Demo", &int_tol, 50, apply_threshold);
-    cvCreateTrackbar("Ideal Hue", "MediaLab Demo", &ideal_hue, 360, apply_threshold);
-    cvCreateTrackbar("Hue Tol.", "MediaLab Demo", &hue_tol, 30, apply_threshold);
-    cvCreateTrackbar("Top-Hat Intensity Threshold", "MediaLab Demo", &top_hat_int, 255, apply_threshold);
+    if (STEREO && SHOW_BOTH_WINDOWS)
+        cvNamedWindow( "MediaLab Demo - R", CV_WINDOW_AUTOSIZE );
+    cvCreateTrackbar("Ideal Intensity", "MediaLab Demo", &ideal_int, 255, on_trackbar);
+    cvCreateTrackbar("Intensity Tol.", "MediaLab Demo", &int_tol, 50, on_trackbar);
+    cvCreateTrackbar("Ideal Hue", "MediaLab Demo", &ideal_hue, 360, on_trackbar);
+    cvCreateTrackbar("Hue Tol.", "MediaLab Demo", &hue_tol, 30, on_trackbar);
+    cvCreateTrackbar("Top-Hat Intensity Threshold", "MediaLab Demo", &top_hat_int, 255, on_trackbar);
 
-    cvSetMouseCallback( "MediaLab Demo", on_mouse, 0 );
-}
-
-void check_camera()
-{
-    IplImage *frame = 0, *frame2 = 0;
-    int k, c;
-
-    /*if (dc1394_set_pan(rh, nid[0], 0) == DC1394_SUCCESS )
-    {
-        frame2 = cvQueryFrame( capture );
-        if (frame2)
-            cvShowImage("MediaLab Demo - Right Frame", frame2);
-    }
-    sleep(0.033);*/
-    //if (dc1394_set_pan(rh, nid[0], 1) == DC1394_SUCCESS)
-    frame = cvQueryFrame( capture );
-
-    if( !frame )
-        return;
-
-    if( !image0 )
-    {
-        // allocate all the buffers
-        image0 = cvCreateImage( cvGetSize(frame), 8, 3 );
-        cvResizeWindow("MediaLab Demo", image0->width, image0->height + 190);
-        cvMoveWindow("MediaLab Demo", 1024, 0);
-        image0->origin = frame->origin;
-        image1 = cvCreateImage( cvGetSize(frame), 8, 3 );
-    }
-
-    cvCopy( frame, image0, 0 );
-    cvCopy( image0, image1, 0 );
-
-    apply_threshold(1);
+    cvSetMouseCallback( "MediaLab Demo", on_mouseL, 0 );
+    if (STEREO && SHOW_BOTH_WINDOWS)
+        cvSetMouseCallback( "MediaLab Demo - R", on_mouseR, 0 );
 
     cvWaitKey(10);
+}
+int pan_ctr = 0;
+void check_fiwi_camera()
+{
+    int k, c;
+
+    if (dc1394_set_pan(rh, nid[0], 1) == DC1394_SUCCESS)
+        imageL = cvQueryFrame( capture );
+    else
+        printf("(!) Couldn't apply panning.\n");
+
+    if( !imageL )
+    {
+        printf("(!) Couldn't get the frame.\n");
+        return;
+    }
+
+    if( !imageBuf )
+    {
+        cvResizeWindow("MediaLab Demo", imageL->width, imageL->height + 230);
+        cvMoveWindow("MediaLab Demo", 1024, 0);
+
+        imageBuf = cvCreateImage( cvGetSize(imageL), 8, 3 );
+    }
+
+    cvCopy( imageL, imageBuf, 0 );
+
+    apply_threshold(imageL, imageBuf, roi_centerL, cornersL, prev_cornersL, "MediaLab Demo");
+
+    sleep(0.033); // to prevent stereo panning glitches (?)
+
+    if (STEREO)
+    {
+        if (dc1394_set_pan(rh, nid[0], 0) == DC1394_SUCCESS )
+            imageR = cvQueryFrame( capture );
+
+        if (!imageR)
+            return;
+
+        cvCopy( imageR, imageBuf, 0 );
+        apply_threshold(imageR, imageBuf, roi_centerR, cornersR, prev_cornersR, "MediaLab Demo - R");
+    }
+
+    c = cvWaitKey(500); // wait for processing
 }
 
 void release_camera()
 {
-    cvReleaseImage(&image0);
-    cvReleaseImage(&image1);
+    cvReleaseImage(&imageL);
+    cvReleaseImage(&imageR);
+    cvReleaseImage(&imageBuf);
 
-    //dc1394_destroy_handle(rh);
+    dc1394_destroy_handle(rh);
     cvReleaseCapture( &capture );
     cvDestroyWindow("MediaLab Demo");
+    if (STEREO && SHOW_BOTH_WINDOWS)
+        cvDestroyWindow("MediaLab Demo - R");
 }
