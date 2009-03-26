@@ -117,26 +117,33 @@ class Matrix4x4
 public: // Methods
 	Matrix4x4()
 	{
-		for (int i=0; i<16; i++)
-			data[i] = 0.0f;
+		for (int i=0; i<4; i++)
+            for (int j=0; j<4; j++)
+                data[i][j] = 0.0f;
 	};
-	Matrix4x4(float* matrix)
+	Matrix4x4(float matrix[16]) // be careful to give 16 element arrays
 	{
-		for (int i=0; i<16; i++)
-			data[i] = matrix[i];
+		for (int i=0; i<4; i++)
+            for (int j=0; j<4; j++)
+                data[i][j] = matrix[i*4 + j];
+	};
+	Matrix4x4(float matrix[4][4]) // be careful to give 16 element arrays
+	{
+		for (int i=0; i<4; i++)
+            for (int j=0; j<4; j++)
+                data[i][j] = matrix[i][j];
 	};
 	Point operator*(Point p) const
 	{
-		// OpenGL keeps matrices in COLUMN-MAJOR order, so:
-		Point r(data[0] * p.x + data[4] * p.y + data[8] * p.z + data[12],
-				data[1] * p.x + data[5] * p.y + data[9] * p.z + data[13],
-				data[2] * p.x + data[6] * p.y + data[10] * p.z + data[14]);
-		float invLast = 1.0f / (data[3] * p.x + data[7] * p.y + data[11] * p.z + data[15]); // inverse of last cell of point coordinate
+		Point r(data[0][0] * p.x + data[0][1] * p.y + data[0][2] * p.z + data[0][3],
+				data[1][0] * p.x + data[1][1] * p.y + data[1][2] * p.z + data[1][3],
+				data[2][0] * p.x + data[2][1] * p.y + data[2][2] * p.z + data[2][3]);
+		float invLast = 1.0f / (data[3][0] * p.x + data[3][0] * p.y + data[3][2]* p.z + data[3][3]); // inverse of last cell of point coordinate
 		return r * invLast;
 	};
 
 public: // Variables
-	float data[16];
+	float data[4][4];
 };
 
 class Geometry
