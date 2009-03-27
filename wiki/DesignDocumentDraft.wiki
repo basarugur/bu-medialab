@@ -46,7 +46,7 @@ struct Material // simple material definition, not "appearance"
 class Geometry3D
 {
     vector< Vector3D > points, normals, colors;
-    vector< vector<Face> > faces;
+    vector< vector<Face> > faces; // separate arrays for each n-gons (tri, quad, ..) 
     Material material;
 
     vector< Geometry* > children;
