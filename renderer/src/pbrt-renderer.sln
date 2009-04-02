@@ -1,0 +1,31 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "renderer", "renderer\renderer.vcproj", "{A4CAF4BA-A3D9-4C00-954D-CF22712D6E2E}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "user", "user\user.vcproj", "{B7F331F5-C5E0-4CC5-8343-584FEF8E5C1B}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{A4CAF4BA-A3D9-4C00-954D-CF22712D6E2E}.Debug.ActiveCfg = Debug|Win32
+		{A4CAF4BA-A3D9-4C00-954D-CF22712D6E2E}.Debug.Build.0 = Debug|Win32
+		{A4CAF4BA-A3D9-4C00-954D-CF22712D6E2E}.Release.ActiveCfg = Release|Win32
+		{A4CAF4BA-A3D9-4C00-954D-CF22712D6E2E}.Release.Build.0 = Release|Win32
+		{B7F331F5-C5E0-4CC5-8343-584FEF8E5C1B}.Debug.ActiveCfg = Debug|Win32
+		{B7F331F5-C5E0-4CC5-8343-584FEF8E5C1B}.Debug.Build.0 = Debug|Win32
+		{B7F331F5-C5E0-4CC5-8343-584FEF8E5C1B}.Release.ActiveCfg = Release|Win32
+		{B7F331F5-C5E0-4CC5-8343-584FEF8E5C1B}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
