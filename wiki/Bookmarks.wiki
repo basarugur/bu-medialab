@@ -1,0 +1,6 @@
+#summary Useful links
+#labels bookmarks,Phase-Implementation
+
+= Links =
+
+http://geekblog.nl/entry/24
