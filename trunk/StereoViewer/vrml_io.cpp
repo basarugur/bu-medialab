@@ -1,15 +1,188 @@
 /*	vrml_io.cpp: implementation
-	Authors: Basar Ugur & Isik Baris Fidaner */
+	Authors: Basar Ugur
+             Isik Baris Fidaner
+             Resid Cizmeci */
 
 #include <string>
 #include "vrml_io.h"
 #include "geometry.h"
 
+#define SCALE_NORM	100
+#define MAXCORNER	10
+
+void vrml_io::fillIndexedFaceSets(Geometry* g, ShapeNode* shapeNode)
+{
+    IndexedFaceSetNode* ifsNode;
+    CoordinateNode* coordNode;
+    if ((ifsNode = shapeNode->getIndexedFaceSetNodes()) != NULL)
+        coordNode = ifsNode->getCoordinateNodes();
+
+    if (ifsNode == NULL || coordNode == NULL)
+    {
+        cout << "(-) Shape does not have a valid Indexed Face Set." << endl;
+        return;
+    }
+    else
+        cout << "[+] Shape has a valid Indexed Face Set." << endl;
+
+    // Coordinate & Face related variables:
+	float temp_p[3];
+	int i, j, c,
+        corners[MAXCORNER], corner_ctr = 0;
+
+    // reset geometry:
+    g->normals.clear();
+    g->points.clear();
+    g->vertices.clear();
+    g->faces.clear();
+
+    for(j=0; j<coordNode->getNPoints(); j++)
+	{
+		coordNode->getPoint(j, temp_p);
+		Point newPoint(temp_p);
+		Point newNormal(0.0f, 0.0f, 0.0f);
+        Vertex newVertex;
+        if (g->points.empty()) // extrema stuff
+        {
+            g->pMax = g->pMin = newPoint;
+        }
+        else
+        {
+            if (temp_p[0] > g->pMax.x)
+                g->pMax.x = temp_p[0]; /*if (x>max) max=x;*/
+            else if (temp_p[0] < g->pMin.x)
+                g->pMin.x = temp_p[0]; /*if (x<min) min=x;*/
+
+            if (temp_p[1] > g->pMax.y)
+                g->pMax.y = temp_p[1];
+            else if (temp_p[1] < g->pMin.y)
+                g->pMin.y = temp_p[1];
+
+            if (temp_p[2] > g->pMax.z)
+                g->pMax.z = temp_p[2]; /*if (z>max) max=z;*/
+            else if (temp_p[2] < g->pMin.z)
+                g->pMin.z = temp_p[2]; /*if (z<min) min=z;*/
+        }
+
+        g->points.push_back(newPoint);
+        g->normals.push_back(newNormal);
+        g->vertices.push_back(newVertex);
+	}
+
+	for(i=0; i<ifsNode->getNCoordIndexes(); i++)
+	{
+		if(ifsNode->getCoordIndex(i) != -1) // -1: marking end
+		{
+			corners[corner_ctr++] = ifsNode->getCoordIndex(i);
+		}
+		else
+		{
+		    // if more than 3 corners, than multiple meshes are inserted accordingly
+			for (c=0; c<corner_ctr-2; c++)
+            {
+                corners[c] = corners[0];
+                Point surfaceNormal = Face::normal(g->points.at(corners[c]), g->points.at(corners[c+1]), g->points.at(corners[c+2]));
+                //int newCorners[3];
+                for (j=c; j<c+3; j++)
+                {
+                    g->normals[corners[j]] = g->normals[corners[j]] + surfaceNormal;
+                    g->vertices[corners[j]].faceIndices.push_back(g->faces.size());
+                    /*normals.push_back(surfaceNormal);
+                    vertices.push_back(points[corners[i+j]]);
+                    newCorners[j] = normals.size() - 1;*/
+                }
+
+                Face newFace(&corners[c]);
+                g->faces.push_back(newFace);
+            }
+
+			corner_ctr = 0;
+		}
+
+	}
+
+	//EXTRACT MATERIAL INFO
+	MaterialNode* mtrNode = shapeNode->getAppearanceNodes()->getMaterialNodes();
+
+	float color[3];
+
+	if(mtrNode == NULL)
+	{
+		cout << "(-) Shape does not have a valid material." << endl;
+		color[0] = color[1] = color[2] = 1.0;
+	}
+	else
+	{
+		cout << "[+] Shape has a valid material." << endl;
+
+		mtrNode->getDiffuseColor(color);
+
+		cout << color[0] << " " << color [1] << " " << color[2] <<endl;
+	}
+
+	g->colors.push_back(Point(color));
+
+    g->scale(SCALE_NORM, SCALE_NORM, SCALE_NORM);
+}
+
+bool vrml_io::read(SceneObject* o, const char* fileName, const char* objName)
+{
+	string choice;
+	SceneGraph *sceneGraph = new SceneGraph();
+
+	bool result = sceneGraph->load(fileName);
+	if(!result)
+	{
+		cout << "(-) Not a valid VRML 97 file. Check your source." << endl;
+		return false;
+	}
+
+	Node *node = sceneGraph->findNode(TRANSFORM_NODE, objName);
+	if (node == NULL) // Not "Transform" node, check Group node
+        node = sceneGraph->findNode(GROUP_NODE, objName);
+    else
+        node = node->getGroupNodes();
+
+	if(node == NULL)
+	{
+		cout << "(-) No object specified with given name." <<endl;
+		return false;
+	}
+	else
+	{
+	    cout << "[+] Object found with given name." <<endl;
+
+	    ShapeNode *tempNode = NULL;
+
+		if((tempNode = node->getShapeNodes()) == NULL)
+		{
+			cout << "(-) Object does not have a valid Shape." <<endl;
+			return false;
+		}
+		else
+		{
+			cout << "[+] Object has valid Shapes." << endl;
+
+            // traverse Shape nodes
+			while (tempNode != NULL)
+            {
+                Geometry g;
+                fillIndexedFaceSets(&g, tempNode);
+                o->children.push_back(g);
+                tempNode = tempNode->next();
+            }
+
+		}
+	}
+
+	return true;
+}
+
+/*  VRML 1.0 related, OLD and Beta stuff
+    .Actually, to be deleted. --Basar, Apr 6, 2009
+
 #define DONE		0
 #define NOT_FOUND  -1
-
-#define SCALE_NORM	5000
-#define MAXCORNER	10
 #define STR_MAX		128
 
 bool endsWith(string read, string word)
@@ -98,13 +271,13 @@ void vrml_io::read(Geometry* g, const char* filename, const char* objectName)
 					}
 					else
 					{
-						if (x > g->pMax.x) { g->pMax.x=x; /*if (x>max) max=x;*/ }
-						else if (x<g->pMin.x) { g->pMin.x=x; /*if (x<min) min=x;*/ }
+						if (x > g->pMax.x) { g->pMax.x=x; } //if (x>max) max=x;
+						else if (x<g->pMin.x) { g->pMin.x=x; } //if (x<min) min=x;
 						if (y > g->pMax.y)
 						{ g->pMax.y=y; if (y>max) max=y;	}
 						else if (y < g->pMin.y) { g->pMin.y=y; if (y<min) min=y; }
-						if (z > g->pMax.z) { g->pMax.z=z; /*if (z>max) max=z;*/ }
-						else if (z < g->pMin.z) { g->pMin.z=z; /*if (z<min) min=z;*/ }
+						if (z > g->pMax.z) { g->pMax.z=z; } // if (z>max) max=z;
+						else if (z < g->pMin.z) { g->pMin.z=z; } // if (z<min) min=z;
 					}
 
 					g->points.push_back(newPoint);
@@ -171,9 +344,9 @@ void vrml_io::read(Geometry* g, const char* filename, const char* objectName)
 						{
 							g->normals[corners[j]] = g->normals[corners[j]] + surfaceNormal;
 							g->vertices[corners[j]].faceIndices.push_back(g->faces.size());
-							/*normals.push_back(surfaceNormal);
-							vertices.push_back(points[corners[i+j]]);
-							newCorners[j] = normals.size() - 1;*/
+							// normals.push_back(surfaceNormal);
+							// vertices.push_back(points[corners[i+j]]);
+							// newCorners[j] = normals.size() - 1;
 						}
 
 						Face newFace(&corners[i]);
@@ -201,7 +374,7 @@ void vrml_io::read(Geometry* g, const char* filename, const char* objectName)
     g->scale(SCALE_NORM, SCALE_NORM, SCALE_NORM);
 
 	fclose(fp);
-}
+}*/
 
 void vrml_io::write(Geometry *g, const char* fileName, const char* objectName)
 {

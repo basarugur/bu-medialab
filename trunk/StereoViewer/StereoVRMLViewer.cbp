@@ -7,7 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="./wiimote-vrml-d" prefix_auto="1" extension_auto="1" />
+				<Option output="./stereo_viewer-d" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -16,7 +16,7 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="./wiimote-vrml" prefix_auto="1" extension_auto="1" />
+				<Option output="./stereo_viewer" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -31,6 +31,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add directory="/usr/include/opencv" />
+			<Add directory="/usr/include/libdc1394" />
 		</Compiler>
 		<Linker>
 			<Add library="/usr/lib/libGL.so" />
@@ -40,17 +41,23 @@
 			<Add library="/usr/lib/libcv.so" />
 			<Add library="/usr/lib/libdc1394_control.so" />
 			<Add library="/usr/lib/libhighgui.so" />
+			<Add library="/usr/lib/libcx3d.a" />
+			<Add library="/usr/lib/libxerces-c.so" />
+			<Add library="/usr/lib/libjpeg.so" />
+			<Add library="/usr/lib/libpng.so" />
 		</Linker>
+		<Unit filename="StereoAnalyzer.cpp" />
+		<Unit filename="StereoAnalyzer.h" />
 		<Unit filename="geometry.cpp" />
 		<Unit filename="geometry.h" />
 		<Unit filename="i_camera.h" />
 		<Unit filename="main.cpp" />
-		<Unit filename="vrml_io.cpp" />
-		<Unit filename="vrml_io.h" />
-		<Unit filename="wiimote.h" />
 		<Unit filename="version.h">
 			<Option target="Release" />
 		</Unit>
+		<Unit filename="vrml_io.cpp" />
+		<Unit filename="vrml_io.h" />
+		<Unit filename="wiimote.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

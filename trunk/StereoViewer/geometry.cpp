@@ -18,11 +18,9 @@ static char THIS_FILE[]=__FILE__;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-Geometry::Geometry(const char* fileName, const char* objectName)
+Geometry::Geometry()
 {
-	weight = 0.0;
-	vrml_io reader;
-	reader.read(this, fileName, objectName);
+    weight = 0.0;
 }
 
 Geometry::~Geometry()
@@ -78,14 +76,19 @@ bool Geometry::onArea( int pi, int ai )
 
 void Geometry::draw()
 {
-    glBegin(GL_TRIANGLES);
-	for (vector<Face>::iterator i = faces.begin(); i != faces.end(); i++)
-		for (int c=0; c<3; c++)
-		{
-			glNormal3f(normals.at(i->indices[c]).x, normals.at(i->indices[c]).y, normals.at(i->indices[c]).z);
-			glVertex3f(points.at(i->indices[c]).x, points.at(i->indices[c]).y, points.at(i->indices[c]).z);
-		}
-    glEnd();
+    if (!faces.empty())
+    {    // Currently supports one color per geometry:
+        glColor3f(colors.at(0).x, colors.at(0).y, colors.at(0).z);
+
+        glBegin(GL_TRIANGLES);
+        for (vector<Face>::iterator i = faces.begin(); i != faces.end(); i++)
+            for (int c=0; c<3; c++)
+            {
+                glNormal3f(normals.at(i->indices[c]).x, normals.at(i->indices[c]).y, normals.at(i->indices[c]).z);
+                glVertex3f(points.at(i->indices[c]).x, points.at(i->indices[c]).y, points.at(i->indices[c]).z);
+            }
+        glEnd();
+    }
 }
 
 void Geometry::scale(float sx, float sy, float sz)
@@ -93,4 +96,24 @@ void Geometry::scale(float sx, float sy, float sz)
     Point scaler(sx, sy, sz);
     for (vector<Point>::iterator iter = points.begin(); iter != points.end(); iter++)
         *iter = Point(iter->x * scaler.x, iter->y * scaler.y, iter->z * scaler.z);
+}
+
+SceneObject::SceneObject(const char* fileName, const char* objectName)
+{
+	vrml_io reader;
+	reader.read(this, fileName, objectName);
+	if (!children.empty())
+        cout << "[i] Number of faces in first child: " << children[0].faces.size() << endl;
+}
+
+SceneObject::~SceneObject()
+{
+    children.clear();
+}
+
+void SceneObject::draw()
+{
+    if (!children.empty())
+        for (vector<Geometry>::iterator c = children.begin(); c != children.end(); c++)
+            c->draw();
 }

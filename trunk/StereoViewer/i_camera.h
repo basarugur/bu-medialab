@@ -276,6 +276,7 @@ void init_fiwi_camera()
     rh = dc1394_create_handle( 0 );
     int num_cam;
     nid = dc1394_get_camera_nodes(rh, &num_cam, 0);
+    printf("Video Set: %d - %d\n", dc1394_set_video_format(rh, *nid, COLOR_FORMAT7_RAW16), DC1394_SUCCESS);
 
     capture = cvCaptureFromCAM( CV_CAP_ANY );
 
@@ -312,13 +313,17 @@ void init_fiwi_camera()
 
     cvWaitKey(10);
 }
-int pan_ctr = 0;
+
 void check_fiwi_camera()
 {
     int k, c;
 
     if (dc1394_set_pan(rh, nid[0], 1) == DC1394_SUCCESS)
+    {
+        freopen("dump.txt", "a+", stdout); // surpassing highgui's "icvRetrieveFrame.." message
         imageL = cvQueryFrame( capture );
+        stdout = fopen("/dev/tty", "w"); // and we're.. back
+    }
     else
         printf("(!) Couldn't apply panning.\n");
 
@@ -345,7 +350,11 @@ void check_fiwi_camera()
     if (STEREO)
     {
         if (dc1394_set_pan(rh, nid[0], 0) == DC1394_SUCCESS )
+        {
+            freopen("dump.txt", "a+", stdout); // surpassing highgui's "icvRetrieveFrame.." message
             imageR = cvQueryFrame( capture );
+            stdout = fopen("/dev/tty", "w"); // and we're.. back
+        }
 
         if (!imageR)
             return;

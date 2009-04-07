@@ -149,7 +149,7 @@ public: // Variables
 class Geometry
 {
 public: // Methods
-	Geometry(const char* fileName = "", const char* objectName = "");
+	Geometry();
 	virtual ~Geometry();
 
 	void invertNormals();
@@ -169,7 +169,7 @@ public: // Methods
 	vector<Point> points, normals, colors;		// core geometric elements
 	vector<Face> faces;							// faces | meshes
 	vector<Vertex> vertices;					// vertex array holding container face info
-	vector<Geometry*> children;
+
 	int dressSize;
 	float Coord2CM;								// coordinate units -> CM transformer
 
@@ -179,4 +179,14 @@ private: // Variables
 	Area areas[N_AREA+1];						// usable areas
 	Point pMin, pMax;							// points holding extreme coordinates [bounding box]
 	float weight;
+};
+
+class SceneObject
+{
+public:
+    SceneObject(const char* fileName = "", const char* objectName = "");
+    ~SceneObject();
+    void draw();
+
+    vector<Geometry> children;
 };
