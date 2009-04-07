@@ -13,6 +13,25 @@ cwiid_wiimote_t * g_wiimote = NULL; /* Handles our wiimote connection */
 struct cwiid_state g_wii_state; /* We capture this state on every frame */
 struct acc_cal wm_cal;
 
+/**
+ * GLUT function to display \a string at position (\a x,\a y,\a z).
+ */
+void renderString(float x, float y, float z, char *string)
+{
+    char * c;
+
+    glDisable(GL_LIGHTING);
+
+    glRasterPos3f(x, y, z);
+
+    for(c=string; *c!='\0'; c++)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c);
+    }
+
+    glEnable(GL_LIGHTING);
+}
+
 void disconnect_wiimote();
 
 /**
@@ -90,6 +109,39 @@ bool setup_wiimote_connection()
     }
 
     return result;
+}
+
+bool check_wiimote()
+{
+    if ( !g_wiimote )
+    {
+        if ( g_connect_attempts < g_max_connect_attempts )
+        {
+            glColor3f(0.0f, 1.0f, 0.0f); /* Text-color */
+            char msg[255];
+            sprintf(msg, "Press button 1+2 on your Wiimote! (%d of %d)", g_connect_attempts+1, g_max_connect_attempts);
+            renderString(-2, -2, 10, msg);
+
+            glutPostRedisplay(); /* Inform GLUT to constantly update the screen */
+            glutSwapBuffers(); /* High-end-machines may need this */
+            setup_wiimote_connection();
+            g_connect_attempts++;
+        }
+        else
+        {
+            glColor3f(1.0f, 0.0f, 0.0f); /* Text-color */
+            renderString(-2, -2, 10, "Unable to connect to Wiimote! Press <Esc> to quit.");
+            glutPostRedisplay(); /* Inform GLUT to constantly update the screen */
+            glutSwapBuffers(); /* High-end-machines may need this */
+        }
+        return false;
+    }
+    else
+	{
+		cwiid_get_state(g_wiimote, &g_wii_state); /* Capture the current wiimote-state. */
+
+		return true;
+	}
 }
 
 /**

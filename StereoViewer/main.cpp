@@ -15,7 +15,7 @@
 
 #define PI 3.141592654
 #define PI_HALF 1.570796327
-#define FULL_SCREEN 0
+#define FULL_SCREEN 1
 
 class Rotation
 {
@@ -37,13 +37,13 @@ Point cam_pos(0, -user_to_screen, user_height), obj_pos(0.f, 0.f, 0.f);
 
 const static float rad2deg = 180.f / PI;
 const static float delta_acc = .005f;
-const static float delta_tr = .01f;
+const static float delta_tr = .5f;
 int lastx = 0;
 int lasty = 0;
 unsigned char Buttons[3] = {0};
 bool object_mode = false;
 
-Geometry *g;
+SceneObject *o1, *o2;
 StereoAnalyzer* stereo_anl;
 
 //-------------------------------------------------------------------------------
@@ -53,65 +53,20 @@ void Init()
 {
     stereo_anl = new StereoAnalyzer(43.0, 640.0, 480.0, 12.0); // actual values
 
-	init_fiwi_camera();
-}
-
-/**
- * GLUT function to display \a string at position (\a x,\a y,\a z).
- */
-void renderString(float x, float y, float z, char *string)
-{
-    char * c;
-
-    glDisable(GL_LIGHTING);
-
-    glRasterPos3f(x, y, z);
-
-    for(c=string; *c!='\0'; c++)
-    {
-        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c);
-    }
-
-    glEnable(GL_LIGHTING);
+	//init_fiwi_camera();
 }
 
 /**
  * Checking wiimote connection and setting up if not exists
  */
-bool checkWiimote()
+void update_by_wiimote()
 {
 	static double ir_positions[2][2] = { { 0, 0 }, { 0, 0 } };
     static int ir_sizes[2] = { 3, 3 }; /* Expect it to be around 2-8 in wiimote state struct */
 
-    if ( !g_wiimote )
+    if ( check_wiimote() )
     {
-        if ( g_connect_attempts < g_max_connect_attempts )
-        {
-            glColor3f(0.0f, 1.0f, 0.0f); /* Text-color */
-            char msg[255];
-            sprintf(msg, "Press button 1+2 on your Wiimote! (%d of %d)", g_connect_attempts+1, g_max_connect_attempts);
-            renderString(-2, -2, 10, msg);
-
-            glutPostRedisplay(); /* Inform GLUT to constantly update the screen */
-            glutSwapBuffers(); /* High-end-machines may need this */
-            setup_wiimote_connection();
-            g_connect_attempts++;
-            return false;
-        }
-        else
-        {
-            glColor3f(1.0f, 0.0f, 0.0f); /* Text-color */
-            renderString(-2, -2, 10, "Unable to connect to Wiimote! Press <Esc> to quit.");
-            glutPostRedisplay(); /* Inform GLUT to constantly update the screen */
-            glutSwapBuffers(); /* High-end-machines may need this */
-            return true;
-        }
-    }
-    else
-	{
-		cwiid_get_state(g_wiimote, &g_wii_state); /* Capture the current wiimote-state. */
-
-		int diffx, diffy;
+        int diffx, diffy;
 		if (lastx > 0) // Valid data
 		{
 			diffx = g_wii_state.acc[0] - lastx,
@@ -129,7 +84,7 @@ bool checkWiimote()
         	if (g_wii_state.ir_src[i].valid)
 	        	leds |= 0x01 * (i+1);
 
-        	printf("%2d %4d %4d %4d | ", g_wii_state.ir_src[i].valid, g_wii_state.ir_src[i].pos[CWIID_X], g_wii_state.ir_src[i].pos[CWIID_Y], g_wii_state.ir_src[i].size);
+        	//printf("%2d %4d %4d %4d | ", g_wii_state.ir_src[i].valid, g_wii_state.ir_src[i].pos[CWIID_X], g_wii_state.ir_src[i].pos[CWIID_Y], g_wii_state.ir_src[i].size);
             /*
             double x, y;
 
@@ -154,9 +109,9 @@ bool checkWiimote()
 
 
         }
-		printf(" LEDS: %d\n", leds);
+		//printf(" LEDS: %d\n", leds);
 
-		/* Check if the home button is pressed, then exit */
+        /* Check if the home button is pressed, then exit */
 		if ( g_wii_state.buttons & CWIID_BTN_HOME )
 		{
 			disconnect_wiimote();
@@ -172,13 +127,13 @@ bool checkWiimote()
 		else if ( g_wii_state.buttons & CWIID_BTN_RIGHT )
 			change->x += delta_tr;
 		else if ( g_wii_state.buttons & CWIID_BTN_UP )
-			change->z += delta_tr;
-		else if ( g_wii_state.buttons & CWIID_BTN_DOWN )
-			change->z -= delta_tr;
-		else if ( g_wii_state.buttons & CWIID_BTN_A )
 			change->y += delta_tr;
-		else if ( g_wii_state.buttons & CWIID_BTN_B )
+		else if ( g_wii_state.buttons & CWIID_BTN_DOWN )
 			change->y -= delta_tr;
+		else if ( g_wii_state.buttons & CWIID_BTN_A )
+			change->z += delta_tr;
+		else if ( g_wii_state.buttons & CWIID_BTN_B )
+			change->z -= delta_tr;
 
         float a_x = ((float)g_wii_state.acc[CWIID_X] - wm_cal.zero[CWIID_X]) /
         	          (wm_cal.one[CWIID_X] - wm_cal.zero[CWIID_X]);
@@ -190,7 +145,7 @@ bool checkWiimote()
 
 		float a_t = atan(a_x/a_z);
 		if (a_z == 0.f || cos(a_t) < .000001f)
-			return true;
+			return;
 
         if (a_z <= 0.f)
         	a_t += PI * ((a_x > 0.f) ? 1 : -1);
@@ -216,7 +171,7 @@ bool checkWiimote()
 		ty -= (float) 0.05f * diffy;
 		*/
 
-		return true;
+		return;
 	}
 }
 
@@ -232,13 +187,14 @@ float rz1 = 0;
 
 void display(void)
 {
-    check_fiwi_camera();
+    //update_by_wiimote();
+    //check_fiwi_camera();
 
-    stereo_anl->findLocationVector(cornersR, cornersL, headPosition, lookVector, coord_trans_4x4);
+    /*stereo_anl->findLocationVector(cornersR, cornersL, headPosition, lookVector, coord_trans_4x4);
     lookVector = Point::normalize(lookVector);
     printf("HP: %01.2f %01.2f %01.2f - LV: %01.2f %01.2f %01.2f\n",
             headPosition.x, headPosition.y, headPosition.z,
-            lookVector.x, lookVector.y, lookVector.z);
+            lookVector.x, lookVector.y, lookVector.z);*/
     //update_user_position(roi_center.x * 1024 / 640, roi_center.y * 768 / 480);
 
     glDrawBuffer(GL_BACK_LEFT);
@@ -311,9 +267,18 @@ void display_scene(float eye_sep_x, float eye_sep_y, float rz)
 
     glRotatef(rz, 0, 0, 1);
 
-    // modeli çiz
-    if (g != NULL)
-        g->draw();
+    glRotatef(obj_r.pitch, 1, 0, 0);
+    glRotatef(obj_r.roll, 0, -1, 0);
+
+    glTranslatef(obj_pos.x, obj_pos.y, obj_pos.z);
+
+    // sahne nesnelerini çiz
+    if (o1 != NULL)
+        o1->draw();
+
+    if (o2 != NULL)
+        o2->draw();
+
     glPopMatrix();
 
 
@@ -453,14 +418,13 @@ int main(int argc,char** argv)
 
 	Init();
 
-	g = new Geometry("bunny.wrl", "Whole_Bunny");
-
+	//g = new Geometry("bunny.wrl", "Whole_Bunny");
+	o1 = new SceneObject("building.wrl","OB_Cylinder02_01_-_Defau");
+    o2  = new SceneObject("chapel_97.wrl", "OB_Thumbstone_Chapel");
 	/* Write example:
 	vrml_io writer;
 	writer.write(g, "new.wrl", "New-Name");
 	*/
-
-	printf("Size: %d\n", g->faces.size());
 
 	glutMainLoop();
 
@@ -468,5 +432,6 @@ int main(int argc,char** argv)
 
 	release_camera();
 
-	delete g;
+	delete o1; o1 = NULL;
+	delete o2; o2 = NULL;
 }
