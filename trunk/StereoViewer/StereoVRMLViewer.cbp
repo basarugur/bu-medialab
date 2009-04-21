@@ -39,18 +39,19 @@
 			<Add library="/usr/lib/libcwiid.so" />
 			<Add library="/usr/lib/libbluetooth.so" />
 			<Add library="/usr/lib/libcv.so" />
-			<Add library="/usr/lib/libdc1394_control.so" />
+			<Add library="/usr/lib/libdc1394.so" />
 			<Add library="/usr/lib/libhighgui.so" />
 			<Add library="/usr/lib/libcx3d.a" />
 			<Add library="/usr/lib/libxerces-c.so" />
 			<Add library="/usr/lib/libjpeg.so" />
 			<Add library="/usr/lib/libpng.so" />
 		</Linker>
+		<Unit filename="IFiWiCamera.h" />
+		<Unit filename="IOpenCV.h" />
 		<Unit filename="StereoAnalyzer.cpp" />
 		<Unit filename="StereoAnalyzer.h" />
 		<Unit filename="geometry.cpp" />
 		<Unit filename="geometry.h" />
-		<Unit filename="i_camera.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="version.h">
 			<Option target="Release" />

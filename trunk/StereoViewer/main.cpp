@@ -11,11 +11,16 @@
 #include "vrml_io.h"
 #include <GL/glut.h>
 #include "wiimote.h"
-#include "i_camera.h"
+
+#include "IOpenCV.h"
+#include "IFiWiCamera.h"
 
 #define PI 3.141592654
 #define PI_HALF 1.570796327
-#define FULL_SCREEN 1
+
+// GLUT window variables:
+bool full_screen = false;
+int w_no;
 
 class Rotation
 {
@@ -45,15 +50,29 @@ bool object_mode = false;
 
 SceneObject *o1, *o2;
 StereoAnalyzer* stereo_anl;
+IFiWiCamera* cam;
+IOpenCV* cv;
 
-//-------------------------------------------------------------------------------
-/// \brief	Initialises the openGL scene
-///
+Point headPosition, lookVector; // actual 3D points
+float M_data[4][4] = { {0.76537,    0.47926,  0.45804, -114.63},
+                       {0.57352,   -0.57671, -0.65950,  123.04},
+                       {0.0068819,  0.62096, -0.43108,  162.72},
+                       {0,          0,        0,        1} };
+Matrix4x4 coord_trans_4x4(M_data);
+
+/**
+* Initializing components
+*/
+
 void Init()
 {
     stereo_anl = new StereoAnalyzer(43.0, 640.0, 480.0, 12.0); // actual values
 
-	//init_fiwi_camera();
+	cam = new IFiWiCamera();
+    if (cam->init())
+        IOpenCV* cv = new IOpenCV( cvSize(cam->vf->size[0], cam->vf->size[1]) );
+    else
+        cout << "Initialization error." << endl;
 }
 
 /**
@@ -187,15 +206,28 @@ float rz1 = 0;
 
 void display(void)
 {
-    //update_by_wiimote();
-    //check_fiwi_camera();
+    // update_by_wiimote();
+    if (cam->capture_image())
+    {
+        // pass the pointer to the left & right images to open_cv interface
+        if (!cv->process_images( cam->imageBufRGB + cam->vf->size[0]*cam->vf->size[1]*3,
+                                 cam->imageBufRGB ) )
+            cout << "[-] OpenCV process error." << endl;
+    }
 
-    /*stereo_anl->findLocationVector(cornersR, cornersL, headPosition, lookVector, coord_trans_4x4);
+    stereo_anl->findLocationVector(cornersL, cornersR, headPosition, lookVector, coord_trans_4x4);
     lookVector = Point::normalize(lookVector);
     printf("HP: %01.2f %01.2f %01.2f - LV: %01.2f %01.2f %01.2f\n",
             headPosition.x, headPosition.y, headPosition.z,
-            lookVector.x, lookVector.y, lookVector.z);*/
-    //update_user_position(roi_center.x * 1024 / 640, roi_center.y * 768 / 480);
+            lookVector.x, lookVector.y, lookVector.z);
+    /*printf("HP: %01.2f %01.2f - LV: %01.2f %01.2f\n",
+            cornersL[0].x, cornersL[0].y,
+            cornersR[0].x, cornersR[0].y);*/
+
+    /*  calibration +y <-> opengl +x AND
+    *   calibration +x <-> opengl -y
+    */
+    update_user_position(512 - 512 * lookVector.y, 512 - 512 * lookVector.x);
 
     glDrawBuffer(GL_BACK_LEFT);
 	display_scene(eye_sep_x, eye_sep_y, rz1);
@@ -267,7 +299,7 @@ void display_scene(float eye_sep_x, float eye_sep_y, float rz)
 
     glRotatef(rz, 0, 0, 1);
 
-    glRotatef(obj_r.pitch, 1, 0, 0);
+    glRotatef(obj_r.pitch + 90, 1, 0, 0);
     glRotatef(obj_r.roll, 0, -1, 0);
 
     glTranslatef(obj_pos.x, obj_pos.y, obj_pos.z);
@@ -339,7 +371,7 @@ void Motion(int x, int y)
 //
 void Keyboard(unsigned char key, int x, int y)
 {
-	if (key == 27)
+    if (key == 27)
 		exit(0);
 }
 
@@ -377,23 +409,32 @@ void Mouse(int b,int s,int x,int y)
 ///
 int main(int argc,char** argv)
 {
-    glutInit(&argc,argv);
+    //g = new Geometry("bunny.wrl", "Whole_Bunny");
+	o1 = new SceneObject("res/chapel_97.wrl","OB_Ground_Ground_M");
+    o2  = new SceneObject("res/chapel_97.wrl", "OB_Thumbstone_Chapel");
+	/* Write example:
+	vrml_io writer;
+	writer.write(g, "new.wrl", "New-Name");
+	*/
+
+    glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_STEREO);
 
-	if ( FULL_SCREEN ) //argc > 2 && strcmp(argv[2], "f") == 0)
-	{	// Enter game mode:
-		char mode_string[100];
-		sprintf(mode_string, "%dx%d:%d@%d", 1024, 768, 25, 120);
-		printf("GLUT-Game-Mode: %s\n", mode_string);
-		glutGameModeString( mode_string );
-		glutEnterGameMode();
-	}
-	else
-	{
-		glutInitWindowSize(w_w, w_h);
-		glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH) - w_w) * 0.5, (glutGet(GLUT_SCREEN_HEIGHT) - w_h) * 0.5 );
-		glutCreateWindow("VRML IO Example");
-	}
+    if ( full_screen ) //argc > 2 && strcmp(argv[2], "f") == 0)
+    {
+        // Enter game mode:
+        char mode_string[100];
+        sprintf(mode_string, "%dx%d:%d@%d", 1024, 768, 25, 120);
+        printf("GLUT-Game-Mode: %s\n", mode_string);
+        glutGameModeString( mode_string );
+        glutEnterGameMode();
+    }
+    else
+    {
+        glutInitWindowSize(w_w, w_h);
+        glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH) - w_w) * 0.5, (glutGet(GLUT_SCREEN_HEIGHT) - w_h) * 0.5 );
+        w_no = glutCreateWindow("VRML IO Example");
+    }
 
 	//glutFullScreen();
     glEnable(GL_LIGHTING);
@@ -418,20 +459,14 @@ int main(int argc,char** argv)
 
 	Init();
 
-	//g = new Geometry("bunny.wrl", "Whole_Bunny");
-	o1 = new SceneObject("building.wrl","OB_Cylinder02_01_-_Defau");
-    o2  = new SceneObject("chapel_97.wrl", "OB_Thumbstone_Chapel");
-	/* Write example:
-	vrml_io writer;
-	writer.write(g, "new.wrl", "New-Name");
-	*/
-
 	glutMainLoop();
 
-	disconnect_wiimote();
-
-	release_camera();
+	// disconnect_wiimote();
 
 	delete o1; o1 = NULL;
 	delete o2; o2 = NULL;
+
+	delete stereo_anl; stereo_anl = NULL;
+    delete cam; cam = NULL;
+    delete cv; cv = NULL;
 }
