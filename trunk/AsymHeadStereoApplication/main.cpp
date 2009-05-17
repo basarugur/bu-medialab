@@ -20,11 +20,14 @@ int debug = FALSE;
 int stereomode=TRUE;
 
 int user_height = 1300; // kullan�c�n�n ekran d�zlemine g�re y�ksekli�i
+int user_height2 = 1300; // kullan�c�n�n ekran d�zlemine g�re y�ksekli�i
 int user_to_screen = 900; // kullan�c�n�n ekran merkezine uzakl���
+int user_to_screen2 = 0;//904.8360040; // kullan�c�n�n ekran merkezine uzakl���
 float K = 0.995; // near clipping coefficient
 float user_yaw =  0.0; // kullan�c�n�n ekrana olan a��s�, a�a�� t�klarsan 0 sa�a t�klarsan 90 vs.
 
 float cam_pos[3] = {0, -user_to_screen, user_height};
+float cam_pos2[3] = {0, -user_to_screen2, user_height2};
 
 float sw=1024.0;
 float sh=768.0;
@@ -157,7 +160,7 @@ void DrawScene(void)
 
     glDisable(GL_CULL_FACE);
 
-    glRotatef(70.0, 1.0, 0.0, 0.0);
+    //glRotatef(70.0, 1.0, 0.0, 0.0);
 
     glBegin(GL_TRIANGLES);
 
@@ -169,18 +172,18 @@ void DrawScene(void)
 
     glPopMatrix();//********************************************************************/
 
-    //glutSolidCube(7.0);//********************************************************************
+    //glutSolidCube(4.0);//********************************************************************
 
     glPopMatrix();
 
-    z=z+0.02;
+    //z=z+0.02;
 }
 
 void display(void)
 {
     float eye_sep_x = 0.3 * cos(user_yaw),
           eye_sep_y = 0.3 * sin(user_yaw),
-          eye_sep_z=0.3*sin(user_yaw);
+          eye_sep_z = 0.3 * sin(user_yaw);
 
         if(stereo)
         {
@@ -211,54 +214,67 @@ void display_pane(float eye_sep_x, float eye_sep_y, float eye_sep_z)
 {
     double left, right, bottom, top, near, far;
 
-    glViewport(0, 0, sw/2, sh);
+    glViewport(0, sh/2, sw, sh/2);
 
-    glScissor(0, 0, sw/2, sh);
+    glScissor(0, sh/2, sw, sh/2);
 
     glMatrixMode(GL_PROJECTION);
 
     glLoadIdentity();
 
-    left= (0-(sw/2)*.0065) * K ; //-ratio * wd2 - 2.5 * ndfl;
-    right= (0+(sw/2)*.0065) * K; //ratio * wd2 - 2.5 * ndfl;
-    bottom= (0-sh*.0065) * K; //-wd2;
-    top= (0+sh*.0065) * K; //wd2;
+    left= (-cam_pos[0]-sw*.0065) * K;//-ratio * wd2 - 2.5 * ndfl;
+    right= (-cam_pos[0]+sw*.0065) * K;//ratio * wd2 - 2.5 * ndfl;
+    bottom= (-cam_pos[1]+(sh/2)*.0065) * K;//-wd2;
+    top= (-cam_pos[1]+2.5*(sh/2)*.0065) * K;//wd2;
     near= user_height * K;
-    far= user_height * 2;
+    far= user_height * 20;
 
-            // rendele
+    /*left= (-cam_pos2[0]-sw*.0065) * K;//-ratio * wd2 - 2.5 * ndfl;
+    right= (-cam_pos2[0]+sw*.0065) * K;//ratio * wd2 - 2.5 * ndfl;
+    bottom= (-cam_pos2[1]-(sh/2)*.0065) * K;//-wd2;
+    top= (-cam_pos2[1]+(sh/2)*.0065) * K;//wd2;
+    near= user_height2 * K;
+    far= user_height2 * 20;*/
+
+                // rendele
     glFrustum(left, right, bottom, top, near, far );//
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
 
-        // sert bak
-    gluLookAt(0.0-eye_sep_x, -1300-eye_sep_y, 0.0-eye_sep_z,
-              0.0-eye_sep_x, 0.0-eye_sep_y, 0.0-eye_sep_z,
-              0.0, 0.0, 1.0); //0.0-eye_sep_x, -1300-eye_sep_y, 0.0, 0.0-eye_sep_x, 0.0-eye_sep_y, 0.0, 0.0, 0.0, 1.0     cam_pos[0]+eye_sep_x, cam_pos[1]+eye_sep_y
+    // sert bak
+    gluLookAt(cam_pos[0]-eye_sep_x, cam_pos[1]-eye_sep_y,cam_pos[2]-eye_sep_z,
+              cam_pos[0]-eye_sep_x, cam_pos[1]-eye_sep_y, 0.0-eye_sep_z,
+              0.0, 1.0, 0.0);
 
+    // sert bak
+    /*gluLookAt(cam_pos2[0]-eye_sep_x, cam_pos2[1]-eye_sep_y,cam_pos2[2]-eye_sep_z,
+              cam_pos2[0]-eye_sep_x, cam_pos2[1]-eye_sep_y, 0.0-eye_sep_z,
+              0.0, 1.0, 0.0);*/
+
+   
     Lighting();
 
     DrawScene();
 
     glPopMatrix();
 
-    glViewport(sw/2, 0, sw/2, sh);
+    glViewport(0, 0, sw, sh/2);
 
-    glScissor(sw/2, 0, sw/2, sh);
+    glScissor(0, 0, sw, sh/2);
 
     glMatrixMode(GL_PROJECTION);
 
     glLoadIdentity();
 
-    left= (-cam_pos[0]-(sw/2)*.0065) * K;//-ratio * wd2 - 2.5 * ndfl;
-    right= (-cam_pos[0]+(sw/2)*.0065) * K;//ratio * wd2 - 2.5 * ndfl;
-    bottom= (-cam_pos[1]-sh*.0065) * K;//-wd2;
-    top= (-cam_pos[1]+sh*.0065) * K;//wd2;
+    left= (-cam_pos[0]-sw*.0065) * K;//-ratio * wd2 - 2.5 * ndfl;
+    right= (-cam_pos[0]+sw*.0065) * K;//ratio * wd2 - 2.5 * ndfl;
+    bottom= (-cam_pos[1]-(sh/2)*.0065) * K;//-wd2;
+    top= (-cam_pos[1]+(sh/2)*.0065) * K;//wd2;
     near= user_height * K;
     far= user_height * 20;
 
-            // rendele
+          // rendele
     glFrustum( left, right, bottom, top, near, far);//
 
     glMatrixMode(GL_MODELVIEW);
@@ -267,7 +283,7 @@ void display_pane(float eye_sep_x, float eye_sep_y, float eye_sep_z)
            // sert bak
     gluLookAt(cam_pos[0]+eye_sep_x, cam_pos[1]+eye_sep_y,cam_pos[2]+eye_sep_z,
               cam_pos[0]+eye_sep_x, cam_pos[1]+eye_sep_y, 0.0+eye_sep_z,
-              0.0, 1.0, 0.0);
+              0.0, 1.0, 1.0);
 
     Lighting();
 
@@ -390,7 +406,7 @@ int main(int argc, char **argv)
 
     if (fullscreen==TRUE)
     {
-        glutGameModeString( "2048x768:16@120" );//1280x800 1024x768 2048x768 2560x800
+        glutGameModeString( "1280x1600:16@120" );//1280x800 1024x768 2048x768 2560x800 1024x1536 1280x1600
         glutEnterGameMode();
     }
 
