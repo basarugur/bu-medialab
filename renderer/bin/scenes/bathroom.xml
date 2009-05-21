@@ -1,0 +1,169 @@
+<?xml version="1.0" ?>
+<Scene>
+   <Transformations>
+      <Transformation id="0">
+        <Rotation x="0.0" y="1.0" z="0.0" r="0.0"/>
+        <Scale x="1.0" y="1.0" z="1.0"/>
+        <Translation x="0.0" y="0.0" z="0.0"/>
+      </Transformation>
+      <Transformation id="1">
+        <Rotation x="0.0" y="1.0" z="0.0" r="0.0"/>
+        <Scale x="1.0" y="1.0" z="1.0"/>
+        <Translation x="0.0" y="-4.1" z="0.0"/>
+      </Transformation>	  
+	  <Transformation id="2">
+        <Rotation x="0.0" y="1.0" z="0.0" r="0.0"/>
+        <Scale x="1.0" y="1.0" z="1.0"/>
+        <Translation x="0.0" y="0.0" z="0.0"/>
+      </Transformation>	  
+	  <Transformation id="3">
+        <Rotation x="0.0" y="1.0" z="0.0" r="180"/>
+        <Scale x="1.8" y="1.8" z="1.8"/>
+        <Translation x="-15.5" y="-8" z="36"/>
+      </Transformation>	   
+   </Transformations>
+
+   <Textures>
+      <Texture id="0">
+        <File path="maps/tiles3.bmp"/>
+        <Normal x="0.0" y="1.0" z="0.0"/>
+        <Scale x="30.0" y="30.0"/>
+      </Texture>
+	  <Texture id="1">
+        <File path="maps/tiles2.bmp"/>
+        <Normal x="0.0" y="0.0" z="1.0"/>
+        <Scale x="30.0" y="30.0"/>
+      </Texture>
+      <Texture id="2">
+        <File path="maps/tiles2.bmp"/>
+        <Normal x="1.0" y="0.0" z="0.0"/>
+        <Scale x="30.0" y="30.0"/>
+      </Texture>
+   </Textures>
+
+   <Materials>
+      <Material id="0" texture_id="0">
+         <Diffusecolor  r="1.0" g="0.0" b="0.0"/>
+         <Specularcolor r="0.0" g="0.0" b="0.0"/>
+         <Ambientcolor  r="0.0" g="0.0" b="0.0"/>
+         <solid> 1.0 </solid>
+         <reflection> 0.1 </reflection>
+         <refraction_index> 0.0 </refraction_index>
+         <luculent> 0.0 </luculent>
+      </Material>
+	  <Material id="1" texture_id="1">
+         <Diffusecolor  r="0.0" g="0.0" b="0.0"/>
+         <Specularcolor r="0.0" g="0.0" b="0.0"/>
+         <Ambientcolor  r="0.0" g="0.0" b="0.0"/>
+         <solid> 1.0 </solid>
+         <reflection> 0.1 </reflection>
+         <refraction_index> 0.0 </refraction_index>
+         <luculent> 0.0 </luculent>
+      </Material>
+	  <Material id="2" texture_id="2">
+         <Diffusecolor  r="0.0" g="0.0" b="0.0"/>
+         <Specularcolor r="0.0" g="0.0" b="0.0"/>
+         <Ambientcolor  r="0.0" g="0.0" b="0.0"/>
+         <solid> 1.0 </solid>
+         <reflection> 0.1 </reflection>
+         <refraction_index> 0.0 </refraction_index>
+         <luculent> 0.0 </luculent>
+      </Material>
+	  <Material id="3" texture_id="-1">
+         <Diffusecolor  r="1.0" g="1.0" b="1.0"/>
+         <Specularcolor r="1.0" g="1.0" b="1.0"/>
+         <Ambientcolor  r="0.5" g="0.5" b="0.5"/>
+         <solid> 1.0 </solid>
+         <reflection> 0.05 </reflection>
+         <refraction_index> 0.0 </refraction_index>
+         <luculent> 0.0 </luculent>
+      </Material>
+	  <Material id="4" texture_id="-1">
+         <Diffusecolor  r="1.0" g="1.0" b="1.0"/>
+         <Specularcolor r="1.0" g="1.0" b="1.0"/>
+         <Ambientcolor  r="0.5" g="0.5" b="0.5"/>
+         <solid> 0.0 </solid>
+         <reflection> 1.0 </reflection>
+         <refraction_index> 0.0 </refraction_index>
+         <luculent> 0.0 </luculent>
+      </Material>
+   </Materials>
+
+   <Lights>
+      <Light id="0" type="point">
+         <Position  x="0.0" y="20.0" z="0"/>
+         <Direction x="0.0" y="1.0" z="0.0"/>
+         <Coefficient> 1.0 </Coefficient>
+      </Light>       
+   </Lights>
+
+   <Camera type="perspective">
+      <Position  x="0" y="15" z="-10.0"/>
+      <Up        x="0.0" y="1.0" z="0.0"/>
+      <Target    x="-10" y="10" z="0.0"/>
+   </Camera>
+
+   <Screen>
+      <Width>  400 </Width>
+      <Height> 400 </Height>
+   </Screen>
+
+   <Shapes>
+      <Shape id="0" type="triangle_mesh">
+         <File  path="models/bathroom/floor.raw"/>
+      </Shape>	  
+      <Shape id="1" type="triangle_mesh">
+         <File  path="models/bathroom/wall1.raw"/>
+      </Shape>
+	  <Shape id="2" type="triangle_mesh">
+         <File  path="models/bathroom/wall2.raw"/>
+      </Shape>
+      <Shape id="3" type="triangle_mesh">
+         <File  path="models/bathroom/wall3.raw"/>
+      </Shape>
+      <Shape id="4" type="triangle_mesh">
+         <File  path="models/bathroom/bathtub.raw"/>
+      </Shape>
+      <Shape id="5" type="triangle_mesh">
+         <File  path="models/bathroom/musluk.raw"/>
+      </Shape>	  
+	  
+   </Shapes>
+   
+   <Primitives>
+      <Primitive id="0">
+         <Shape> 0 </Shape>
+         <Material> 0 </Material>
+         <Transformation> 0 </Transformation>
+      </Primitive>
+      <Primitive id="1">
+         <Shape> 1 </Shape>
+         <Material> 1 </Material>
+         <Transformation> 1 </Transformation>
+      </Primitive>
+      <Primitive id="2">
+         <Shape> 2 </Shape>
+         <Material> 2 </Material>
+         <Transformation> 1 </Transformation>
+      </Primitive>
+      <Primitive id="3">
+         <Shape> 3 </Shape>
+         <Material> 2 </Material>
+         <Transformation> 1 </Transformation>
+      </Primitive>	  
+      <Primitive id="4">
+         <Shape> 4 </Shape>
+         <Material> 3 </Material>
+         <Transformation> 3 </Transformation>
+      </Primitive>	  	
+      <Primitive id="5">
+         <Shape> 5 </Shape>
+         <Material> 4 </Material>
+         <Transformation> 3 </Transformation>
+      </Primitive>	      		 
+   </Primitives>
+   
+   <Properties>
+	  <AntiAlias> true </AntiAlias>
+   </Properties>
+</Scene>
