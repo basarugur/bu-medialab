@@ -127,6 +127,7 @@ namespace acc
 									isect->dg()->setp(dg->p());
 									isect->dg()->setnormal(dg->n());							
 									isect->dg()->set_material(dg->material());
+									isect->dg()->setuv(dg->u(),dg->v(),dg->w());
 									hitted = true;
 								}
 							}						

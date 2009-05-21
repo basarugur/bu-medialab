@@ -18,7 +18,7 @@
 namespace scene
 {
 	class DifferentialGeometry;
-	class Triangle;
+	class Triangle;	
 
 	class Shape
 	{
@@ -46,13 +46,14 @@ namespace scene
 			}
 
 			DifferentialGeometry(const space::Point3& p, const space::Vector3& dpdu,
-				 				 const space::Vector3& dpdv,const Shape* s, float u=0.0, float v=0.0)
+				 				 const space::Vector3& dpdv,const Shape* s, float u=0.0, float v=0.0,float w=0.0)
 								 : m_p(p),m_dpdu(dpdu),m_dpdv(dpdv)
 			{
 				space::Vector3 vv = (dpdu ^ dpdv).normalize();
 				m_n = space::Normal3(vv.x(),vv.y(),vv.z());
 				m_u = u;
 				m_v = v;
+				m_w = w;
 				m_shape = s;
 			}
 
@@ -60,11 +61,13 @@ namespace scene
 			Material* material() const { return m_material; };
 			void setnormal(const space::Normal3& normal) const { m_n = normal; };
 			void setp(const space::Point3& point) const { m_p = point; };
+			void setuv(const space::Vector3& u,const space::Vector3&  v) { m_dpdu = u; m_dpdv = v; };	
+			void setuv(float u,float v,float w) { m_u = u; m_v = v; m_w = w; };
 			const space::Normal3& n() const { return m_n; };
-			const space::Point3& p() const { return m_p; };			
+			const space::Point3& p() const { return m_p; };
 			float u() const { return m_u; };
 			float v() const { return m_v; };
-
+			float w() const { return m_w; };
 
 		private:
 			mutable space::Point3 m_p;
@@ -72,7 +75,7 @@ namespace scene
 			scene::Material* m_material;
 			space::Vector3 m_dpdu,m_dpdv;			
 			const Shape* m_shape;
-			float m_u,m_v;
+			float m_u,m_v,m_w;
 	};
 
 	class Vertex : public space::Vector3
@@ -80,7 +83,8 @@ namespace scene
 		public:
 			Vertex(double _x=0,double _y=0,double _z=0) : space::Vector3(_x,_y,_z)
 			{};
-		
+			Vertex(space::Vector3 v) : space::Vector3(v) 
+			{};
 	};
 
 	class Triangle
@@ -152,10 +156,15 @@ namespace scene
 				if (n()*r.direction()>0) fn = space::Normal3(-n().x(),-n().y(),-n().z()); 
 				else fn = space::Normal3(n().x(),n().y(),n().z());
 				space::Point3 p = r.origin() + (r.direction()*t);
-				
+
+				float u_ = p.x() - m_box.min().x();
+				float v_ = p.y() - m_box.min().y();
+				float w_ = p.z() - m_box.min().z();
+
 				dg->setp(p);
 				dg->setnormal(fn);
-				dg->set_material(m_material);
+				dg->set_material(m_material);				
+				dg->setuv(u_,v_,w_);
 				*hit = t;
 				return true;
 			};
@@ -202,11 +211,14 @@ namespace scene
 			void set_material(scene::Material* m) { m_material = m;};
 			const scene::Material* material() const { return m_material; };
 
+			void set_box(scene::BBox b) { m_box = b; };
+
 		private:
 			Vertex m_v[3];
 			space::Normal3 m_n;
 			space::Point3 m_midpoint;
 			scene::Material* m_material;
+			scene::BBox m_box;
 	};
 
 	class TriangleMesh : public Shape
@@ -218,6 +230,12 @@ namespace scene
 				load();
 				calculatebounds();
 			};
+
+			TriangleMesh(std::vector<Triangle*> m_list) 
+			{
+				m_facelist = m_list;
+				calculatebounds();
+			}
 	
 			virtual BBox object_bound() const;
 			virtual bool can_intersect() const { return false; }

@@ -108,8 +108,8 @@ namespace scene
 						pt.z() >= m_pmin.z() && pt.z() <= m_pmax.z());
 			};
 
-			space::Point3 min() { return m_pmin; };
-			space::Point3 max() { return m_pmax; };
+			space::Point3 min() const { return m_pmin; };
+			space::Point3 max() const { return m_pmax; };
 
 			bool intersectp(const Ray& ray,float *hitt0,float *hitt1) const {
 				float t0 = ray.mint(), t1 = ray.maxt();
