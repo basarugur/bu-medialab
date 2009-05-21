@@ -47,7 +47,7 @@ namespace output
 				m_inc_x = w / scr->width();
 				m_inc_y = h / scr->height();				
 
-				srand(234);
+				srand(1000);
 			};
 
 			const double width() const { return m_width; };
@@ -68,12 +68,9 @@ namespace output
 			
 			//randomly generate sample (aa)
 			const space::Point3 viewr() const {
-				
-					double y_ = m_inc_y/2.0;
-					double x_ = m_inc_x/2.0;
 
-					double yy =  m_y + (y_ - random()*(m_inc_y));
-					double xx =  m_x + (x_ - random()*(m_inc_x));			
+					double yy =  m_y + (random()*m_inc_y);
+					double xx =  m_x + (random()*m_inc_x);			
 
 					return space::Point3(xx,yy,m_z);
 			}

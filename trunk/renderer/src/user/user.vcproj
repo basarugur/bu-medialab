@@ -20,10 +20,10 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\renderer"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;TIXML_USE_STL"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="5"
+				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
@@ -32,10 +32,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="renderer.lib"
+				AdditionalDependencies="renderer.lib tinyxmld_STL.lib"
 				OutputFile="$(OutDir)/user.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\renderer\Debug"
+				AdditionalLibraryDirectories="..\renderer\Debug;..\lib"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/user.pdb"
 				SubSystem="1"
@@ -70,7 +70,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..\renderer"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;TIXML_USE_STL"
+				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -80,10 +81,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="renderer.lib"
+				AdditionalDependencies="renderer.lib tinyxml_STL.lib"
 				OutputFile="$(OutDir)/user.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\renderer\Release"
+				AdditionalLibraryDirectories="..\renderer\Release;..\lib"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
 				OptimizeReferences="2"

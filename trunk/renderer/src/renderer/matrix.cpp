@@ -6,7 +6,7 @@ namespace space
 
 	Matrix::Matrix()
 	{	
-		identity();
+		zeros();
 	}
 
 	void  Matrix::setrow(const std::size_t& i,Vector3& v)
@@ -17,7 +17,7 @@ namespace space
 
 	void  Matrix::setcol(const std::size_t& i,Vector3& v)
 	{
-		for(std::size_t k=0;k<3;k++)
+		for(std::size_t k=0;k<4;k++)
 				m_data[k][i] = v.v(k);
 	}
 

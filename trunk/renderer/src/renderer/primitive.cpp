@@ -1,4 +1,5 @@
 #include "primitive.h"
+#include <time.h>
 
 namespace scene 
 {
@@ -29,13 +30,21 @@ namespace scene
 				for(int j=0;j<list.size();j++)
 				{
 					list[j]->set_material(m_primitives[i]->material());
+					list[j]->set_box(m_primitives[i]->object_bound());
 					m_list.push_back(list[j]);
 				}
 			}
 
 		}		
 
-		m_tree->build(20,2,m_list);
+		char timeStr [9];
+		_strtime( timeStr );
+		std::cout << "> " << timeStr << " : "<< "bounding volume hierarchy is creating..." << std::endl;	
+			
+			m_tree->build(20,2,m_list);
+
+		_strtime( timeStr );
+		std::cout << "> " << timeStr << " : "<< "bounding volume hierarchy is created." << std::endl;
 	}
 
 	

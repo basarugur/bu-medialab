@@ -1,6 +1,6 @@
 <html>
 <head>
-<META HTTP-EQUIV="Content-Type" content="text/html; charset=Windows-1252">
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=windows-1254">
 </head>
 <body>
 <pre>
@@ -11,53 +11,59 @@ Build Log
 </h3>
 </pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
 Command Lines
-</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Creating temporary file "d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\user\Release\RSP00000E.rsp" with contents
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Creating temporary file "d:\cmpe\cmpe492\src\user\Release\RSP000028.rsp" with contents
 [
-/O2 /I "..\renderer" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /EHsc /MDd /GS /Fo"Release/" /Fd"Release/vc70.pdb" /W3 /c /Wp64 /Zi /TP
-".\main.cpp"
+/O2 /I "..\renderer" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "TIXML_USE_STL" /D "_MBCS" /FD /EHsc /MDd /GS /Fo"Release/" /Fd"Release/vc70.pdb" /W3 /c /Wp64 /Zi /TP
+.\main.cpp
 ]
-Creating command line "cl.exe @"d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\user\Release\RSP00000E.rsp" /nologo"
-Creating temporary file "d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\user\Release\RSP00000F.rsp" with contents
+Creating command line "cl.exe @d:\cmpe\cmpe492\src\user\Release\RSP000028.rsp /nologo"
+Creating temporary file "d:\cmpe\cmpe492\src\user\Release\RSP000029.rsp" with contents
 [
-/OUT:"Release/user.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"..\renderer\Release" /DEBUG /PDB:"Release/user.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /MACHINE:X86 renderer.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib "\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\Release\renderer.lib"
-".\Release\main.obj"
+/OUT:"Release/user.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"..\renderer\Release" /LIBPATH:"..\lib" /DEBUG /PDB:"Release/user.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /MACHINE:X86 renderer.lib tinyxml_STL.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib
+.\Release\main.obj
 ]
-Creating command line "link.exe @"d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\user\Release\RSP00000F.rsp""
+Creating command line "link.exe @d:\cmpe\cmpe492\src\user\Release\RSP000029.rsp"
 </pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
 Output Window
 </font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Compiling...
 main.cpp
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\sampler.h(18) : warning C4244: 'initializing' : conversion from 'double' to 'size_t', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\sampler.h(21) : warning C4244: 'initializing' : conversion from 'double' to 'size_t', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\ray.h(115) : warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\ray.h(115) : warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\ray.h(118) : warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\ray.h(119) : warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\ray.h(120) : warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\shape.h(125) : warning C4305: '=' : truncation from 'double' to 'float'
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\shape.h(135) : warning C4305: '=' : truncation from 'double' to 'float'
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\shape.h(144) : warning C4305: '=' : truncation from 'double' to 'float'
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\shape.h(159) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\shape.h(191) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\light.h(64) : warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\light.h(131) : warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\octree.h(70) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\octree.h(71) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\octree.h(73) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\octree.h(74) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\octree.h(80) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\octree.h(81) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\octree.h(114) : warning C4018: '<' : signed/unsigned mismatch
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\kdtree.h(61) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\kdtree.h(62) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\kdtree.h(64) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\kdtree.h(65) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\kdtree.h(71) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\renderer\kdtree.h(72) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\sampler.h(18) : warning C4244: 'initializing' : conversion from 'double' to 'size_t', possible loss of data
+d:\cmpe\cmpe492\src\renderer\sampler.h(21) : warning C4244: 'initializing' : conversion from 'double' to 'size_t', possible loss of data
+d:\cmpe\cmpe492\src\renderer\ray.h(115) : warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\ray.h(115) : warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\ray.h(118) : warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\ray.h(119) : warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\ray.h(120) : warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\shape.h(129) : warning C4305: '=' : truncation from 'double' to 'float'
+d:\cmpe\cmpe492\src\renderer\shape.h(139) : warning C4305: '=' : truncation from 'double' to 'float'
+d:\cmpe\cmpe492\src\renderer\shape.h(148) : warning C4305: '=' : truncation from 'double' to 'float'
+d:\cmpe\cmpe492\src\renderer\shape.h(160) : warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\shape.h(161) : warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\shape.h(162) : warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\shape.h(168) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\shape.h(200) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\light.h(104) : warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\light.h(176) : warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\octree.h(70) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\octree.h(71) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\octree.h(73) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\octree.h(74) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\octree.h(80) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\octree.h(81) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\octree.h(114) : warning C4018: '<' : signed/unsigned mismatch
+d:\cmpe\cmpe492\src\renderer\kdtree.h(61) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\kdtree.h(62) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\kdtree.h(64) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\kdtree.h(65) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\kdtree.h(71) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\kdtree.h(72) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+d:\cmpe\cmpe492\src\renderer\primitive.h(94) : warning C4018: '<' : signed/unsigned mismatch
+main.cpp(231) : warning C4018: '<' : signed/unsigned mismatch
 Linking...
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
 </pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
 Results
 </font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>
-Build log was saved at "file://d:\Bogazici_University\ENG_CLASS_VIII\CMPE492\phase-one\src\user\Release\BuildLog.htm"
-user - 0 error(s), 27 warning(s)</pre></table><table   width=100% height=20 bgcolor=#CFCFE5><tr><td><font face=arial size=+2>
+Build log was saved at "file://d:\cmpe\cmpe492\src\user\Release\BuildLog.htm"
+user - 0 error(s), 33 warning(s)</pre></table><table   width=100% height=20 bgcolor=#CFCFE5><tr><td><font face=arial size=+2>
 </font></table></body></html>

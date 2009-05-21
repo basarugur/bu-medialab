@@ -5,9 +5,11 @@
 #define MATRIX_H
 
 #include "vector3.h"
+#include "point3.h"
 
 namespace space
 {
+	//row x column
 	class Matrix
 	{
 	public:
@@ -47,16 +49,30 @@ namespace space
 			return m_;
 		}
 
+
+
 		Vector3 operator*(Vector3& rhs)
 		{
 			double d[4] = {0,0,0,0};
+			double v[4] = {rhs.x(),rhs.y(),rhs.z(),1.0};
 
-			for(std::size_t i=0;i<4;i++)
+			for(std::size_t i=0;i<4;i++)		
 				for(std::size_t j=0;j<4;j++)				
-						d[i] = d[i] + m_data[i][j]*rhs.v(i);
-
+						d[i] = d[i] + m_data[i][j]*v[j];		
 			
 			return Vector3(d[0],d[1],d[2]);
+		}
+
+		Point3 operator*(Point3& rhs)
+		{
+			double d[4] = {0,0,0,0};
+			double v[4] = {rhs.x(),rhs.y(),rhs.z(),1.0};
+
+			for(std::size_t i=0;i<4;i++)		
+				for(std::size_t j=0;j<4;j++)				
+						d[i] = d[i] + m_data[i][j]*v[j];		
+			
+			return Point3(d[0],d[1],d[2]);
 		}
 
 	private:

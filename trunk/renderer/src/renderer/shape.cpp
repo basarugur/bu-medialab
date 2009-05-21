@@ -1,4 +1,5 @@
 #include "shape.h"
+#include <time.h>
 
 namespace scene
 {
@@ -8,9 +9,14 @@ namespace scene
 			stream.open(m_filename.c_str(),std::ios::in);
 			std::string temp_string;
 			double x = 0,y = 0,z = 0;
+			char timeStr [9];
 
 			if (stream.is_open())
 			{
+				
+				_strtime( timeStr );
+				std::cout << "> " << timeStr << " : "<< "geometry is loading..." << std::endl;
+
 				stream >> temp_string;
 			
 				while (!stream.eof() && temp_string!="")
@@ -41,11 +47,14 @@ namespace scene
 
 				stream.close();
 				
+				_strtime( timeStr );
+				std::cout << "> " << timeStr << " : "<< "geometry is loaded." << std::endl;
+				
 				return true;
 
 			} else 
 			{
-				std::cout << "Error: scene file does not exist" << std::endl;
+				std::cout << "Error: geometry file does not exist" << std::endl;
 
 				return false;
 			}
