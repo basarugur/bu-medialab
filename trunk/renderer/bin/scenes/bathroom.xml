@@ -98,7 +98,7 @@
    </Lights>
 
    <Camera type="perspective">
-      <Position  x="0" y="15" z="-10.0"/>
+      <Position  x="0" y="15" z="-20.0"/>
       <Up        x="0.0" y="1.0" z="0.0"/>
       <Target    x="-10" y="10" z="0.0"/>
    </Camera>
