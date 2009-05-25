@@ -8,6 +8,7 @@
 #include <QProcess>
 #include <QStringList>
 #include <QMessageBox>
+#include <QThread>
 
 
 #include "core/sphere.h"
@@ -22,6 +23,27 @@
 #include "core/circle.h"
 #include "core/disk.h"
 #include "core/partialdisk.h"
+
+//
+class RenderThread : public QThread
+{
+public:
+	RenderThread(QObject* obj_):QThread(obj_)
+	{
+
+	}
+	~RenderThread(){ };
+
+	void run()
+	{
+		QStringList arg_ ;
+		arg_ << "data/scene.xml";
+		QProcess::execute("renderer.exe",arg_);
+	}
+};
+//
+
+
 
 RendererController::RendererController(Scene* sc,RawDevice* rwdev_,QWidget *parent)
 	: QDialog(parent), m_scene(sc) , m_raw_device(rwdev_)
@@ -54,14 +76,11 @@ void RendererController::on_pushButton_2_clicked()
 		saveRawFiles();
 		saveXMLFile();
 
-
-		QStringList arg_ ;
-		arg_ << "data/scene.xml";
+		RenderThread rnd_(this);
+		rnd_.start();
 
 		this->accept();
 		this->close();
-
-		QProcess::execute("renderer.exe",arg_);
 	}
 	else if( w_ <= 0)
 	{
