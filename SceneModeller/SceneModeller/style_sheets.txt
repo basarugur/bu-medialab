@@ -1,0 +1,43 @@
+QMainWindow {
+   background:rgb(0,0,0);
+   color:rgb(255,255,255);
+}
+QDialog {
+   background:rgb(0,0,0);
+   color:rgb(255,255,255);
+}
+QPushButton {
+   background:rgb(0,0,0);
+   color:rgb(255,255,255);
+}
+QRadioButton{
+   background:rgb(0,0,0);
+   color:rgb(255,255,255);
+}
+QDockWidget {
+   background:rgb(0,0,0);
+   color:rgb(255,255,255);
+}
+ QDockWidget::close-button, QDockWidget::float-button {  
+border: 1px solid transparent;   
+background: darkgray;    
+color:rgb(255,255,255);
+}
+ QDockWidget::close-button:hover, QDockWidget::float-button:hover 
+{
+     background: gray; 
+} 
+QDockWidget::close-button:pressed, QDockWidget::float-button:pressed { 
+    padding: 1px -1px -1px 1px;
+ }
+QStatusBar { 
+background:rgb(0,0,0);
+ color:rgb(255,255,255); 
+}
+QLabel{ color:rgb(255,255,255); }
+QGroupBox{ color:rgb(255,255,255); }
+QLineEdit
+{
+background-color : rgb(100,100,100);
+color : rgb(255,255,255);
+}
