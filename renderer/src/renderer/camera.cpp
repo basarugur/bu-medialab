@@ -19,7 +19,7 @@ namespace scene
 
 	float Perspective::generate_ray(const output::Sampler* s,Ray& r)
 	{		
-		space::Point3 p1(0,0,-1);
+		space::Point3 p1(0,0,-2);
 		space::Vector3 dir = s->view() - p1;		
 		r = Ray(position(),apply_transform(dir),0,1e30);
 		return 0.f;
@@ -27,7 +27,7 @@ namespace scene
 	
 	float Perspective::generate_rayr(const output::Sampler* s,Ray& r) 
 	{
-		space::Point3 p1(0,0,-1);
+		space::Point3 p1(0,0,-2);
 		space::Vector3 dir = s->viewr() - p1;
 		r = Ray(position(),apply_transform(dir),0,1e30);
 		return 0.f;
@@ -36,7 +36,7 @@ namespace scene
 	float Perspective::generate_rays(const output::Sampler* s,Ray* rays,space::Vector3* l,int size)
 	{
 		space::Point3 pix = s->view();
-		space::Point3 p1(0,0,-1);
+		space::Point3 p1(0,0,-2);
 
 		double sw = s->screen()->width();
 		double sh = s->screen()->height();
