@@ -25,6 +25,12 @@ private:
 	void updateGUI();
 	void clearGUI();
 
+protected:
+	void keyPressEvent(QKeyEvent *)
+	{
+
+	};
+
 public slots:
 	void showDialog();
 	void currentPositionChanged();

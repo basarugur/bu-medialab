@@ -23,6 +23,7 @@ EditCamera::~EditCamera()
 void EditCamera::currentNameChanged()
 {
 	if(m_previous_index!=-1){
+		m_scene->cameras()[m_previous_index]->setName(ui.lineEdit->text().toStdString());
 		ui.listWidget->currentItem()->setText(QString::fromStdString(m_scene->cameras()[m_previous_index]->getName()));
 	}
 }
