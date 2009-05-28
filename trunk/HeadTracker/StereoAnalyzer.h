@@ -3,6 +3,7 @@
 /// \file	StereoAnalyzer.h
 /// \author	M. Resid Cizmeci & Basar Ugur
 /// \brief	Stereo Vision Analyzer for obtaining 3D vector correspondences
+///         Requires the class definitions from "geometry.h" in StereoViewer
 /// \note
 ///-----------------------------------------------------------------------------
 
