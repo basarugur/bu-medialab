@@ -1,197 +1,97 @@
 ///-----------------------------------------------------------------------------
 ///
 /// \file	main.cpp
-/// \author	Rob Bateman
-/// \brief	A simple viewer for a simple file format.
+/// \author	Basar Ugur
+/// \brief	Moved on from Rob Bateman's simple viewer for GLUT,
+///         an enhanced Stereo VRML2.0 viewer
 /// \note
 ///-----------------------------------------------------------------------------
 
 #include <fstream>
-#include "StereoAnalyzer.h"
+#include <stdexcept>
+#include "geometry.h"
 #include "vrml_io.h"
 #include <GL/glut.h>
 #include "wiimote.h"
-
-#include "IOpenCV.h"
-#include "IFiWiCamera.h"
+#include "HeadTrackerClient.h"
 
 #define PI 3.141592654
 #define PI_HALF 1.570796327
 
 // GLUT window variables:
 bool full_screen = false;
-int w_no;
-
-class Rotation
-{
-public:
-	Rotation(float p = 0.f, float y = 0.f, float r = 0.f) { pitch = p; yaw = y; roll = r; };
-	~Rotation() {};
-
-	float pitch, yaw, roll;
-};
 
 int w_w = 1024, w_h = 768;
-int user_height = 1300;     // kullanıcının ekran düzlemine göre yükseklii
-int user_to_screen = 900;   // kullanıcının ekran merkezine uzaklığı
+int user_height = 796;      // kullanıcının ekran düzlemine göre yüksekliği
+int user_to_screen = 500;   // kullanıcının ekran merkezine uzaklığı
 float user_yaw =  0.0;      // kullanıcının ekrana olan açısı: aşağı tıklarsan 0 saa tıklarsan 90 vs.
 float K = 0.1;              // near clipping coefficient
 
 Rotation world_r(90, 0, 0), obj_r, cam_r;
 Point cam_pos(0, -user_to_screen, user_height), obj_pos(0.f, 0.f, 0.f);
 
-const static float rad2deg = 180.f / PI;
-const static float delta_acc = .005f;
-const static float delta_tr = .5f;
 int lastx = 0;
 int lasty = 0;
 unsigned char Buttons[3] = {0};
 bool object_mode = false;
+//int showgrid = 0;//*********************
 
 SceneObject *o1, *o2;
-StereoAnalyzer* stereo_anl;
-IFiWiCamera* cam;
-IOpenCV* cv;
+
+HeadTrackerClient *r_htc;
 
 Point headPosition, lookVector; // actual 3D points
+
 float M_data[4][4] = { {0.76537,    0.47926,  0.45804, -114.63},
                        {0.57352,   -0.57671, -0.65950,  123.04},
                        {0.0068819,  0.62096, -0.43108,  162.72},
                        {0,          0,        0,        1} };
+
 Matrix4x4 coord_trans_4x4(M_data);
 
 /**
 * Initializing components
 */
 
+#define SERVER_IP "79.123.176.157"
+
 void Init()
 {
-    stereo_anl = new StereoAnalyzer(43.0, 640.0, 480.0, 12.0); // actual values
-
-	cam = new IFiWiCamera();
-    if (cam->init())
-        IOpenCV* cv = new IOpenCV( cvSize(cam->vf->size[0], cam->vf->size[1]) );
-    else
-        cout << "Initialization error." << endl;
+    try
+    {
+        r_htc = new HeadTrackerClient(SERVER_IP);
+    }
+    catch (runtime_error e)
+    {
+        cout << e.what() << endl;
+    }
 }
 
-/**
- * Checking wiimote connection and setting up if not exists
- */
-void update_by_wiimote()
+void InitGlut();
+
+void FogEffect(float fogkey)
 {
-	static double ir_positions[2][2] = { { 0, 0 }, { 0, 0 } };
-    static int ir_sizes[2] = { 3, 3 }; /* Expect it to be around 2-8 in wiimote state struct */
+    int fogMode[]={GL_EXP, GL_EXP2, GL_LINEAR};
 
-    if ( check_wiimote() )
-    {
-        int diffx, diffy;
-		if (lastx > 0) // Valid data
-		{
-			diffx = g_wii_state.acc[0] - lastx,
-			diffy = g_wii_state.acc[2] - lasty;
-		}
-		else
-			diffx = diffy = 0;
+    int fogfilter=2;
 
-		lastx = g_wii_state.acc[0];
-		lasty = g_wii_state.acc[2];
+    float fogColor[4] = {0.0f, 0.0f, 0.0f, 1.f};
 
-		uint8_t leds = 0x00;
-		for (int i=0; i < 4; i++)
-        {
-        	if (g_wii_state.ir_src[i].valid)
-	        	leds |= 0x01 * (i+1);
+    glEnable(GL_FOG);
 
-        	//printf("%2d %4d %4d %4d | ", g_wii_state.ir_src[i].valid, g_wii_state.ir_src[i].pos[CWIID_X], g_wii_state.ir_src[i].pos[CWIID_Y], g_wii_state.ir_src[i].size);
-            /*
-            double x, y;
+    glFogi(GL_FOG_MODE, fogMode[fogfilter]);
 
-            if (g_wii_state.ir_src[i].valid)
-            {
-            	x = g_wii_state.ir_src[i].pos[CWIID_X] * 64 / ((double) CWIID_IR_X_MAX);
-                y = 64 - g_wii_state.ir_src[i].pos[CWIID_Y] * 64 / (double) CWIID_IR_Y_MAX;
+    glFogfv(GL_FOG_COLOR, fogColor);
 
-                ir_positions[i][0] = x;
-                ir_positions[i][1] = y;
+    //glFogf(GL_FOG_COORD_SRC, GL_FOG_COORD);
 
-                if (g_wii_state.ir_src[i].size != -1)
-                {
-                    ir_sizes[i] = g_wii_state.ir_src[i].size+1;
-                }
-            }
-            else
-            {
-                x = ir_positions[i][0];
-                y = ir_positions[i][1];
-            }*/
+    glFogf(GL_FOG_DENSITY, .1f);
 
+    glFogf(GL_FOG_START, cam_pos.z-140);//cam_pos[2]
 
-        }
-		//printf(" LEDS: %d\n", leds);
+    glFogf(GL_FOG_END, cam_pos.z + fogkey);//* 2 - 8000);
 
-        /* Check if the home button is pressed, then exit */
-		if ( g_wii_state.buttons & CWIID_BTN_HOME )
-		{
-			disconnect_wiimote();
-		    exit(EXIT_SUCCESS);
-		}
-
-		Point* change = (object_mode ? &cam_pos : &obj_pos);
-
-		if ( g_wii_state.buttons & CWIID_BTN_A && g_wii_state.buttons & CWIID_BTN_B )
-			object_mode = !object_mode;
-		else if ( g_wii_state.buttons & CWIID_BTN_LEFT )
-			change->x -= delta_tr;
-		else if ( g_wii_state.buttons & CWIID_BTN_RIGHT )
-			change->x += delta_tr;
-		else if ( g_wii_state.buttons & CWIID_BTN_UP )
-			change->y += delta_tr;
-		else if ( g_wii_state.buttons & CWIID_BTN_DOWN )
-			change->y -= delta_tr;
-		else if ( g_wii_state.buttons & CWIID_BTN_A )
-			change->z += delta_tr;
-		else if ( g_wii_state.buttons & CWIID_BTN_B )
-			change->z -= delta_tr;
-
-        float a_x = ((float)g_wii_state.acc[CWIID_X] - wm_cal.zero[CWIID_X]) /
-        	          (wm_cal.one[CWIID_X] - wm_cal.zero[CWIID_X]);
-        float a_y = ((float)g_wii_state.acc[CWIID_Y] - wm_cal.zero[CWIID_Y]) /
-        	      (wm_cal.one[CWIID_Y] - wm_cal.zero[CWIID_Y]);
-        float a_z = ((float)g_wii_state.acc[CWIID_Z] - wm_cal.zero[CWIID_Z]) /
-        	      (wm_cal.one[CWIID_Z] - wm_cal.zero[CWIID_Z]);
-        //float a = sqrt(pow(a_x,2)+pow(a_y,2)+pow(a_z,2));
-
-		float a_t = atan(a_x/a_z);
-		if (a_z == 0.f || cos(a_t) < .000001f)
-			return;
-
-        if (a_z <= 0.f)
-        	a_t += PI * ((a_x > 0.f) ? 1 : -1);
-
-        a_t *= -1;
-
-		//printf("%d %d %d\n",g_wii_state.acc[CWIID_X] - wm_cal.zero[CWIID_X], g_wii_state.acc[CWIID_Y] - wm_cal.zero[CWIID_Y], g_wii_state.acc[CWIID_Z] - wm_cal.zero[CWIID_Z]);
-
-        Rotation* ch_r = (object_mode ? &world_r : &obj_r);
-
-        ch_r->pitch = ch_r->pitch + (atan(a_y/a_z*cos(a_t)) * rad2deg - ch_r->pitch) * delta_acc;
-        ch_r->roll = ch_r->roll + (a_t*rad2deg - ch_r->roll) * delta_acc;
-
-		//printf("accelerator data\n");
-		/*for (int i = 0; i < 3; i++)
-			printf("%d ", g_wii_state.acc[i]);
-		printf("\n");
-		if (abs(diffx) > 1 || abs(diffy) > 1)
-			printf("%d %d - %d %d - %d %d\n", g_wii_state.acc[0], g_wii_state.acc[2], lastx, lasty, diffx, diffy);
-
-		printf("%d %d - %d %d - %d %d\n", g_wii_state.acc[0], g_wii_state.acc[2], lastx, lasty, diffx, diffy);
-		tx += (float) 0.05f * diffx;
-		ty -= (float) 0.05f * diffy;
-		*/
-
-		return;
-	}
+    glHint(GL_FOG_HINT,GL_FASTEST);
 }
 
 //-------------------------------------------------------------------------------
@@ -201,63 +101,45 @@ float eye_sep_x = 0, eye_sep_y = 0, inv_eye_dist = 0;
 
 void display_scene(float, float, float);
 void update_user_position(int x, int y);
+void update_user_position();
 
-float rz1 = 0;
+float rz1 = 0, data[6];
 
 void display(void)
 {
-    // update_by_wiimote();
-    if (cam->capture_image())
+    /*update_by_wiimote( (object_mode ? &world_r : &obj_r),
+                       (object_mode ? &cam_pos : &obj_pos),
+                       object_mode,
+                       lastx, lasty );*/
+
+    try
     {
-        // pass the pointer to the left & right images to open_cv interface
-        if (!cv->process_images( cam->imageBufRGB + cam->vf->size[0]*cam->vf->size[1]*3,
-                                 cam->imageBufRGB ) )
-            cout << "[-] OpenCV process error." << endl;
+        if (r_htc->read(data))
+        {
+            cout << data[0] << " " << data[1] << " " << data[2] << endl;
+            headPosition = Point(data);
+            lookVector = Point(data+3);
+        }
+    }
+    catch (runtime_error e)
+    {
+        cout << e.what() << endl;
     }
 
-    stereo_anl->findLocationVector(cornersL, cornersR, headPosition, lookVector, coord_trans_4x4);
-    lookVector = Point::normalize(lookVector);
-    printf("HP: %01.2f %01.2f %01.2f - LV: %01.2f %01.2f %01.2f\n",
-            headPosition.x, headPosition.y, headPosition.z,
-            lookVector.x, lookVector.y, lookVector.z);
-    /*printf("HP: %01.2f %01.2f - LV: %01.2f %01.2f\n",
-            cornersL[0].x, cornersL[0].y,
-            cornersR[0].x, cornersR[0].y);*/
 
     /*  calibration +y <-> opengl +x AND
     *   calibration +x <-> opengl -y
     */
-    update_user_position(512 - 512 * lookVector.y, 512 - 512 * lookVector.x);
+    update_user_position(); //512 - 512 * lookVector.y, 512 - 512 * lookVector.x);
 
-    glDrawBuffer(GL_BACK_LEFT);
-	display_scene(eye_sep_x, eye_sep_y, rz1);
-	glDrawBuffer(GL_BACK_RIGHT);
+    glDrawBuffer(GL_BACK_RIGHT);
+    display_scene(eye_sep_x, eye_sep_y, rz1);
+	glDrawBuffer(GL_BACK_LEFT);
 	display_scene(-eye_sep_x, -eye_sep_y, rz1);
 }
 
-void display_scene(float eye_sep_x, float eye_sep_y, float rz)
+void DrawScene(float rz)//****************************************
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-    // rendele
-	glFrustum( (-cam_pos.x-w_w*.5) * K, (-cam_pos.x+w_w*.5) * K,
-			   (-cam_pos.y-w_h*.5) * K, (-cam_pos.y+w_h*.5) * K,
-				user_height * K, user_height * 2);
-
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-
-	// sert bak
-	gluLookAt(cam_pos.x+eye_sep_x, cam_pos.y+eye_sep_y, cam_pos.z,
-              cam_pos.x+eye_sep_x, cam_pos.y+eye_sep_y, 0.0,
-              0, 1, 0);
-
-	// kullanýcý hizasýndan ekranýn olduðu yere taþý
-	//glTranslatef(0.0, user_to_screen, 0.0);
-
     glDisable(GL_LIGHTING);
     // draw grid
     int half_w_w = w_w * .5f,
@@ -279,6 +161,8 @@ void display_scene(float eye_sep_x, float eye_sep_y, float rz)
 
     glEnd();
     glEnable(GL_LIGHTING);
+
+
     /*float mult=0.5;
 	for(float y=-*mult;y<=500*mult;y+=200*mult)
         for(float x=-700*mult;x<=700*mult;x+=200*mult)
@@ -295,6 +179,7 @@ void display_scene(float eye_sep_x, float eye_sep_y, float rz)
         }*/
 
     glPushMatrix();
+
     glColor3f(0.7f, 1.f, 1.f);
 
     glRotatef(rz, 0, 0, 1);
@@ -304,6 +189,33 @@ void display_scene(float eye_sep_x, float eye_sep_y, float rz)
 
     glTranslatef(obj_pos.x, obj_pos.y, obj_pos.z);
 
+    /*if (showgrid)//*********************************************
+    {
+    // draw grid
+    glBegin(GL_LINES);
+        for (int j=-half_w_w;j<=half_w_w;j+=2)
+        {
+            for(int i=-half_w_h;i<=half_w_h;i=+2)
+            {
+                   glNormal3f(i,j,-half_w_w);
+                   glVertex3f(i,j,-half_w_w);
+                   glNormal3f(i,j,half_w_w);
+                   glVertex3f(i,j,half_w_w);
+
+                   glNormal3f(half_w_w,j,i);
+                   glVertex3f(half_w_w,j,i);
+                   glNormal3f(-half_w_w,j,i);
+                   glVertex3f(-half_w_w,j,i);
+
+                   glNormal3f(i,-half_w_w,j);
+                   glVertex3f(i,-half_w_w,j);
+                   glNormal3f(i,half_w_w,j);
+                   glVertex3f(i,half_w_w,j);
+            }
+        }
+    glEnd();
+    }*/
+
     // sahne nesnelerini çiz
     if (o1 != NULL)
         o1->draw();
@@ -312,12 +224,82 @@ void display_scene(float eye_sep_x, float eye_sep_y, float rz)
         o2->draw();
 
     glPopMatrix();
+}
 
+void display_scene(float eye_sep_x, float eye_sep_y, float rz)
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	double left, right, bottom, top, near, far;
+
+/*    glViewport(0, w_h/2, w_w, w_h/2);
+
+    glScissor(0, w_h/2, w_w, w_h/2);
+*/
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	left= (-cam_pos.x - w_w*.5) * K;
+    right= (-cam_pos.x + w_w*.5) * K;
+    bottom= (-cam_pos.y - w_h * .5) * K;
+    top= (-cam_pos.y + w_h * .5) * K;
+    near= cam_pos.z * K;
+    far= cam_pos.z * 2;
+
+    // rendele
+	glFrustum( left, right, bottom, top, near, far);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+
+	// sert bak
+	gluLookAt(cam_pos.x+eye_sep_x, cam_pos.y+eye_sep_y, cam_pos.z,
+              cam_pos.x+eye_sep_x, cam_pos.y+eye_sep_y, 0.0,
+              0, 1, 0);
+
+	// kullanýcý hizasýndan ekranýn olduðu yere taþý
+	//glTranslatef(0.0, user_to_screen, 0.0);
+
+    DrawScene(rz);//****************************************
 
 	glPopMatrix();
+/*
+	glViewport(0, 0, w_w, w_h/2);
 
-	glutPostRedisplay(); /* Inform GLUT to constantly update the screen */
-	glutSwapBuffers();
+    glScissor(0, 0, w_w, w_h/2);
+
+    glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	left= (-cam_pos.x-w_w*.5) * K;
+    right= (-cam_pos.x+w_w*.5) * K;
+    bottom= (-cam_pos.y-2.0*w_h*.5*.5) * K;
+    top= (-cam_pos.y+0.5*w_h*.5*.5) * K;
+    near= cam_pos.z * K;
+    far= cam_pos.z * 2;
+
+    // rendele
+	glFrustum( left, right, bottom, top, near, far);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+
+	// sert bak
+	gluLookAt(cam_pos.x+eye_sep_x, cam_pos.y+eye_sep_y, cam_pos.z,
+              cam_pos.x+eye_sep_x, cam_pos.y+eye_sep_y, 0.0,
+              0, 1, 0);
+
+    // kullanýcý hizasýndan ekranýn olduðu yere taþý
+	//glTranslatef(0.0, user_to_screen, 0.0);
+
+    DrawScene(rz);//****************************************
+
+	glPopMatrix();
+*/
+    if (glutGetWindow())
+	{
+        glutPostRedisplay(); /* Inform GLUT to constantly update the screen */
+        glutSwapBuffers();
+	}
 }
 
 
@@ -355,6 +337,25 @@ void update_user_position(int x, int y)
     //printf("user_yaw = %f\n",user_yaw);
 }
 
+#define CM_2_COORD 11.377777778
+#define x_offset -45 * CM_2_COORD
+#define y_offset -32 * CM_2_COORD
+
+void update_user_position()
+{
+    user_yaw = PI_HALF + atan2( lookVector.x, lookVector.y ); // *180/PI;
+
+    eye_sep_x = 5 * cos(user_yaw);
+    eye_sep_y = 5 * sin(user_yaw);
+
+    cout << "user_yaw = " << user_yaw << eye_sep_x << eye_sep_y << endl;
+
+    cam_pos.x += ( x_offset + headPosition.y * CM_2_COORD - cam_pos.x ) * delta_tr;
+    cam_pos.y += ( y_offset - headPosition.x * CM_2_COORD - cam_pos.y ) * delta_tr;
+
+    cam_pos.z += ( headPosition.z * CM_2_COORD - cam_pos.z ) * delta_tr;
+}
+
 //-------------------------------------------------------------------------------
 //
 void Motion(int x, int y)
@@ -371,8 +372,65 @@ void Motion(int x, int y)
 //
 void Keyboard(unsigned char key, int x, int y)
 {
-    if (key == 27)
+    if (key == 'g' || key == 'G')
+    {
+        full_screen = !full_screen;
+
+        if ( full_screen && glutGameModeGet(GLUT_GAME_MODE_ACTIVE) == 0 ) //argc > 2 && strcmp(argv[2], "f") == 0)
+        {
+            // Enter game mode:
+            char mode_string[100];
+            sprintf(mode_string, "%dx%d:%d@%d", 1024, 1536, 32, 120);
+            cout << "GLUT-Game-Mode: " << mode_string << endl;
+            glutGameModeString( mode_string );
+            glutEnterGameMode();
+            // register callbacks again
+			InitGlut();
+        }
+        else
+            glutLeaveGameMode();
+    }
+    /*else if (key == 'f' || key == 'F')
+        FogEffect(.01);*/
+    else if (key == 27)
 		exit(0);
+
+    switch (key)//************************************
+    {
+        case '1':
+            FogEffect(20.0);
+            break;
+
+        case '2':
+            FogEffect(40.0);
+            break;
+
+        case '3':
+            FogEffect(60.0);
+            break;
+
+        case '4':
+            FogEffect(80.0);
+            break;
+
+        case '5':
+            FogEffect(100.0);
+            break;
+
+        case '6':
+            FogEffect(120.0);
+            break;
+
+        case '7':
+            FogEffect(500.0);
+            break;
+
+        /*case 'r':            // Toggle grid
+
+        case 'R':
+            showgrid = !showgrid;
+            break;*/
+    }
 }
 
 //-------------------------------------------------------------------------------
@@ -405,10 +463,41 @@ void Mouse(int b,int s,int x,int y)
 	glutPostRedisplay();
 }
 
+/**
+* Registering GLUT related callbacks
+*/
+void InitGlut()
+{
+    glutDisplayFunc(display);
+	glutReshapeFunc(reshape);
+	glutMouseFunc(Mouse);
+	glutKeyboardFunc(Keyboard);
+	glutMotionFunc(Motion);
+
+    // glutFullScreen();
+    glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	GLfloat LightPosition[]={ 0.0f, 50.0f, 500.0f, 1.0f };
+	GLfloat LightIntensity[]={ 0.2f, 0.2f, 0.2f, 1.0f };
+	glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, LightIntensity);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, LightIntensity);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, LightIntensity);
+	glClearColor(0.0, 0.0, 0.0, 1.0);//*************************
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_NORMALIZE);
+	glDepthFunc(GL_LEQUAL);
+	glCullFace(GL_BACK);
+	glEnable(GL_COLOR_MATERIAL);
+}
+
+
 //-------------------------------------------------------------------------------
 ///
 int main(int argc,char** argv)
 {
+    //if (strstr(argv[0], "-r") != NULL)//******************
+        //showgrid = 1;//**********************
     //g = new Geometry("bunny.wrl", "Whole_Bunny");
 	o1 = new SceneObject("res/chapel_97.wrl","OB_Ground_Ground_M");
     o2  = new SceneObject("res/chapel_97.wrl", "OB_Thumbstone_Chapel");
@@ -420,44 +509,15 @@ int main(int argc,char** argv)
     glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_STEREO);
 
-    if ( full_screen ) //argc > 2 && strcmp(argv[2], "f") == 0)
-    {
-        // Enter game mode:
-        char mode_string[100];
-        sprintf(mode_string, "%dx%d:%d@%d", 1024, 768, 25, 120);
-        printf("GLUT-Game-Mode: %s\n", mode_string);
-        glutGameModeString( mode_string );
-        glutEnterGameMode();
-    }
-    else
-    {
-        glutInitWindowSize(w_w, w_h);
-        glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH) - w_w) * 0.5, (glutGet(GLUT_SCREEN_HEIGHT) - w_h) * 0.5 );
-        w_no = glutCreateWindow("VRML IO Example");
-    }
+    glutInitWindowSize(w_w, w_h);
+    glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH) - w_w) * 0.5, (glutGet(GLUT_SCREEN_HEIGHT) - w_h) * 0.5 );
+    glutCreateWindow("VRML IO Example");
 
-	//glutFullScreen();
-    glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	GLfloat LightPosition[]={ 0.0f, 50.0f, 500.0f, 1.0f };
-	GLfloat LightIntensity[]={ 0.2f, 0.2f, 0.2f, 1.0f };
-	glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, LightIntensity);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, LightIntensity);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, LightIntensity);
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_NORMALIZE);
-	glDepthFunc(GL_LEQUAL);
-	glCullFace(GL_BACK);
-	glEnable(GL_COLOR_MATERIAL);
-
-	glutDisplayFunc(display);
-	glutReshapeFunc(reshape);
-	glutMouseFunc(Mouse);
-	glutKeyboardFunc(Keyboard);
-	glutMotionFunc(Motion);
+    InitGlut();
 
 	Init();
+
+	//FogEffect(1.0);
 
 	glutMainLoop();
 
@@ -465,8 +525,4 @@ int main(int argc,char** argv)
 
 	delete o1; o1 = NULL;
 	delete o2; o2 = NULL;
-
-	delete stereo_anl; stereo_anl = NULL;
-    delete cam; cam = NULL;
-    delete cv; cv = NULL;
 }

@@ -146,6 +146,15 @@ public: // Variables
 	float data[4][4];
 };
 
+class Rotation
+{
+public:
+	Rotation(float p = 0.f, float y = 0.f, float r = 0.f) { pitch = p; yaw = y; roll = r; };
+	~Rotation() {};
+
+	float pitch, yaw, roll;
+};
+
 class Geometry
 {
 public: // Methods

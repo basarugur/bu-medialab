@@ -13,6 +13,10 @@ cwiid_wiimote_t * g_wiimote = NULL; /* Handles our wiimote connection */
 struct cwiid_state g_wii_state; /* We capture this state on every frame */
 struct acc_cal wm_cal;
 
+const static float delta_acc = .005f;
+const static float delta_tr = 1.f;//.05f;
+const static float rad2deg = 180.f / PI;
+
 /**
  * GLUT function to display \a string at position (\a x,\a y,\a z).
  */
@@ -163,5 +167,120 @@ void disconnect_wiimote()
         printf("done\n");
     }
     fflush(stdout);
+}
+
+/**
+ * Checking wiimote connection and setting up if not exists
+ */
+void update_by_wiimote(Rotation* ch_r, Point* ch_pos, bool object_mode, int last_x, int last_y)
+{
+	static double ir_positions[2][2] = { { 0, 0 }, { 0, 0 } };
+    static int ir_sizes[2] = { 3, 3 }; /* Expect it to be around 2-8 in wiimote state struct */
+
+    if ( check_wiimote() )
+    {
+        int diffx, diffy;
+		if (last_x > 0) // Valid data
+		{
+			diffx = g_wii_state.acc[0] - last_x,
+			diffy = g_wii_state.acc[2] - last_y;
+		}
+		else
+			diffx = diffy = 0;
+
+		last_x = g_wii_state.acc[0];
+		last_y = g_wii_state.acc[2];
+
+		uint8_t leds = 0x00;
+		for (int i=0; i < 4; i++)
+        {
+        	if (g_wii_state.ir_src[i].valid)
+	        	leds |= 0x01 * (i+1);
+
+        	//printf("%2d %4d %4d %4d | ", g_wii_state.ir_src[i].valid, g_wii_state.ir_src[i].pos[CWIID_X], g_wii_state.ir_src[i].pos[CWIID_Y], g_wii_state.ir_src[i].size);
+            /*
+            double x, y;
+
+            if (g_wii_state.ir_src[i].valid)
+            {
+            	x = g_wii_state.ir_src[i].pos[CWIID_X] * 64 / ((double) CWIID_IR_X_MAX);
+                y = 64 - g_wii_state.ir_src[i].pos[CWIID_Y] * 64 / (double) CWIID_IR_Y_MAX;
+
+                ir_positions[i][0] = x;
+                ir_positions[i][1] = y;
+
+                if (g_wii_state.ir_src[i].size != -1)
+                {
+                    ir_sizes[i] = g_wii_state.ir_src[i].size+1;
+                }
+            }
+            else
+            {
+                x = ir_positions[i][0];
+                y = ir_positions[i][1];
+            }*/
+
+
+        }
+		//printf(" LEDS: %d\n", leds);
+
+        /* Check if the home button is pressed, then exit */
+		if ( g_wii_state.buttons & CWIID_BTN_HOME )
+		{
+			disconnect_wiimote();
+		    exit(EXIT_SUCCESS);
+		}
+
+		if ( g_wii_state.buttons & CWIID_BTN_A && g_wii_state.buttons & CWIID_BTN_B )
+			object_mode = !object_mode;
+		else if ( g_wii_state.buttons & CWIID_BTN_LEFT )
+			ch_pos->x -= delta_tr;
+		else if ( g_wii_state.buttons & CWIID_BTN_RIGHT )
+			ch_pos->x += delta_tr;
+		else if ( g_wii_state.buttons & CWIID_BTN_UP )
+			ch_pos->y += delta_tr;
+		else if ( g_wii_state.buttons & CWIID_BTN_DOWN )
+			ch_pos->y -= delta_tr;
+		else if ( g_wii_state.buttons & CWIID_BTN_A )
+			ch_pos->z += delta_tr;
+		else if ( g_wii_state.buttons & CWIID_BTN_B )
+			ch_pos->z -= delta_tr;
+
+        float a_x = ((float)g_wii_state.acc[CWIID_X] - wm_cal.zero[CWIID_X]) /
+        	          (wm_cal.one[CWIID_X] - wm_cal.zero[CWIID_X]);
+        float a_y = ((float)g_wii_state.acc[CWIID_Y] - wm_cal.zero[CWIID_Y]) /
+        	      (wm_cal.one[CWIID_Y] - wm_cal.zero[CWIID_Y]);
+        float a_z = ((float)g_wii_state.acc[CWIID_Z] - wm_cal.zero[CWIID_Z]) /
+        	      (wm_cal.one[CWIID_Z] - wm_cal.zero[CWIID_Z]);
+        //float a = sqrt(pow(a_x,2)+pow(a_y,2)+pow(a_z,2));
+
+		float a_t = atan(a_x/a_z);
+		if (a_z == 0.f || cos(a_t) < .000001f)
+			return;
+
+        if (a_z <= 0.f)
+        	a_t += PI * ((a_x > 0.f) ? 1 : -1);
+
+        a_t *= -1;
+
+		//printf("%d %d %d\n",g_wii_state.acc[CWIID_X] - wm_cal.zero[CWIID_X], g_wii_state.acc[CWIID_Y] - wm_cal.zero[CWIID_Y], g_wii_state.acc[CWIID_Z] - wm_cal.zero[CWIID_Z]);
+
+        ch_r->pitch = ch_r->pitch + (atan(a_y/a_z*cos(a_t)) * rad2deg - ch_r->pitch) * delta_acc;
+        ch_r->roll = ch_r->roll + (a_t*rad2deg - ch_r->roll) * delta_acc;
+
+		//printf("accelerator data\n");
+		/*for (int i = 0; i < 3; i++)
+			printf("%d ", g_wii_state.acc[i]);
+		printf("\n");
+		if (abs(diffx) > 1 || abs(diffy) > 1)
+			printf("%d %d - %d %d - %d %d\n", g_wii_state.acc[0], g_wii_state.acc[2], last_x, last_y, diffx, diffy);
+
+		printf("%d %d - %d %d - %d %d\n", g_wii_state.acc[0], g_wii_state.acc[2], last_x, last_y, diffx, diffy);
+		tx += (float) 0.05f * diffx;
+		ty -= (float) 0.05f * diffy;
+		*/
+
+		return;
+	}
 }
 
