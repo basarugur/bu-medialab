@@ -1,0 +1,12 @@
+If video i/o error is received, do:
+- in shell: ps aux www
+- find possible processes that use the camera (such as previous HeadTracker-d)
+- kill them.
+
+If non-root user cannot access video:
+- sudo chmod 777 /dev/raw1394
+or
+- sudo chmod 777 /dev/video1394/*
+
+If ISO/Bandwidth errors exist:
+- Run ../CameraCleanup
