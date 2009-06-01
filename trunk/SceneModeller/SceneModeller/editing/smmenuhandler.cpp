@@ -18,6 +18,7 @@
 #include <math.h>
 
 #include <QFileDialog>
+#include <QMessageBox>
 
 
 SMMenuHandler::SMMenuHandler(QObject *parent)
@@ -637,8 +638,11 @@ void SMMenuHandler::fileActionClicked()
 		switch (ind_)
 		{
 		case 0:
-			m_scene->clearScene();
-			emit sceneChanged();
+			if (QMessageBox::Yes==QMessageBox::question(m_dialog_parent,"Clear Scene","Are you sure to clear scene?",QMessageBox::Yes,QMessageBox::No))
+			{
+				m_scene->clearScene();
+				emit sceneChanged();
+			}
 			break;
 		case 1:
 			m_scene->clearScene();

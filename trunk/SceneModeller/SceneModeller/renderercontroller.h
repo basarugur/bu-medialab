@@ -9,6 +9,28 @@
 
 #include "formats/rawdevice.h"
 
+#include <QThread>
+#include <QProcess>
+
+//
+class RenderThread : public QThread
+{
+public:
+	RenderThread(QObject* obj_):QThread(obj_)
+	{
+
+	}
+	~RenderThread(){ };
+
+	void run()
+	{
+		QStringList arg_ ;
+		arg_ << "data/scene.xml";
+		QProcess::execute("renderer.exe",arg_);
+	}
+};
+//
+
 class RendererController : public QDialog
 {
 	Q_OBJECT
@@ -28,6 +50,8 @@ private:
 
 	void saveRawFiles();
 	void saveXMLFile();
+
+	RenderThread* m_render_thread;
 
 private slots:
 	void on_pushButton_2_clicked();

@@ -16,7 +16,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle" >
-   <string>Scene Modeler for Resposive Workbench by SERHAT ANGIN</string>
+   <string>Scene Modeler for Responsive Workbench by SERHAT ANGIN</string>
   </property>
   <property name="windowIcon" >
    <iconset resource="scenemodeller.qrc" >
@@ -118,7 +118,7 @@ QMenuBar::item:selected {
 </string>
   </property>
   <property name="dockOptions" >
-   <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::ForceTabbedDocks|QMainWindow::VerticalTabs</set>
+   <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::VerticalTabs</set>
   </property>
   <widget class="QToolBar" name="fileToolBar" >
    <attribute name="toolBarArea" >

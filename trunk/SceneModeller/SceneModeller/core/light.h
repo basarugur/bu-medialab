@@ -27,6 +27,7 @@ class Light
 			m_p = Point3(0,0,0);
 
 			m_is_selected = false;
+			m_coeff = 1.0;
 		}
 
 		Light(Point3& p,Vector3& d) : m_p(p), m_d(d) {

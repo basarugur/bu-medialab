@@ -5,10 +5,10 @@
 #include <QDomElement>
 #include <QDomAttr>
 #include <QDomText>
-#include <QProcess>
+
 #include <QStringList>
 #include <QMessageBox>
-#include <QThread>
+
 
 
 #include "core/sphere.h"
@@ -24,24 +24,7 @@
 #include "core/disk.h"
 #include "core/partialdisk.h"
 
-//
-class RenderThread : public QThread
-{
-public:
-	RenderThread(QObject* obj_):QThread(obj_)
-	{
 
-	}
-	~RenderThread(){ };
-
-	void run()
-	{
-		QStringList arg_ ;
-		arg_ << "data/scene.xml";
-		QProcess::execute("renderer.exe",arg_);
-	}
-};
-//
 
 
 
@@ -51,6 +34,8 @@ RendererController::RendererController(Scene* sc,RawDevice* rwdev_,QWidget *pare
 	ui.setupUi(this);
 
 	m_scene = sc;
+
+	m_render_thread = new RenderThread(this);
 }
 
 RendererController::~RendererController()
@@ -68,7 +53,7 @@ void RendererController::on_pushButton_2_clicked()
 	int w_ = ui.lineEdit->text().toInt();
 	int h_ = ui.lineEdit_2->text().toInt();
 
-	if ( w_ > 0 && h_ > 0 )
+	if ( w_ > 0 && h_ > 0  && !m_render_thread->isRunning() )
 	{
 		QDir dir(".");
 		if(!dir.entryList().contains("data")) dir.mkdir("data");
@@ -76,8 +61,7 @@ void RendererController::on_pushButton_2_clicked()
 		saveRawFiles();
 		saveXMLFile();
 
-		RenderThread rnd_(this);
-		rnd_.start();
+		m_render_thread->start();
 
 		this->accept();
 		this->close();
@@ -86,7 +70,7 @@ void RendererController::on_pushButton_2_clicked()
 	{
 		QMessageBox::warning(this,"Size Error","Widht must be greater than 0.");
 	}
-	else
+	else if(h_ <= 0)
 	{
 		QMessageBox::warning(this,"Size Error","Height must be greater than 0.");
 	}
@@ -95,7 +79,7 @@ void RendererController::showDialog(Camera*  crnt_)
 {
 	m_current_camera  = crnt_ ; 
 	ui.checkBox->setChecked(false);
-	ui.checkBox_2->setChecked(false);
+	ui.groupBox_2->setChecked(false);
 	ui.lineEdit->setText("600");
 	ui.lineEdit_2->setText("600");
 
@@ -438,19 +422,15 @@ void RendererController::saveXMLFile()
 
 	}
 
-	if(ui.checkBox_2->isChecked())
+	if(ui.groupBox_2->isChecked())
 	{
 		QDomElement lghtElm_ = doc_.createElement("Light");
 		lgts_.appendChild(lghtElm_);
 		lghtElm_.setAttribute("id","0");
-		//QDomAttr at5_ = doc_.createAttribute("id"); 
-		//at5_.setNodeValue("0");
-		//lghtElm_.appendChild(at5_);
+
 
 		lghtElm_.setAttribute("type","sky");
-		//QDomAttr txtID_ = doc_.createAttribute("type"); 
-		//txtID_.setNodeValue("sky");
-		//lghtElm_.appendChild(txtID_);
+
 
 		QDomElement normal_ = doc_.createElement("Position");
 		lghtElm_.appendChild(normal_);
@@ -458,15 +438,7 @@ void RendererController::saveXMLFile()
 		normal_.setAttribute("y","7");
 		normal_.setAttribute("z","-5");
 
-		//QDomAttr nx_ = doc_.createAttribute("x"); 
-		//nx_.setNodeValue("0");
-		//normal_.appendChild(nx_);
-		//QDomAttr ny_ = doc_.createAttribute("y"); 
-		//ny_.setNodeValue("7");
-		//normal_.appendChild(ny_);
-		//QDomAttr nz_ = doc_.createAttribute("z"); 
-		//nz_.setNodeValue("-5");
-		//normal_.appendChild(nz_);
+
 
 		QDomElement translation_ = doc_.createElement("Direction");
 		lghtElm_.appendChild(translation_);
@@ -474,18 +446,9 @@ void RendererController::saveXMLFile()
 		translation_.setAttribute("y","1");
 		translation_.setAttribute("z","0");
 
-		//QDomAttr trnsx_ = doc_.createAttribute("x"); 
-		//trnsx_.setNodeValue("0");
-		//translation_.appendChild(trnsx_);
-		//QDomAttr trnsy_ = doc_.createAttribute("y"); 
-		//trnsy_.setNodeValue("1");
-		//translation_.appendChild(trnsy_);
-		//QDomAttr trnsz_ = doc_.createAttribute("z"); 
-		//trnsz_.setNodeValue("0");
-		//translation_.appendChild(trnsz_);
 
 		QDomElement pTrns_ = doc_.createElement("Coefficient");
-		QDomText pTrns_txt = doc_.createTextNode("1");
+		QDomText pTrns_txt = doc_.createTextNode(ui.lineEdit_3->text());
 		pTrns_.appendChild(pTrns_txt);
 		lghtElm_.appendChild(pTrns_);
 	}
@@ -494,7 +457,7 @@ void RendererController::saveXMLFile()
 	{
 		QDomElement lghtElm_ = doc_.createElement("Light");
 		lgts_.appendChild(lghtElm_);
-		if(ui.checkBox_2->isChecked())lghtElm_.setAttribute("id",QString::number(i+1));
+		if(ui.groupBox_2->isChecked())lghtElm_.setAttribute("id",QString::number(i+1));
 		else lghtElm_.setAttribute("id",QString::number(i));
 		//QDomAttr at5_ = doc_.createAttribute("id"); 
 		//if(ui.checkBox_2->isChecked()) at5_.setNodeValue(QString::number(i+1));
@@ -538,7 +501,7 @@ void RendererController::saveXMLFile()
 		//translation_.appendChild(trnsz_);
 
 		QDomElement pTrns_ = doc_.createElement("Coefficient");
-		QDomText pTrns_txt = doc_.createTextNode("1");
+		QDomText pTrns_txt = doc_.createTextNode(QString::number(m_scene->lights()[i]->coeff(),'f',3));
 		pTrns_.appendChild(pTrns_txt);
 		lghtElm_.appendChild(pTrns_);
 	}
