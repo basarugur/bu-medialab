@@ -132,7 +132,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing centralwidget.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\windows\.&quot; -I&quot;.\.&quot; &quot;.\centralwidget.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_centralwidget.cpp&quot;
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\windows\.&quot; -I&quot;.\.&quot; &quot;.\centralwidget.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_centralwidget.cpp&quot;
 "
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\centralwidget.h"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_centralwidget.cpp&quot;"/>
@@ -142,7 +142,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing centralwidget.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\.&quot; -I&quot;.\windows\.&quot; &quot;.\centralwidget.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_centralwidget.cpp&quot;
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\.&quot; -I&quot;.\windows\.&quot; &quot;.\centralwidget.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_centralwidget.cpp&quot;
 "
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\centralwidget.h"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_centralwidget.cpp&quot;"/>
@@ -202,7 +202,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing scenemodeller.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\windows\.&quot; -I&quot;.\.&quot; &quot;.\scenemodeller.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_scenemodeller.cpp&quot;
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\windows\.&quot; -I&quot;.\.&quot; &quot;.\scenemodeller.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_scenemodeller.cpp&quot;
 "
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\scenemodeller.h"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_scenemodeller.cpp&quot;"/>
@@ -212,7 +212,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing scenemodeller.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\.&quot; -I&quot;.\windows\.&quot; &quot;.\scenemodeller.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_scenemodeller.cpp&quot;
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\.&quot; -I&quot;.\windows\.&quot; &quot;.\scenemodeller.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_scenemodeller.cpp&quot;
 "
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\scenemodeller.h"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_scenemodeller.cpp&quot;"/>
@@ -1092,13 +1092,88 @@
 			Filter="moc;h;cpp"
 			UniqueIdentifier="{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}">
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_camerapropertiescontroller.cpp">
+				RelativePath=".\generatedfiles\debug\moc_camerapropertiescontroller.cpp">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_centralwidget.cpp">
+				RelativePath=".\generatedfiles\release\moc_camerapropertiescontroller.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_editcamera.cpp">
+				RelativePath=".\generatedfiles\debug\moc_centralwidget.cpp">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\generatedfiles\release\moc_centralwidget.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\generatedfiles\release\moc_editcamera.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\generatedfiles\debug\moc_editcamera.cpp">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\generatedfiles\release\moc_extrudedialog.cpp">
@@ -1126,19 +1201,57 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_logcontroller.cpp">
-			</File>
-			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_objectpropertiescontroller.cpp">
-			</File>
-			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_objecttreecontroller.cpp">
-			</File>
-			<File
-				RelativePath=".\GeneratedFiles\Release\moc_renderercontroller.cpp">
+				RelativePath=".\generatedfiles\release\moc_objectpropertiescontroller.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32"
 					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\generatedfiles\debug\moc_objectpropertiescontroller.cpp">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\generatedfiles\release\moc_objecttreecontroller.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\generatedfiles\debug\moc_objecttreecontroller.cpp">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
 					<Tool
 						Name="VCCLCompilerTool"/>
 				</FileConfiguration>
@@ -1153,19 +1266,153 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_scenemodeller.cpp">
+				RelativePath=".\GeneratedFiles\Release\moc_renderercontroller.cpp">
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_smcanvaswidget.cpp">
+				RelativePath=".\generatedfiles\debug\moc_scenemodeller.cpp">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_smcanvaswindow.cpp">
+				RelativePath=".\generatedfiles\release\moc_scenemodeller.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_smmenuhandler.cpp">
+				RelativePath=".\generatedfiles\debug\moc_smcanvaswidget.cpp">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_smtreewidget.cpp">
+				RelativePath=".\generatedfiles\release\moc_smcanvaswidget.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\generatedfiles\debug\moc_smcanvaswindow.cpp">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\generatedfiles\release\moc_smcanvaswindow.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\generatedfiles\debug\moc_smmenuhandler.cpp">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\generatedfiles\release\moc_smmenuhandler.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\generatedfiles\debug\moc_smtreewidget.cpp">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\generatedfiles\release\moc_smtreewidget.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\GeneratedFiles\qrc_scenemodeller.cpp">
@@ -1438,7 +1685,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing smcanvaswidget.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\windows\.&quot; -I&quot;.\.&quot; &quot;.\canvas\smcanvaswidget.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_smcanvaswidget.cpp&quot;
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\windows\.&quot; -I&quot;.\.&quot; &quot;.\canvas\smcanvaswidget.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_smcanvaswidget.cpp&quot;
 "
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\canvas\smcanvaswidget.h"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_smcanvaswidget.cpp&quot;"/>
@@ -1448,7 +1695,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing smcanvaswidget.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\.&quot; -I&quot;.\windows\.&quot; &quot;.\canvas\smcanvaswidget.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_smcanvaswidget.cpp&quot;
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\.&quot; -I&quot;.\windows\.&quot; &quot;.\canvas\smcanvaswidget.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_smcanvaswidget.cpp&quot;
 "
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\canvas\smcanvaswidget.h"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_smcanvaswidget.cpp&quot;"/>
@@ -1464,7 +1711,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing smcanvaswindow.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\windows\.&quot; -I&quot;.\.&quot; &quot;.\canvas\smcanvaswindow.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_smcanvaswindow.cpp&quot;
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\windows\.&quot; -I&quot;.\.&quot; &quot;.\canvas\smcanvaswindow.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_smcanvaswindow.cpp&quot;
 "
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\canvas\smcanvaswindow.h"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_smcanvaswindow.cpp&quot;"/>
@@ -1474,7 +1721,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing smcanvaswindow.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\.&quot; -I&quot;.\windows\.&quot; &quot;.\canvas\smcanvaswindow.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_smcanvaswindow.cpp&quot;
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\.&quot; -I&quot;.\windows\.&quot; &quot;.\canvas\smcanvaswindow.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_smcanvaswindow.cpp&quot;
 "
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\canvas\smcanvaswindow.h"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_smcanvaswindow.cpp&quot;"/>
@@ -1531,7 +1778,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing smmenuhandler.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\windows\.&quot; -I&quot;.\.&quot; &quot;.\editing\smmenuhandler.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_smmenuhandler.cpp&quot;
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\windows\.&quot; -I&quot;.\.&quot; &quot;.\editing\smmenuhandler.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_smmenuhandler.cpp&quot;
 "
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\editing\smmenuhandler.h"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_smmenuhandler.cpp&quot;"/>
@@ -1541,7 +1788,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing smmenuhandler.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\.&quot; -I&quot;.\windows\.&quot; &quot;.\editing\smmenuhandler.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_smmenuhandler.cpp&quot;
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\.&quot; -I&quot;.\windows\.&quot; &quot;.\editing\smmenuhandler.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_smmenuhandler.cpp&quot;
 "
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\editing\smmenuhandler.h"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_smmenuhandler.cpp&quot;"/>
@@ -1566,7 +1813,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing camerapropertiescontroller.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\windows\.&quot; -I&quot;.\.&quot; &quot;.\windows\camerapropertiescontroller.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_camerapropertiescontroller.cpp&quot;
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\windows\.&quot; -I&quot;.\.&quot; &quot;.\windows\camerapropertiescontroller.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_camerapropertiescontroller.cpp&quot;
 "
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\windows\camerapropertiescontroller.h"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_camerapropertiescontroller.cpp&quot;"/>
@@ -1576,36 +1823,10 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing camerapropertiescontroller.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\.&quot; -I&quot;.\windows\.&quot; &quot;.\windows\camerapropertiescontroller.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_camerapropertiescontroller.cpp&quot;
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\.&quot; -I&quot;.\windows\.&quot; &quot;.\windows\camerapropertiescontroller.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_camerapropertiescontroller.cpp&quot;
 "
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\windows\camerapropertiescontroller.h"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_camerapropertiescontroller.cpp&quot;"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\windows\logcontroller.cpp">
-			</File>
-			<File
-				RelativePath=".\windows\logcontroller.h">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing logcontroller.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\windows\.&quot; -I&quot;.\.&quot; &quot;.\windows\logcontroller.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_logcontroller.cpp&quot;
-"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\windows\logcontroller.h"
-						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_logcontroller.cpp&quot;"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing logcontroller.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\.&quot; -I&quot;.\windows\.&quot; &quot;.\windows\logcontroller.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_logcontroller.cpp&quot;
-"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\windows\logcontroller.h"
-						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_logcontroller.cpp&quot;"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -1618,7 +1839,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing objectpropertiescontroller.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\windows\.&quot; -I&quot;.\.&quot; &quot;.\windows\objectpropertiescontroller.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_objectpropertiescontroller.cpp&quot;
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\windows\.&quot; -I&quot;.\.&quot; &quot;.\windows\objectpropertiescontroller.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_objectpropertiescontroller.cpp&quot;
 "
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\windows\objectpropertiescontroller.h"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_objectpropertiescontroller.cpp&quot;"/>
@@ -1628,7 +1849,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing objectpropertiescontroller.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\.&quot; -I&quot;.\windows\.&quot; &quot;.\windows\objectpropertiescontroller.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_objectpropertiescontroller.cpp&quot;
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\.&quot; -I&quot;.\windows\.&quot; &quot;.\windows\objectpropertiescontroller.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_objectpropertiescontroller.cpp&quot;
 "
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\windows\objectpropertiescontroller.h"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_objectpropertiescontroller.cpp&quot;"/>
@@ -1644,7 +1865,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing objecttreecontroller.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\windows\.&quot; -I&quot;.\.&quot; &quot;.\windows\objecttreecontroller.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_objecttreecontroller.cpp&quot;
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\windows\.&quot; -I&quot;.\.&quot; &quot;.\windows\objecttreecontroller.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_objecttreecontroller.cpp&quot;
 "
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\windows\objecttreecontroller.h"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_objecttreecontroller.cpp&quot;"/>
@@ -1654,7 +1875,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing objecttreecontroller.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\.&quot; -I&quot;.\windows\.&quot; &quot;.\windows\objecttreecontroller.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_objecttreecontroller.cpp&quot;
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\.&quot; -I&quot;.\windows\.&quot; &quot;.\windows\objecttreecontroller.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_objecttreecontroller.cpp&quot;
 "
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\windows\objecttreecontroller.h"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_objecttreecontroller.cpp&quot;"/>
@@ -1670,7 +1891,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing smtreewidget.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\windows\.&quot; -I&quot;.\.&quot; &quot;.\windows\smtreewidget.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_smtreewidget.cpp&quot;
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\windows\.&quot; -I&quot;.\.&quot; &quot;.\windows\smtreewidget.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_smtreewidget.cpp&quot;
 "
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\windows\smtreewidget.h"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_smtreewidget.cpp&quot;"/>
@@ -1680,7 +1901,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing smtreewidget.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\.&quot; -I&quot;.\windows\.&quot; &quot;.\windows\smtreewidget.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_smtreewidget.cpp&quot;
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\.&quot; -I&quot;.\windows\.&quot; &quot;.\windows\smtreewidget.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_smtreewidget.cpp&quot;
 "
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\windows\smtreewidget.h"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_smtreewidget.cpp&quot;"/>
@@ -2446,7 +2667,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing editcamera.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\windows\.&quot; -I&quot;.\.&quot; &quot;.\Camera\editcamera.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_editcamera.cpp&quot;
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\windows\.&quot; -I&quot;.\.&quot; &quot;.\Camera\editcamera.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_editcamera.cpp&quot;
 "
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\Camera\editcamera.h"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_editcamera.cpp&quot;"/>
@@ -2456,7 +2677,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing editcamera.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\.&quot; -I&quot;.\windows\.&quot; &quot;.\Camera\editcamera.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_editcamera.cpp&quot;
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;.\canvas\.&quot; -I&quot;.\menu\.&quot; -I&quot;.\Camera\.&quot; -I&quot;.\.&quot; -I&quot;.\windows\.&quot; &quot;.\Camera\editcamera.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_editcamera.cpp&quot;
 "
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\Camera\editcamera.h"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_editcamera.cpp&quot;"/>

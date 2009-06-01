@@ -85,12 +85,14 @@ void VrmlDevice::loadScene(std::string fl_ , Scene* sce_)
 			{
 				AreaLight* lght_ = new AreaLight();
 				lght_->setPos(Point3(pos_[0],pos_[1],pos_[2]));
+				lght_->set_coeff(pntNode_->getIntensity());
 				sce_->lights().push_back(lght_);
 			}
 			else
 			{
 				PointLight* lght_ = new PointLight();
 				lght_->setPos(Point3(pos_[0],pos_[1],pos_[2]));
+				lght_->set_coeff(pntNode_->getIntensity());
 				sce_->lights().push_back(lght_);
 			}
 		}

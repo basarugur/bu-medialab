@@ -175,6 +175,14 @@ void ObjectPropertiesController::showLight()
 			m_layout->addWidget(sc_,1,0,1,1);
 			m_layout->addWidget(sce_,1,1,1,1);
 			connect(sce_,SIGNAL(editingFinished()),this,SLOT(lineEditsChanged()));
+
+			QLabel* refCo_ = new QLabel(m_dock_widget);
+			refCo_->setText("Coefficient ");
+			QLineEdit* refCoe_ = new QLineEdit(m_dock_widget);
+			refCoe_->setText(QString::number(lg_->coeff(),'f',3));
+			m_layout->addWidget(refCo_,2,0,1,1);
+			m_layout->addWidget(refCoe_,2,1,1,1);
+			connect(refCoe_,SIGNAL(editingFinished()),this,SLOT(lineEditsChanged()));
 		}
 		else
 		{
@@ -213,6 +221,14 @@ void ObjectPropertiesController::showLight()
 			m_layout->addWidget(luCo_,3,0,1,1);
 			m_layout->addWidget(luCoe_,3,1,1,1);
 			connect(luCoe_,SIGNAL(editingFinished()),this,SLOT(lineEditsChanged()));
+
+			QLabel* ref1Co_ = new QLabel(m_dock_widget);
+			ref1Co_->setText("Coefficient ");
+			QLineEdit* ref1Coe_ = new QLineEdit(m_dock_widget);
+			ref1Coe_->setText(QString::number(lg_->coeff(),'f',3));
+			m_layout->addWidget(ref1Co_,4,0,1,1);
+			m_layout->addWidget(ref1Coe_,4,1,1,1);
+			connect(ref1Coe_,SIGNAL(editingFinished()),this,SLOT(lineEditsChanged()));
 		}
 	}
 }
@@ -1287,7 +1303,16 @@ void ObjectPropertiesController::saveGUIToLight()
 		}
 	}
 
-	if(m_current_light->type() == AREA_LIGHT)
+	if (m_current_light->type() == POINT_LIGHT)
+	{
+		// pos scale
+		tmp_ = static_cast<QLineEdit*>(m_layout->itemAtPosition(2,1)->widget());
+		if(tmp_)
+		{
+			m_current_light->set_coeff(tmp_->text().toDouble());
+		}
+	}
+	else if(m_current_light->type() == AREA_LIGHT)
 	{
 		AreaLight* areLig_ = static_cast<AreaLight*>(m_current_light);
 
@@ -1303,6 +1328,13 @@ void ObjectPropertiesController::saveGUIToLight()
 		if(tmp_)
 		{
 			areLig_->setH(tmp_->text().toDouble());
+		}
+
+		// pos scale
+		tmp_ = static_cast<QLineEdit*>(m_layout->itemAtPosition(4,1)->widget());
+		if(tmp_)
+		{
+			areLig_->set_coeff(tmp_->text().toDouble());
 		}
 	}
 
