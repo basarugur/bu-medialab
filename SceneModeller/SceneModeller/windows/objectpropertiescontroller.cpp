@@ -758,6 +758,14 @@ void ObjectPropertiesController::showObject()
 			m_layout->addWidget(rad_,20,0,1,1);
 			m_layout->addWidget(rade_,20,1,1,1);
 			rade_->setReadOnly(true);
+
+			QLabel* rad1_ = new QLabel(m_dock_widget);
+			rad1_->setText("Vertex Count");
+			QLineEdit* rad1e_ = new QLineEdit(m_dock_widget);
+			rad1e_->setText(QString::number(triangle_mesh_->vertexList().size()));
+			m_layout->addWidget(rad1_,21,0,1,1);
+			m_layout->addWidget(rad1e_,21,1,1,1);
+			rad1e_->setReadOnly(true);
 		}
 		else if(shape_->type() == TRIANGLE_SHAPE)
 		{
