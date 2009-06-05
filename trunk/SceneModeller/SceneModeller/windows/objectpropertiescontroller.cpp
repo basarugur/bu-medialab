@@ -15,6 +15,7 @@
 #include <QFileDialog>
 #include <QDir>
 #include <QFileInfo>
+#include <QSpacerItem>
 
 #include "../common.h"
 
@@ -63,8 +64,8 @@ ObjectPropertiesController::ObjectPropertiesController(QDockWidget* m_): m_dock_
 
 	m_current_object = NULL;
 	m_layout = new QGridLayout(m_dock_widget->widget());
-	m_layout->setSpacing(2);
-	m_layout->setMargin(2);
+	m_layout->setSpacing(5);
+	m_layout->setMargin(5);
 
 	m_current_camera = NULL;
 
@@ -86,8 +87,16 @@ void ObjectPropertiesController::clearAll()
 			if(itm_)
 			{
 				QWidget* wdg_ = itm_->widget();
-				m_layout->removeWidget(wdg_);
-				delete (wdg_);
+				if (wdg_)
+				{
+					m_layout->removeWidget(wdg_);
+					delete (wdg_);
+				}
+				else
+				{
+					m_layout->removeItem(itm_);
+					delete itm_;
+				}
 			}
 		}
 }
@@ -103,7 +112,10 @@ void ObjectPropertiesController::setMinimumSizes()
 				if(itm_)
 				{
 					QWidget* wdg_ = itm_->widget();
-					wdg_->setMinimumSize(QSize(0,0));
+					if (wdg_)
+					{
+						wdg_->setMinimumSize(QSize(0,0));
+					}
 				}
 			}
 }
@@ -148,6 +160,9 @@ void ObjectPropertiesController::showCamera()
 		m_layout->addWidget(tr_,3,0,1,1);
 		m_layout->addWidget(tre_,3,1,1,1);
 		connect(tre_,SIGNAL(editingFinished()),this,SLOT(cameraUpChanged()));
+
+		QSpacerItem* spc_ = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+		m_layout->addItem(spc_,4,1,1,1);
 	}
 }
 void ObjectPropertiesController::showLight()
@@ -183,6 +198,9 @@ void ObjectPropertiesController::showLight()
 			m_layout->addWidget(refCo_,2,0,1,1);
 			m_layout->addWidget(refCoe_,2,1,1,1);
 			connect(refCoe_,SIGNAL(editingFinished()),this,SLOT(lineEditsChanged()));
+
+			QSpacerItem* spc_ = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+			m_layout->addItem(spc_,3,1,1,1);
 		}
 		else
 		{
@@ -229,6 +247,9 @@ void ObjectPropertiesController::showLight()
 			m_layout->addWidget(ref1Co_,4,0,1,1);
 			m_layout->addWidget(ref1Coe_,4,1,1,1);
 			connect(ref1Coe_,SIGNAL(editingFinished()),this,SLOT(lineEditsChanged()));
+
+			QSpacerItem* spc_ = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+			m_layout->addItem(spc_,5,1,1,1);
 		}
 	}
 }
@@ -247,6 +268,9 @@ void ObjectPropertiesController::showVertex()
 		m_layout->addWidget(sc_,0,0,1,1);
 		m_layout->addWidget(sce_,0,1,1,1);
 		connect(sce_,SIGNAL(editingFinished()),this,SLOT(lineEditsChanged()));
+
+		QSpacerItem* spc_ = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+		m_layout->addItem(spc_,1,1,1,1);
 	}
 }
 void ObjectPropertiesController::showTriangle()
@@ -255,7 +279,7 @@ void ObjectPropertiesController::showTriangle()
 	if (trng_ != NULL)
 	{
 		QLabel* sc_ = new QLabel(m_dock_widget);
-		sc_->setText("Normal : ");
+		sc_->setText("Normal ");
 		QLineEdit* sce_ = new QLineEdit(m_dock_widget);
 		sce_->setText(QString::number(trng_->n().x(),'f',3)+" , "+
 			QString::number(trng_->n().y(),'f',3)+" , "+
@@ -295,6 +319,9 @@ void ObjectPropertiesController::showTriangle()
 		m_layout->addWidget(sc1_,3,0,1,1);
 		m_layout->addWidget(sce1_,3,1,1,1);
 		connect(sce1_,SIGNAL(editingFinished()),this,SLOT(lineEditsChanged()));
+
+		QSpacerItem* spc_ = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+		m_layout->addItem(spc_,4,1,1,1);
 	}
 }
 
@@ -454,8 +481,8 @@ void ObjectPropertiesController::showObject()
 		connect(bx_,SIGNAL(toggled(bool)),this,SLOT(textureOnOff(bool)));
 
 		QGridLayout* lyt_ = new QGridLayout(bx_);
-		lyt_->setSpacing(2);
-		lyt_->setMargin(2);
+		lyt_->setSpacing(5);
+		lyt_->setMargin(5);
 
 		QLabel* lbl1_ = new QLabel(bx_);
 		lbl1_->setText("Plane ");
@@ -560,6 +587,9 @@ void ObjectPropertiesController::showObject()
 			m_layout->addWidget(dim_,20,0,1,1);
 			m_layout->addWidget(dime_,20,1,1,1);
 			connect(dime_,SIGNAL(editingFinished()),this,SLOT(lineEditsChanged()));
+
+			//QSpacerItem* spc_ = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+			//m_layout->addItem(spc_,21,1,1,1);
 		}
 		else if(shape_->type()==SPHERE)
 		{
@@ -589,6 +619,9 @@ void ObjectPropertiesController::showObject()
 			m_layout->addWidget(stck_,22,0,1,1);
 			m_layout->addWidget(stcke_,22,1,1,1);
 			connect(stcke_,SIGNAL(editingFinished()),this,SLOT(lineEditsChanged()));
+
+			//QSpacerItem* spc_ = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+			//m_layout->addItem(spc_,23,1,1,1);
 		}
 		else if(shape_->type()==CONE)
 		{
@@ -626,6 +659,9 @@ void ObjectPropertiesController::showObject()
 			m_layout->addWidget(stck_,23,0,1,1);
 			m_layout->addWidget(stcke_,23,1,1,1);
 			connect(stcke_,SIGNAL(editingFinished()),this,SLOT(lineEditsChanged()));
+
+			//QSpacerItem* spc_ = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+			//m_layout->addItem(spc_,24,1,1,1);
 		}
 		else if(shape_->type()==CYLINDER)
 		{
@@ -663,6 +699,9 @@ void ObjectPropertiesController::showObject()
 			m_layout->addWidget(stck_,23,0,1,1);
 			m_layout->addWidget(stcke_,23,1,1,1);
 			connect(stcke_,SIGNAL(editingFinished()),this,SLOT(lineEditsChanged()));
+
+			//QSpacerItem* spc_ = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+			//m_layout->addItem(spc_,24,1,1,1);
 		}
 		else if(shape_->type()==TWO_SIDED_CYLINDER)
 		{
@@ -708,6 +747,9 @@ void ObjectPropertiesController::showObject()
 			m_layout->addWidget(stck_,24,0,1,1);
 			m_layout->addWidget(stcke_,24,1,1,1);
 			connect(stcke_,SIGNAL(editingFinished()),this,SLOT(lineEditsChanged()));
+
+			//QSpacerItem* spc_ = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+			//m_layout->addItem(spc_,25,1,1,1);
 		}
 		else if(shape_->type()==TORUS)
 		{
@@ -745,6 +787,9 @@ void ObjectPropertiesController::showObject()
 			m_layout->addWidget(stck_,23,0,1,1);
 			m_layout->addWidget(stcke_,23,1,1,1);
 			connect(stcke_,SIGNAL(editingFinished()),this,SLOT(lineEditsChanged()));
+
+			//QSpacerItem* spc_ = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+			//m_layout->addItem(spc_,24,1,1,1);
 		}
 		else if(shape_->type()==TRIANGLE_MESH)
 		{
@@ -766,6 +811,9 @@ void ObjectPropertiesController::showObject()
 			m_layout->addWidget(rad1_,21,0,1,1);
 			m_layout->addWidget(rad1e_,21,1,1,1);
 			rad1e_->setReadOnly(true);
+
+			//QSpacerItem* spc_ = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+			//m_layout->addItem(spc_,22,1,1,1);
 		}
 		else if(shape_->type() == TRIANGLE_SHAPE)
 		{
@@ -801,6 +849,9 @@ void ObjectPropertiesController::showObject()
 			m_layout->addWidget(p3_,22,0,1,1);
 			m_layout->addWidget(p3e_,22,1,1,1);
 			connect(p3e_,SIGNAL(editingFinished()),this,SLOT(lineEditsChanged()));
+
+			//QSpacerItem* spc_ = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+			//m_layout->addItem(spc_,23,1,1,1);
 		}
 		else if(shape_->type() == RECTANGLE)
 		{
@@ -822,6 +873,9 @@ void ObjectPropertiesController::showObject()
 			m_layout->addWidget(rad1_,21,0,1,1);
 			m_layout->addWidget(rade1_,21,1,1,1);
 			connect(rade1_,SIGNAL(editingFinished()),this,SLOT(lineEditsChanged()));
+
+			//QSpacerItem* spc_ = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+			//m_layout->addItem(spc_,22,1,1,1);
 		}
 		else if(shape_->type() == CIRCLE)
 		{
@@ -851,6 +905,9 @@ void ObjectPropertiesController::showObject()
 			m_layout->addWidget(stck_,22,0,1,1);
 			m_layout->addWidget(stcke_,22,1,1,1);
 			connect(stcke_,SIGNAL(editingFinished()),this,SLOT(lineEditsChanged()));
+
+			//QSpacerItem* spc_ = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+			//m_layout->addItem(spc_,23,1,1,1);
 		}
 		else if(shape_->type() == DISK)
 		{
@@ -888,6 +945,9 @@ void ObjectPropertiesController::showObject()
 			m_layout->addWidget(stck_,23,0,1,1);
 			m_layout->addWidget(stcke_,23,1,1,1);
 			connect(stcke_,SIGNAL(editingFinished()),this,SLOT(lineEditsChanged()));
+
+			//QSpacerItem* spc_ = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+			//m_layout->addItem(spc_,24,1,1,1);
 		}
 		else if(shape_->type() == PARTIAL_DISK)
 		{
@@ -941,6 +1001,9 @@ void ObjectPropertiesController::showObject()
 			m_layout->addWidget(stck_,25,0,1,1);
 			m_layout->addWidget(stcke_,25,1,1,1);
 			connect(stcke_,SIGNAL(editingFinished()),this,SLOT(lineEditsChanged()));
+
+			//QSpacerItem* spc_ = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+			//m_layout->addItem(spc_,26,1,1,1);
 		}
 
 

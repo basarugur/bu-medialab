@@ -13,8 +13,8 @@ void Cylinder::copyToMesh(TriangleMesh* msh_)
 
 	double angle_,cosAng_,sinAng_;
 	double x_ , y_ ; 
-	x_ = m_r;
-	y_ = 0;
+	x_ = 0;
+	y_ = m_r;
 	for(int j=0 ; j< m_slices ; j++ ) // circle
 	{
 		Vertex* vrt_ = new Vertex(x_,y_,0);
@@ -24,8 +24,8 @@ void Cylinder::copyToMesh(TriangleMesh* msh_)
 		cosAng_ = cos(angle_);
 		sinAng_ = sin(angle_);
 
-		x_ = m_r*cosAng_;
-		y_ = m_r*sinAng_;
+		y_ = m_r*cosAng_;
+		x_ = m_r*sinAng_;
 	}
 
 	for(int i=1 ; i<= m_stacks ; i++) // height

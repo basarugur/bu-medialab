@@ -28,6 +28,13 @@ public:
 	SceneModeller(QWidget *parent = 0, Qt::WFlags flags = 0);
 	~SceneModeller();
 
+	void showDockWindows()
+	{
+		ui.ObjectPropertyDock->setVisible(true);
+		ui.ObjectTreeDock->setVisible(true);
+		ui.cameraPropertyDock->setVisible(true);
+	}
+
 private:
 	Ui::SceneModellerClass ui;
 

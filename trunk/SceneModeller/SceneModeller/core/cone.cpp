@@ -11,8 +11,8 @@ void Cone::copyToMesh(TriangleMesh* msh_)
 
 	double angle_,cosAng_,sinAng_;
 	double x_ , y_ ; 
-	x_ = m_r;
-	y_ = 0;
+	x_ = 0;
+	y_ = m_r;
 
 	double topR_ = m_r/m_stacks;
 
@@ -29,14 +29,14 @@ void Cone::copyToMesh(TriangleMesh* msh_)
 		cosAng_ = cos(angle_);
 		sinAng_ = sin(angle_);
 
-		x_ = m_r*cosAng_;
-		y_ = m_r*sinAng_;
+		y_ = m_r*cosAng_;
+		x_ = m_r*sinAng_;
 	}
 
 	for(int i=1 ; i<= stacks_ ; i++) // height
 	{
-		x_ = m_r+delraR_*i;
-		y_ = 0;
+		x_ = 0;
+		y_ = m_r+delraR_*i;
 		for(int j=0 ; j< m_slices ; j++ ) // circle
 		{
 			Vertex* bs_ = msh_->vertexList()[(i-1)*m_slices+j];
@@ -48,8 +48,8 @@ void Cone::copyToMesh(TriangleMesh* msh_)
 			cosAng_ = cos(angle_);
 			sinAng_ = sin(angle_);
 
-			x_ = (m_r+delraR_*i)*cosAng_;
-			y_ = (m_r+delraR_*i)*sinAng_;
+			y_ = (m_r+delraR_*i)*cosAng_;
+			x_ = (m_r+delraR_*i)*sinAng_;
 
 		}
 	}

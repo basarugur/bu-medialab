@@ -108,10 +108,6 @@ void SceneModeller::initializeGUI()
 	 connect(m_central_widget,SIGNAL(sizeChanged()),this,SLOT(centralWidgetSizeChanged()));
 	 changeFullScreen(TOP_VIEW,false);
 
-
-	 ui.actionObject_Tree_Dock->setChecked(true);
-	 ui.actionObject_Properties_Dock->setChecked(true);
-	 ui.actionCamera_Property_Window->setChecked(true);
 }
 SceneModeller::~SceneModeller()
 {
