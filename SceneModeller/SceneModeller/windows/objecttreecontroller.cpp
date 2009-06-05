@@ -9,7 +9,7 @@ ObjectTreeController::ObjectTreeController(QDockWidget* m_): m_dock_widget(m_)
 	//m_dock_widget->setVisible(true);
 
 	QGridLayout* lyt_ = new QGridLayout(m_->widget());
-	lyt_->setMargin(2);
+	lyt_->setMargin(5);
 	m_tree_widget = new SMTreeWidget(m_->widget());
 	lyt_->addWidget(m_tree_widget);
 

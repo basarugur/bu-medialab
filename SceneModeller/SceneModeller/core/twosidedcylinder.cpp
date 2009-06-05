@@ -12,8 +12,8 @@ void TwoSidedCylinder::copyToMesh(TriangleMesh* msh_)
 
 	double angle_,cosAng_,sinAng_;
 	double x_ , y_ ; 
-	x_ = m_base_r;
-	y_ = 0;
+	x_ = 0;
+	y_ = m_base_r;
 
 	double delraR_ = (m_top_r-m_base_r)/(double)m_stacks;
 
@@ -26,14 +26,14 @@ void TwoSidedCylinder::copyToMesh(TriangleMesh* msh_)
 		cosAng_ = cos(angle_);
 		sinAng_ = sin(angle_);
 
-		x_ = m_base_r*cosAng_;
-		y_ = m_base_r*sinAng_;
+		y_ = m_base_r*cosAng_;
+		x_ = m_base_r*sinAng_;
 	}
 
 	for(int i=1 ; i<= m_stacks ; i++) // height
 	{
-		x_ = m_base_r+delraR_*i;
-		y_ = 0;
+		y_ = m_base_r+delraR_*i;
+		x_ = 0;
 		for(int j=0 ; j< m_slices ; j++ ) // circle
 		{
 			Vertex* bs_ = msh_->vertexList()[(i-1)*m_slices+j];
@@ -45,8 +45,8 @@ void TwoSidedCylinder::copyToMesh(TriangleMesh* msh_)
 			cosAng_ = cos(angle_);
 			sinAng_ = sin(angle_);
 
-			x_ = (m_base_r+delraR_*i)*cosAng_;
-			y_ = (m_base_r+delraR_*i)*sinAng_;
+			y_ = (m_base_r+delraR_*i)*cosAng_;
+			x_ = (m_base_r+delraR_*i)*sinAng_;
 
 		}
 	}

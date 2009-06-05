@@ -16,7 +16,7 @@ void Disk::copyToMesh(TriangleMesh* msh_)
 	y_ = 0;
 	for(int j=0 ; j<= m_loops ; j++ ) // circle
 	{
-		Vertex* vrt_ = new Vertex(x_+deltaR_*j,0,0);
+		Vertex* vrt_ = new Vertex(0,x_+deltaR_*j,0);
 		msh_->vertexList().push_back(vrt_);
 	}
 
@@ -30,8 +30,8 @@ void Disk::copyToMesh(TriangleMesh* msh_)
 			cosAng_ = cos(angle_);
 			sinAng_ = sin(angle_);
 
-			x_ = vr1_->x()*cosAng_;
-			y_ = vr1_->x()*sinAng_;
+			y_ = vr1_->y()*cosAng_;
+			x_ = vr1_->y()*sinAng_;
 
 			msh_->vertexList().push_back(new Vertex(x_,y_,0));
 		}

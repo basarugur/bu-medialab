@@ -22,7 +22,7 @@ void Sphere::copyToMesh(TriangleMesh* msh_)
 		z_  = m_r*cosAng_;
 		x_  = m_r*sinAng_;
 
-		msh_->vertexList().push_back(new Vertex(x_,0,z_));
+		msh_->vertexList().push_back(new Vertex(0,x_,z_));
 	}
 
 	for(int i=1 ; i<m_slices ; i++)
@@ -34,8 +34,8 @@ void Sphere::copyToMesh(TriangleMesh* msh_)
 			angle_  = ((double)i)*deltaSlicesAng_;
 			cosAng_ = cos(angle_);
 			sinAng_ = sin(angle_);
-			x_ = vr_->x()*cosAng_;
-			y_ = vr_->x()*sinAng_;
+			y_ = vr_->y()*cosAng_;
+			x_ = vr_->y()*sinAng_;
 
 			msh_->vertexList().push_back(new Vertex(x_,y_,vr_->z()));
 		}

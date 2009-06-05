@@ -1131,6 +1131,7 @@ void SMCanvasWidget::resizeGL(int w, int h)
 	glFrustum(-0.5*ratio,0.5*ratio,-0.5,0.5,1.0,1000);
 	
 
+	repaint();
 	//glMatrixMode(GL_MODELVIEW);
 	//gluLookAt(m_camera->position().x(),m_camera->position().y(),m_camera->position().z(),
 	//      m_camera->atPoint().x(),m_camera->atPoint().y(),m_camera->atPoint().z(),

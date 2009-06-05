@@ -8,7 +8,7 @@ BBox PartialDisk::object_bound() const
 void PartialDisk::copyToMesh(TriangleMesh* msh_)
 {
 	double deltaSlicesAng_ = 0.0174532925*(double)-sweep_ang/(double)m_slices;
-	double strtAngle_ = 0.0174532925*(start_ang) ;
+	double strtAngle_ = 0.0174532925*(-start_ang-90) ;
 	double deltaR_ = (m_out_r-m_in_r)/(double)m_loops;
 
 	double angle_,cosAng_,sinAng_;
@@ -25,7 +25,7 @@ void PartialDisk::copyToMesh(TriangleMesh* msh_)
 		x_ = (m_in_r+(double)j*deltaR_)*cosAng_;
 		y_ = (m_in_r+(double)j*deltaR_)*sinAng_;
 
-		Vertex* vrt_ = new Vertex(x_,y_,0);
+		Vertex* vrt_ = new Vertex(-x_,-y_,0);
 		msh_->vertexList().push_back(vrt_);
 	}
 

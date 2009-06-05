@@ -8,6 +8,7 @@ int main(int argc, char *argv[])
 
 	SceneModeller w;
 	w.show();
+	w.showDockWindows();
 	//w.showFullScreen();
 	return a.exec();
 }
