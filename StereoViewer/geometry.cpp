@@ -94,6 +94,9 @@ void Geometry::draw()
 void Geometry::scale(float sx, float sy, float sz)
 {
     Point scaler(sx, sy, sz);
+    float range = pMax.maxCoord() - pMin.minCoord();
+    scaler = scaler / range;
+
     for (vector<Point>::iterator iter = points.begin(); iter != points.end(); iter++)
         *iter = Point(iter->x * scaler.x, iter->y * scaler.y, iter->z * scaler.z);
 }
