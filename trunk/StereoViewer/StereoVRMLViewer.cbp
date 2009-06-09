@@ -46,10 +46,8 @@
 			<Add library="/usr/lib/libjpeg.so" />
 			<Add library="/usr/lib/libpng.so" />
 		</Linker>
-		<Unit filename="IFiWiCamera.h" />
-		<Unit filename="IOpenCV.h" />
-		<Unit filename="StereoAnalyzer.cpp" />
-		<Unit filename="StereoAnalyzer.h" />
+		<Unit filename="HeadTrackerClient.cpp" />
+		<Unit filename="HeadTrackerClient.h" />
 		<Unit filename="geometry.cpp" />
 		<Unit filename="geometry.h" />
 		<Unit filename="main.cpp" />

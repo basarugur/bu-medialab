@@ -21,9 +21,10 @@
 // GLUT window variables:
 bool full_screen = false;
 
-int w_w = 1024, w_h = 768;
-int user_height = 796;      // kullanıcının ekran düzlemine göre yüksekliği
-int user_to_screen = 500;   // kullanıcının ekran merkezine uzaklığı
+int cm_w_width = 85, cm_w_height = 64,
+    px_w_width = 1024, px_w_height = 768;
+int user_height = 70;       // kullanıcının ekran düzlemine göre yüksekliği
+int user_to_screen = 70;    // kullanıcının ekran merkezine uzaklığı
 float user_yaw =  0.0;      // kullanıcının ekrana olan açısı: aşağı tıklarsan 0 saa tıklarsan 90 vs.
 float K = 0.1;              // near clipping coefficient
 
@@ -38,7 +39,7 @@ bool object_mode = false;
 
 SceneObject *o1, *o2;
 
-HeadTrackerClient *r_htc;
+HeadTrackerClient *p_htc;
 
 Point headPosition, lookVector; // actual 3D points
 
@@ -49,21 +50,31 @@ float M_data[4][4] = { {0.76537,    0.47926,  0.45804, -114.63},
 
 Matrix4x4 coord_trans_4x4(M_data);
 
-/**
-* Initializing components
-*/
-
 #define SERVER_IP "79.123.176.157"
+static bool use_camera = false;
 
-void Init()
+/**
+* Initializing head position and orientation
+*/
+void InitHead()
+{
+    headPosition = Point(0, -30, 250);
+    lookVector = Point(0, 1, 0);
+}
+
+/**
+* Initializing Head Tracker (Network-) Client module
+*/
+void InitHeadTracker()
 {
     try
     {
-        r_htc = new HeadTrackerClient(SERVER_IP);
+        p_htc = new HeadTrackerClient(SERVER_IP);
     }
     catch (runtime_error e)
     {
         cout << e.what() << endl;
+        p_htc = NULL;
     }
 }
 
@@ -111,30 +122,30 @@ void display(void)
                        (object_mode ? &cam_pos : &obj_pos),
                        object_mode,
                        lastx, lasty );*/
-
-    try
+    if (use_camera)
     {
-        if (r_htc->read(data))
+        try
         {
-            cout << data[0] << " " << data[1] << " " << data[2] << endl;
-            headPosition = Point(data);
-            lookVector = Point(data+3);
+            if (p_htc->read(data))
+            {
+                cout << data[0] << " " << data[1] << " " << data[2] << endl;
+                headPosition = Point(data);
+                lookVector = Point(data+3);
+            }
         }
+        catch (runtime_error e)
+        {
+            cout << e.what() << endl;
+        }
+        /*  calibration +y <-> opengl +x AND
+        *   calibration +x <-> opengl -y
+        */
+        update_user_position(); //512 - 512 * lookVector.y, 512 - 512 * lookVector.x);
     }
-    catch (runtime_error e)
-    {
-        cout << e.what() << endl;
-    }
 
-
-    /*  calibration +y <-> opengl +x AND
-    *   calibration +x <-> opengl -y
-    */
-    update_user_position(); //512 - 512 * lookVector.y, 512 - 512 * lookVector.x);
-
-    glDrawBuffer(GL_BACK_RIGHT);
+    glDrawBuffer(GL_BACK_LEFT);
     display_scene(eye_sep_x, eye_sep_y, rz1);
-	glDrawBuffer(GL_BACK_LEFT);
+	glDrawBuffer(GL_BACK_RIGHT);
 	display_scene(-eye_sep_x, -eye_sep_y, rz1);
 }
 
@@ -142,9 +153,9 @@ void DrawScene(float rz)//****************************************
 {
     glDisable(GL_LIGHTING);
     // draw grid
-    int half_w_w = w_w * .5f,
-        half_w_h = w_h * .5f,
-        grid_step = 64;
+    int half_w_w = cm_w_width * .5f,
+        half_w_h = cm_w_height * .5f,
+        grid_step = 5;
 
     glColor3f(0.7f, 0.7f, 0.7f);
     glBegin(GL_LINES);
@@ -238,12 +249,14 @@ void display_scene(float eye_sep_x, float eye_sep_y, float rz)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	left= (-cam_pos.x - w_w*.5) * K;
-    right= (-cam_pos.x + w_w*.5) * K;
-    bottom= (-cam_pos.y - w_h * .5) * K;
-    top= (-cam_pos.y + w_h * .5) * K;
-    near= cam_pos.z * K;
-    far= cam_pos.z * 2;
+    left = (-cam_pos.x - cm_w_width * .5) * 0.1;
+    right = (-cam_pos.x + cm_w_width * .5) * 0.1;
+
+    bottom = (-cam_pos.y - cm_w_height * .5) * 0.1;
+    top = (-cam_pos.y + cm_w_height * .5) * 0.1;
+
+    near = cam_pos.z * K;
+    far = cam_pos.z * 2;
 
     // rendele
 	glFrustum( left, right, bottom, top, near, far);
@@ -313,8 +326,8 @@ void reshape(int w, int h)
 	// prevent divide by 0 error when minimized
 	if(w==0)
 		h = 1;
-	w_w = w;
-	w_h = h;
+	px_w_width = w;
+	px_w_height = h;
 	/*glViewport(0,0,w,h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -326,7 +339,7 @@ void reshape(int w, int h)
 
 void update_user_position(int x, int y)
 {
-    user_yaw = PI_HALF + atan2( -(y-w_h*0.5), (x-w_w*0.5) ); // *180/PI;
+    user_yaw = PI_HALF + atan2( -(y - px_w_height*0.5), (x - px_w_width* 0.5) ); // *180/PI;
 
     cam_pos.x = user_to_screen * sin(user_yaw);
     cam_pos.y = -user_to_screen * cos(user_yaw);
@@ -348,7 +361,7 @@ void update_user_position()
     eye_sep_x = 5 * cos(user_yaw);
     eye_sep_y = 5 * sin(user_yaw);
 
-    cout << "user_yaw = " << user_yaw << eye_sep_x << eye_sep_y << endl;
+    // cout << "user_yaw = " << user_yaw << " " << eye_sep_x << " " << eye_sep_y << endl;
 
     cam_pos.x += ( x_offset + headPosition.y * CM_2_COORD - cam_pos.x ) * delta_tr;
     cam_pos.y += ( y_offset - headPosition.x * CM_2_COORD - cam_pos.y ) * delta_tr;
@@ -363,7 +376,10 @@ void Motion(int x, int y)
     if (Buttons[0])
         update_user_position(x, y);
     else if (Buttons[2])
-        cam_pos.z = user_height + (y-w_w*0.5);
+    {
+        cam_pos.z = user_height + (y-px_w_width*0.5)*2;
+        cout << cam_pos.z << endl;
+    }
 
 	glutPostRedisplay();
 }
@@ -380,7 +396,10 @@ void Keyboard(unsigned char key, int x, int y)
         {
             // Enter game mode:
             char mode_string[100];
-            sprintf(mode_string, "%dx%d:%d@%d", 1024, 1536, 32, 120);
+            // DOUBLE SCREEN:
+            // sprintf(mode_string, "%dx%d:%d@%d", 1024, 1536, 32, 120);
+            // SINGLE SCREEN:
+            sprintf(mode_string, "%dx%d:%d@%d", 1024, 768, 32, 120);
             cout << "GLUT-Game-Mode: " << mode_string << endl;
             glutGameModeString( mode_string );
             glutEnterGameMode();
@@ -389,6 +408,15 @@ void Keyboard(unsigned char key, int x, int y)
         }
         else
             glutLeaveGameMode();
+    }
+    else if (key == 'c' || key == 'C')
+    {
+        use_camera = !use_camera;
+
+        if (use_camera) // Reinitialize head:
+            InitHead();
+        else if (p_htc == NULL)
+            InitHeadTracker();
     }
     /*else if (key == 'f' || key == 'F')
         FogEffect(.01);*/
@@ -454,7 +482,8 @@ void Mouse(int b,int s,int x,int y)
 	case GLUT_RIGHT_BUTTON:
 		Buttons[2] = ((GLUT_DOWN==s)?1:0);
 
-		cam_pos.z = user_height + (y-w_w*0.5);
+		//cam_pos.z = user_height + (y-px_w_width*0.5);
+        cam_pos.z = user_height + (y-px_w_width*0.5)*2;
 
 		break;
 	default:
@@ -489,6 +518,7 @@ void InitGlut()
 	glDepthFunc(GL_LEQUAL);
 	glCullFace(GL_BACK);
 	glEnable(GL_COLOR_MATERIAL);
+	// glShadeModel(GL_FLAT);
 }
 
 
@@ -500,7 +530,9 @@ int main(int argc,char** argv)
         //showgrid = 1;//**********************
     //g = new Geometry("bunny.wrl", "Whole_Bunny");
 	o1 = new SceneObject("res/chapel_97.wrl","OB_Ground_Ground_M");
-    o2  = new SceneObject("res/chapel_97.wrl", "OB_Thumbstone_Chapel");
+    //o2  = new SceneObject("res/chapel_97.wrl", "OB_Thumbstone_Chapel");
+    o2  = new SceneObject("res/box.wrl", "OB_rsvd_Box");
+
 	/* Write example:
 	vrml_io writer;
 	writer.write(g, "new.wrl", "New-Name");
@@ -509,13 +541,15 @@ int main(int argc,char** argv)
     glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_STEREO);
 
-    glutInitWindowSize(w_w, w_h);
-    glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH) - w_w) * 0.5, (glutGet(GLUT_SCREEN_HEIGHT) - w_h) * 0.5 );
+    glutInitWindowSize(px_w_width, px_w_height);
+    glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH) - px_w_width) * 0.5, (glutGet(GLUT_SCREEN_HEIGHT) - px_w_height) * 0.5 );
     glutCreateWindow("VRML IO Example");
 
     InitGlut();
 
-	Init();
+    InitHead();
+
+	InitHeadTracker();
 
 	//FogEffect(1.0);
 

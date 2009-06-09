@@ -7,7 +7,7 @@
 #include "vrml_io.h"
 #include "geometry.h"
 
-#define SCALE_NORM	4000
+#define SCALE_NORM	10
 #define MAXCORNER	10
 
 void vrml_io::fillIndexedFaceSets(Geometry* g, ShapeNode* shapeNode)
