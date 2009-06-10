@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="SceneCreation"
-	ProjectGUID="{896417E2-83BB-4DBB-865F-A4610D3E9C29}"
+	Name="Selections"
+	ProjectGUID="{ED3792C3-2FBD-49DE-BD3D-250DA4DC96B1}"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -32,11 +32,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="SM_API.lib"
-				OutputFile="$(OutDir)/SceneCreation.exe"
+				OutputFile="$(OutDir)/Selections.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\..\src\debug"
+				AdditionalLibraryDirectories="../../src/debug"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/SceneCreation.pdb"
+				ProgramDatabaseFile="$(OutDir)/Selections.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
@@ -78,10 +78,8 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SM_API.lib"
-				OutputFile="$(OutDir)/SceneCreation.exe"
+				OutputFile="$(OutDir)/Selections.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\..\src\release"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
 				OptimizeReferences="2"

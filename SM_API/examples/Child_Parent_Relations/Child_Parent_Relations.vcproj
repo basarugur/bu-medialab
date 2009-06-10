@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="SceneCreation"
-	ProjectGUID="{896417E2-83BB-4DBB-865F-A4610D3E9C29}"
+	Name="Child_Parent_Relations"
+	ProjectGUID="{3F22D8FE-B0FC-401C-9FA1-4F5BA134A5E8}"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -32,11 +32,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="SM_API.lib"
-				OutputFile="$(OutDir)/SceneCreation.exe"
+				OutputFile="$(OutDir)/Child_Parent_Relations.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\src\debug"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/SceneCreation.pdb"
+				ProgramDatabaseFile="$(OutDir)/Child_Parent_Relations.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
@@ -78,10 +78,8 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SM_API.lib"
-				OutputFile="$(OutDir)/SceneCreation.exe"
+				OutputFile="$(OutDir)/Child_Parent_Relations.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\..\src\release"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
 				OptimizeReferences="2"

@@ -13,6 +13,8 @@
 #include "disk.h"
 #include "partialdisk.h"
 
+#include <iostream>
+
 void GfxObject::getCopy(GfxObject*& nwObj_)
 {
 		TriangleMesh* msh_,*msh1_;
@@ -168,11 +170,16 @@ void GfxObject::convertToMesh()
 		Disk* disk_;
 		PartialDisk* pdisk_;
 		TriangleMesh* meshShape_ = new TriangleMesh();
+
+		//std::cout << "It come here... 1 " << std::endl;
 		switch(m_shape->type())
 		{
 		case CUBE:
+			//std::cout << "It come here... 2 " << std::endl;
 			cp_ = static_cast<Cube*>(m_shape);
+			//std::cout << "It come here... 3 " << std::endl;
 			cp_->copyToMesh(meshShape_);
+			//std::cout << "It come here... 4 " << std::endl;
 			break;
 		case SPHERE:
 			sph_ = static_cast<Sphere*>(m_shape);
@@ -218,7 +225,10 @@ void GfxObject::convertToMesh()
 			break;
 		}
 
+		//std::cout << "It come here... 5 " << std::endl;
 		delete m_shape;
+		//std::cout << "It come here... 6 " << std::endl;
 		m_shape = meshShape_;
+		//std::cout << "It come here... 7 " << std::endl;
 	}
 }
