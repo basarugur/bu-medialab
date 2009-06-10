@@ -1,1 +1,0 @@
-#include "scaleTool.h"
