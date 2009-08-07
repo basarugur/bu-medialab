@@ -76,17 +76,22 @@ bool Geometry::onArea( int pi, int ai )
 
 void Geometry::draw()
 {
+    Point n;
     if (!faces.empty())
     {    // Currently supports one color per geometry:
         glColor3f(colors.at(0).x, colors.at(0).y, colors.at(0).z);
 
         glBegin(GL_TRIANGLES);
         for (vector<Face>::iterator i = faces.begin(); i != faces.end(); i++)
+        {
+            n = Face::normal(points.at(i->indices[0]), points.at(i->indices[1]), points.at(i->indices[2]) );
             for (int c=0; c<3; c++)
             {
-                glNormal3f(normals.at(i->indices[c]).x, normals.at(i->indices[c]).y, normals.at(i->indices[c]).z);
+                //glNormal3f(normals.at(i->indices[c]).x, normals.at(i->indices[c]).y, normals.at(i->indices[c]).z);
+                glNormal3f(n.x, n.y, n.z);
                 glVertex3f(points.at(i->indices[c]).x, points.at(i->indices[c]).y, points.at(i->indices[c]).z);
             }
+        }
         glEnd();
     }
 }

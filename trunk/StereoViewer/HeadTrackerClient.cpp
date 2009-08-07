@@ -2,18 +2,21 @@
 ///
 /// \file	Server.h
 /// \author	Ebutalib Agayev & Basar Ugur
-/// \brief	Network client implementation, expecting to receive "6 float" data
+/// \brief	Network client implementation, simply expecting to receive "6 float"
+///         data
 /// \note
 ///-----------------------------------------------------------------------------
 
 #include <stdexcept>
 #include <cstring>
-#include <string>
 #include <errno.h>
+#include <iostream>
 
 #include "HeadTrackerClient.h"
 
-#define MAXLINE 1024
+#include "../HeadTracker/StereoAnalyzer.h"
+#include "../HeadTracker/IOpenCV.h"
+#include "../HeadTracker/IFiWiCamera.h"
 
 using std::string;
 using std::runtime_error;
@@ -84,8 +87,25 @@ static ssize_t writen(int fd, const void *vptr, size_t n)
     return(n);
 }
 
-HeadTrackerClient::HeadTrackerClient(const string& ip): remote_ip(ip)
+HeadTrackerClient::HeadTrackerClient(const string& ip, bool offline_mode): remote_ip(ip)
 {
+    headPosition = Point(0, -30, 250);
+    lookVector = Point(0, 1, 0);
+    coord_trans_4x4 = new Matrix4x4(M_data);
+
+    if (offline_mode)
+    {
+        stereo_anl = new StereoAnalyzer(43.0, 640.0, 480.0, 12.0); // actual values
+
+        cam = new IFiWiCamera();
+        if (cam->init())
+            cv = new IOpenCV( cvSize(cam->vf->size[0], cam->vf->size[1]) );
+        else
+            cout << "Initialization error." << endl;
+
+        return;
+    }
+
     memset(&server_addr, 0, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
     server_addr.sin_port   = htons(3333);
@@ -100,10 +120,17 @@ HeadTrackerClient::HeadTrackerClient(const string& ip): remote_ip(ip)
         throw runtime_error("failed to connect to remote server");
 }
 
-bool HeadTrackerClient::read(float *data)
+HeadTrackerClient::~HeadTrackerClient()
+{
+    delete stereo_anl; stereo_anl = NULL;
+    delete cam; cam = NULL;
+    delete cv; cv = NULL;
+    delete coord_trans_4x4; coord_trans_4x4 = NULL;
+}
+
+bool HeadTrackerClient::read()
 {
     ssize_t n;
-    char recvline[MAXLINE];
 
 	/*if (writen(sockfd, "\n", 1) != 1)
         throw runtime_error("failed to write to socket");
@@ -114,13 +141,38 @@ bool HeadTrackerClient::read(float *data)
         //throw runtime_error("failed to read from socket");
     }
     else if (n == 0)
-        throw runtime_error("server terminated prematurely");
+        throw runtime_error("[-] Server terminated prematurely");
 
-	if (sscanf(recvline, "%f %f %f %f %f %f", data, data+1, data+2, data+3, data+4, data+5) != 6)
+	if (sscanf(recvline, "%f %f %f %f %f %f", tempo, tempo+1, tempo+2, tempo+3, tempo+4, tempo+5) != 6)
     {
     	printf("[-] Invalid data received from server: %s\n", recvline);
         //throw runtime_error("invalid data received from server");
     }
+    else // Valid data!
+    {
+        headPosition = Point(tempo);
+        lookVector = Point(tempo+3);
+        cout << tempo[0] << " " << tempo[1] << " " << tempo[2] << endl;
+    }
+
+    return true;
+}
+
+bool HeadTrackerClient::read_offline()
+{
+    // try to capture image
+    if (!cam->capture_image() ||
+        // pass the pointer to the left & right images to open_cv interface
+        !cv->process_images( cam->imageBufRGB + cam->vf->size[0]*cam->vf->size[1]*3,
+                             cam->imageBufRGB ) )
+    {
+        throw runtime_error("[-] OpenCV process exited");
+    }
+
+    stereo_anl->findLocationVector(cornersL, cornersR, headPosition, lookVector, *coord_trans_4x4);
+    lookVector = Point::normalize(lookVector);
+
+    cout << headPosition.x << " " << headPosition.y << " " << headPosition.z << endl;
 
     return true;
 }

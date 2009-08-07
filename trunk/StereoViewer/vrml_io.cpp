@@ -7,7 +7,7 @@
 #include "vrml_io.h"
 #include "geometry.h"
 
-#define SCALE_NORM	10
+#define SCALE_NORM	1 //22
 #define MAXCORNER	10
 
 void vrml_io::fillIndexedFaceSets(Geometry* g, ShapeNode* shapeNode)
@@ -122,7 +122,7 @@ void vrml_io::fillIndexedFaceSets(Geometry* g, ShapeNode* shapeNode)
 
 	g->colors.push_back(Point(color));
 
-    g->scale(SCALE_NORM, SCALE_NORM, SCALE_NORM);
+    // g->scale(SCALE_NORM, SCALE_NORM, SCALE_NORM);
 }
 
 bool vrml_io::read(SceneObject* o, const char* fileName, const char* objName)

@@ -1,10 +1,14 @@
-/*	Geometry.h: A Geometry class containing a 3D geometric object
-	plus 3D geometric primitives with some useful methods defined on them
-	Author: Basar Ugur */
+///-----------------------------------------------------------------------------
+///
+/// \file	Geometry.h
+/// \author	Basar Ugur
+/// \brief	A Geometry class containing a 3D geometric object
+///         plus 3D geometric primitives with some useful methods defined on them
+/// \note
+///-----------------------------------------------------------------------------
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+#ifndef GEOH_DEFINED
+#define GEOH_DEFINED
 
 #include <vector>
 #include <math.h>
@@ -199,3 +203,5 @@ public:
 
     vector<Geometry> children;
 };
+
+#endif

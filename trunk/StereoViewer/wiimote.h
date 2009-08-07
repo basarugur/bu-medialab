@@ -14,8 +14,10 @@ struct cwiid_state g_wii_state; /* We capture this state on every frame */
 struct acc_cal wm_cal;
 
 const static float delta_acc = .005f;
-const static float delta_tr = 1.f;//.05f;
+static float delta_tr = .1f;//.05f;
 const static float rad2deg = 180.f / PI;
+
+static char wii_msg[255] = "";
 
 /**
  * GLUT function to display \a string at position (\a x,\a y,\a z).
@@ -24,7 +26,7 @@ void renderString(float x, float y, float z, char *string)
 {
     char * c;
 
-    glDisable(GL_LIGHTING);
+   glDisable(GL_LIGHTING);
 
     glRasterPos3f(x, y, z);
 
@@ -45,7 +47,7 @@ bool setup_wiimote_connection()
 {
     bool result = false;
 
-    printf("Press buttons 1 and 2 on the Wiimote to connect... ");
+    printf(wii_msg);
     fflush(stdout);
 
     /* Establish a continous and non-blocking connection */
@@ -121,20 +123,30 @@ bool check_wiimote()
     {
         if ( g_connect_attempts < g_max_connect_attempts )
         {
-            glColor3f(0.0f, 1.0f, 0.0f); /* Text-color */
-            char msg[255];
-            sprintf(msg, "Press button 1+2 on your Wiimote! (%d of %d)", g_connect_attempts+1, g_max_connect_attempts);
-            renderString(-2, -2, 10, msg);
+            sprintf(wii_msg, "Press button 1+2 on your Wiimote! (%d of %d)", g_connect_attempts+1, g_max_connect_attempts);
 
             glutPostRedisplay(); /* Inform GLUT to constantly update the screen */
             glutSwapBuffers(); /* High-end-machines may need this */
+
+            /**
+            *   Wiimote will NOT be connected at first attempt,
+            *   OpenGL text message should be prompted previously
+            *   so that bluetooth connection attempt does not block.
+            */
+            if (g_connect_attempts == 0)
+            {
+                g_connect_attempts++;
+                return false;
+            }
+
             setup_wiimote_connection();
             g_connect_attempts++;
         }
         else
         {
-            glColor3f(1.0f, 0.0f, 0.0f); /* Text-color */
-            renderString(-2, -2, 10, "Unable to connect to Wiimote! Press <Esc> to quit.");
+            sprintf(wii_msg, "Unable to connect to Wiimote! Press <Esc> to quit.");
+
+            //renderString(-2, -2, 10, "Unable to connect to Wiimote! Press <Esc> to quit.");
             glutPostRedisplay(); /* Inform GLUT to constantly update the screen */
             glutSwapBuffers(); /* High-end-machines may need this */
         }
@@ -142,6 +154,8 @@ bool check_wiimote()
     }
     else
 	{
+        sprintf(wii_msg, "");
+
 		cwiid_get_state(g_wiimote, &g_wii_state); /* Capture the current wiimote-state. */
 
 		return true;
@@ -167,12 +181,14 @@ void disconnect_wiimote()
         printf("done\n");
     }
     fflush(stdout);
+
+    g_connect_attempts = 0;
 }
 
 /**
  * Checking wiimote connection and setting up if not exists
  */
-void update_by_wiimote(Rotation* ch_r, Point* ch_pos, bool object_mode, int last_x, int last_y)
+void update_object_by_wiimote(Rotation* ch_r, Point* ch_pos, bool object_mode, int last_x, int last_y)
 {
 	static double ir_positions[2][2] = { { 0, 0 }, { 0, 0 } };
     static int ir_sizes[2] = { 3, 3 }; /* Expect it to be around 2-8 in wiimote state struct */
@@ -268,7 +284,7 @@ void update_by_wiimote(Rotation* ch_r, Point* ch_pos, bool object_mode, int last
         ch_r->pitch = ch_r->pitch + (atan(a_y/a_z*cos(a_t)) * rad2deg - ch_r->pitch) * delta_acc;
         ch_r->roll = ch_r->roll + (a_t*rad2deg - ch_r->roll) * delta_acc;
 
-		//printf("accelerator data\n");
+        //printf("accelerator data\n");
 		/*for (int i = 0; i < 3; i++)
 			printf("%d ", g_wii_state.acc[i]);
 		printf("\n");
