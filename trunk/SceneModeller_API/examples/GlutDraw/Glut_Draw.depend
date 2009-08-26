@@ -1,0 +1,793 @@
+# depslib dependency file v1.0
+1249565848 source:/home/medialab/Projects/SceneModeller_API/examples/GlutDraw/main.cpp
+	"common.h"
+
+1244730827 /home/medialab/Projects/SceneModeller_API/src/core/scene.h
+	"camera.h"
+	"light.h"
+	"primitive.h"
+	"film.h"
+	"shape.h"
+	"gfxobject.h"
+	"integrator.h"
+	"sampler.h"
+	"CImg.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/camera.h
+	"point3.h"
+	"sampler.h"
+	"ray.h"
+	"primitive.h"
+
+1249566507 /home/medialab/Projects/SceneModeller_API/src/core/point3.h
+	"vector3.h"
+
+1244728449 /home/medialab/Projects/SceneModeller_API/src/core/vector3.h
+	<iostream>
+	<stdlib.h>
+	<math.h>
+	<algorithm>
+	<float.h>
+	"../sm_api_dll.h"
+
+1244728389 /home/medialab/Projects/SceneModeller_API/src/sm_api_dll.h
+
+1244730286 /home/medialab/Projects/SceneModeller_API/src/core/sampler.h
+	"film.h"
+	"vector3.h"
+	"point3.h"
+
+1244555844 /home/medialab/Projects/SceneModeller_API/src/core/film.h
+	"../sm_api_dll.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/ray.h
+	"vector3.h"
+	"point3.h"
+	"normal3.h"
+	<float.h>
+	<algorithm>
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/normal3.h
+	"vector3.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/primitive.h
+	"shape.h"
+	"film.h"
+	"light.h"
+	"material.h"
+	"vector3.h"
+	"transformation.h"
+	"kdtree.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/shape.h
+	<string>
+	<fstream>
+	<iostream>
+	<vector>
+	"material.h"
+	"vector3.h"
+	"normal3.h"
+	"point3.h"
+	"triangle.h"
+	"bbox.h"
+	"ray.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/material.h
+	"film.h"
+	"vector3.h"
+	"texture.h"
+	<string>
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/texture.h
+	"film.h"
+	"vector3.h"
+	"point3.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/triangle.h
+	"vertex.h"
+	"normal3.h"
+	"point3.h"
+	"material.h"
+	"bbox.h"
+	"ray.h"
+
+1248961813 /home/medialab/Projects/SceneModeller_API/src/core/vertex.h
+	"vector3.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/bbox.h
+	"point3.h"
+	"ray.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/light.h
+	"film.h"
+	"vector3.h"
+	"point3.h"
+	"shape.h"
+	"diffgeometry.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/diffgeometry.h
+	"vector3.h"
+	"point3.h"
+	"normal3.h"
+	"shape.h"
+	<float.h>
+	<algorithm>
+
+1248938220 /home/medialab/Projects/SceneModeller_API/src/core/transformation.h
+	"matrix.h"
+	"shape.h"
+	"trianglemesh.h"
+	"vector3.h"
+	"diffgeometry.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/matrix.h
+	"vector3.h"
+	"point3.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/trianglemesh.h
+	"shape.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/kdtree.h
+	"shape.h"
+	"primitive.h"
+
+1248952724 /home/medialab/Projects/SceneModeller_API/src/core/gfxobject.h
+	"shape.h"
+	"film.h"
+	"light.h"
+	"material.h"
+	"vector3.h"
+	"transformation.h"
+	"primitive.h"
+	<vector>
+	<string>
+
+1244555970 /home/medialab/Projects/SceneModeller_API/src/core/integrator.h
+	"../sm_api_dll.h"
+
+1244616991 /home/medialab/Projects/SceneModeller_API/src/core/CImg.h
+	<cstdio>
+	<cstdlib>
+	<cstdarg>
+	<cstring>
+	<cmath>
+	<ctime>
+	<sys/time.h>
+	<unistd.h>
+	<windows.h>
+	<shlobj.h>
+	<X11/Xlib.h>
+	<X11/Xutil.h>
+	<X11/keysym.h>
+	<pthread.h>
+	<sys/ipc.h>
+	<sys/shm.h>
+	<X11/extensions/XShm.h>
+	<X11/extensions/Xrandr.h>
+	<Carbon/Carbon.h>
+	<pthread.h>
+	"omp.h"
+	"png.h"
+	"jpeglib.h"
+	"tiffio.h"
+	"ffmpeg/avformat.h"
+	"ffmpeg/avcodec.h"
+	"ffmpeg/swscale.h"
+	"zlib.h"
+	"Magick++.h"
+	"fftw3.h"
+	"Board.h"
+	"CImg.h"
+	"CImg.h"
+	"CImg.h"
+	"CImg.h"
+	"CImg.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/cylinder.h
+	"shape.h"
+	"trianglemesh.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/cube.h
+	"shape.h"
+	"trianglemesh.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/rectangle.h
+	"shape.h"
+	"trianglemesh.h"
+
+1244624644 /home/medialab/Projects/SceneModeller_API/src/RenderController.h
+	"core/scene.h"
+
+1245064237 /home/medialab/Projects/SceneModeller_API/src/SceneDrawer.h
+	"core/scene.h"
+	"CanvasGrid.h"
+	"GL/glut.h"
+
+1245065152 /home/medialab/Projects/SceneModeller_API/src/CanvasGrid.h
+	"GL/glut.h"
+	"common.h"
+
+1244555860 /home/medialab/Projects/SceneModeller_API/src/common.h
+	"sm_api_dll.h"
+
+1248685235 /home/medialab/Projects/SceneModeller_API/examples/GlutDraw/common.h
+	"../../src/core/scene.h"
+	"../../src/core/cylinder.h"
+	"../../src/core/cube.h"
+	"../../src/core/rectangle.h"
+	"../../src/formats/vrmldevice.h"
+	"../../src/RenderController.h"
+	"../../src/SceneDrawer.h"
+
+1248786090 /home/medialab/Projects/SceneModeller_API/src/formats/vrmldevice.h
+	"SMIODevice.h"
+	"../core/trianglemesh.h"
+	<map>
+	<sstream>
+	"vrml/Node.h"
+	"vrml/SceneGraph.h"
+
+1244554592 /home/medialab/Projects/SceneModeller_API/src/formats/SMIODevice.h
+	"../core/scene.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/Node.h
+	<iostream>
+	<fstream>
+	<assert.h>
+	"Vector.h"
+	"Field.h"
+	"String.h"
+	"LinkedList.h"
+	"SFMatrix.h"
+	"JNode.h"
+	"VRMLString.h"
+
+1244731529 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/Vector.h
+	"LinkedList.h"
+	<vector>
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/LinkedList.h
+	"LinkedListNode.h"
+	<list>
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/LinkedListNode.h
+	<stdio.h>
+	"OldCpp.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/OldCpp.h
+	<string.h>
+
+1244554588 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/Field.h
+	<stdlib.h>
+	<string.h>
+	<iostream>
+	<assert.h>
+	"String.h"
+	"JavaVM.h"
+	"OldCpp.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/String.h
+	<string>
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/JavaVM.h
+	<stdio.h>
+	<stdarg.h>
+	<jni.h>
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/SFMatrix.h
+	<math.h>
+	"Field.h"
+	"SFVec3f.h"
+	"SFRotation.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/SFVec3f.h
+	<math.h>
+	<stdio.h>
+	<iostream>
+	"Field.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/SFRotation.h
+	<iostream>
+	"SFVec3f.h"
+	"Field.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/JNode.h
+	"CJavaVM.h"
+	"Field.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/VRMLString.h
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/SceneGraph.h
+	<iostream>
+	<fstream>
+	"String.h"
+	"VRMLField.h"
+	"VRMLNodes.h"
+	"Parser.h"
+	"JavaVM.h"
+	"UrlFile.h"
+	"BoundingBox.h"
+	"RouteList.h"
+	"MathUtil.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/VRMLField.h
+	"Field.h"
+	"SFBool.h"
+	"SFVec2f.h"
+	"SFVec3f.h"
+	"SFColor.h"
+	"SFRotation.h"
+	"SFMatrix.h"
+	"SFString.h"
+	"SFTime.h"
+	"SFInt32.h"
+	"SFFloat.h"
+	"SFImage.h"
+	"SFNode.h"
+	"MField.h"
+	"MFVec2f.h"
+	"MFVec3f.h"
+	"MFColor.h"
+	"MFRotation.h"
+	"MFInt32.h"
+	"MFTime.h"
+	"MFFloat.h"
+	"MFString.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/SFBool.h
+	<stdio.h>
+	<iostream>
+	"Field.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/SFVec2f.h
+	<math.h>
+	<stdio.h>
+	<iostream>
+	"Field.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/SFColor.h
+	<stdio.h>
+	<iostream>
+	"Field.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/SFString.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<iostream>
+	"Field.h"
+	"String.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/SFTime.h
+	<stdio.h>
+	<iostream>
+	"Field.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/SFInt32.h
+	<stdio.h>
+	<iostream>
+	"Field.h"
+
+1244012702 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/SFFloat.h
+	<stdio.h>
+	<iostream>
+	"Field.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/SFImage.h
+	"MField.h"
+	"SFInt32.h"
+
+1244012702 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/MField.h
+	<iostream>
+	"Field.h"
+	"Vector.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/SFNode.h
+	<stdlib.h>
+	<string.h>
+	<iostream>
+	"Field.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/MFVec2f.h
+	"MField.h"
+	"SFVec2f.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/MFVec3f.h
+	"MField.h"
+	"SFVec3f.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/MFColor.h
+	"MField.h"
+	"SFColor.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/MFRotation.h
+	"MField.h"
+	"SFRotation.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/MFInt32.h
+	"MField.h"
+	"SFInt32.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/MFTime.h
+	"MField.h"
+	"SFTime.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/MFFloat.h
+	"MField.h"
+	"SFFloat.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/MFString.h
+	"MField.h"
+	"SFString.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/VRMLNodes.h
+	"RootNode.h"
+	"DEFNode.h"
+	"AnchorNode.h"
+	"AppearanceNode.h"
+	"AudioClipNode.h"
+	"BackgroundNode.h"
+	"BillboardNode.h"
+	"BoxNode.h"
+	"CollisionNode.h"
+	"ColorNode.h"
+	"ColorInterpolatorNode.h"
+	"ConeNode.h"
+	"CoordinateNode.h"
+	"CoordinateInterpolatorNode.h"
+	"CylinderNode.h"
+	"CylinderSensorNode.h"
+	"DirectionalLightNode.h"
+	"ElevationGridNode.h"
+	"ExtrusionNode.h"
+	"FogNode.h"
+	"FontStyleNode.h"
+	"GroupNode.h"
+	"ImageTextureNode.h"
+	"IndexedFaceSetNode.h"
+	"IndexedLineSetNode.h"
+	"InlineNode.h"
+	"LodNode.h"
+	"MaterialNode.h"
+	"MovieTextureNode.h"
+	"NavigationInfoNode.h"
+	"NormalNode.h"
+	"NormalInterpolatorNode.h"
+	"OrientationInterpolatorNode.h"
+	"PixelTextureNode.h"
+	"PlaneSensorNode.h"
+	"PointLightNode.h"
+	"PointSetNode.h"
+	"PositionInterpolatorNode.h"
+	"ProximitySensorNode.h"
+	"ScalarInterpolatorNode.h"
+	"ScriptNode.h"
+	"ShapeNode.h"
+	"SoundNode.h"
+	"SphereNode.h"
+	"SphereSensorNode.h"
+	"SpotLightNode.h"
+	"SwitchNode.h"
+	"TextNode.h"
+	"TextureCoordinateNode.h"
+	"TextureTransformNode.h"
+	"TimeSensorNode.h"
+	"TouchSensorNode.h"
+	"TransformNode.h"
+	"ViewpointNode.h"
+	"VisibilitySensorNode.h"
+	"WorldInfoNode.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/RootNode.h
+	"VRMLField.h"
+	"Node.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/DEFNode.h
+	"Node.h"
+
+1244012702 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/AnchorNode.h
+	"VRMLField.h"
+	"GroupingNode.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/GroupingNode.h
+	"Node.h"
+	"BoundingBox.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/BoundingBox.h
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/AppearanceNode.h
+	"VRMLField.h"
+	"Node.h"
+	"MaterialNode.h"
+	"TextureTransformNode.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/MaterialNode.h
+	"VRMLField.h"
+	"Node.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/TextureTransformNode.h
+	"VRMLField.h"
+	"Node.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/AudioClipNode.h
+	"VRMLField.h"
+	"Node.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/BackgroundNode.h
+	"BindableNode.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/BindableNode.h
+	"VRMLField.h"
+	"Node.h"
+
+1244012702 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/BillboardNode.h
+	"VRMLField.h"
+	"Node.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/BoxNode.h
+	"VRMLField.h"
+	"GeometryNode.h"
+
+1244012702 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/GeometryNode.h
+	"VRMLField.h"
+	"Node.h"
+	"BoundingBox.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/CollisionNode.h
+	"GroupingNode.h"
+
+1244012702 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/ColorNode.h
+	"Node.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/ColorInterpolatorNode.h
+	"InterpolatorNode.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/InterpolatorNode.h
+	"Node.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/ConeNode.h
+	"GeometryNode.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/CoordinateNode.h
+	"VRMLField.h"
+	"Node.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/CoordinateInterpolatorNode.h
+	"InterpolatorNode.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/CylinderNode.h
+	"GeometryNode.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/CylinderSensorNode.h
+	"SensorNode.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/SensorNode.h
+	"VRMLField.h"
+	"Node.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/DirectionalLightNode.h
+	"VRMLField.h"
+	"LightNode.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/LightNode.h
+	"VRMLField.h"
+	"Node.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/ElevationGridNode.h
+	"GeometryNode.h"
+	"ColorNode.h"
+	"NormalNode.h"
+	"TextureCoordinateNode.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/NormalNode.h
+	"VRMLField.h"
+	"Node.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/TextureCoordinateNode.h
+	"VRMLField.h"
+	"Node.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/ExtrusionNode.h
+	"GeometryNode.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/FogNode.h
+	"BindableNode.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/FontStyleNode.h
+	"VRMLField.h"
+	"Node.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/GroupNode.h
+	"GroupingNode.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/ImageTextureNode.h
+	"VRMLField.h"
+	"TextureNode.h"
+	"FileImage.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/TextureNode.h
+	"VRMLField.h"
+	"Node.h"
+	"FileImage.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/FileImage.h
+	"OldCpp.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/IndexedFaceSetNode.h
+	"GeometryNode.h"
+	"NormalNode.h"
+	"ColorNode.h"
+	"CoordinateNode.h"
+	"TextureCoordinateNode.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/IndexedLineSetNode.h
+	"GeometryNode.h"
+	"ColorNode.h"
+	"CoordinateNode.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/InlineNode.h
+	"GroupingNode.h"
+
+1244012702 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/LodNode.h
+	"VRMLField.h"
+	"Node.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/MovieTextureNode.h
+	"VRMLField.h"
+	"TextureNode.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/NavigationInfoNode.h
+	"BindableNode.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/NormalInterpolatorNode.h
+	"InterpolatorNode.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/OrientationInterpolatorNode.h
+	"InterpolatorNode.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/PixelTextureNode.h
+	"VRMLField.h"
+	"TextureNode.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/PlaneSensorNode.h
+	"SensorNode.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/PointLightNode.h
+	"LightNode.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/PointSetNode.h
+	"GeometryNode.h"
+	"ColorNode.h"
+	"CoordinateNode.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/PositionInterpolatorNode.h
+	"InterpolatorNode.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/ProximitySensorNode.h
+	"SensorNode.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/ScalarInterpolatorNode.h
+	"InterpolatorNode.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/ScriptNode.h
+	"VRMLField.h"
+	"Node.h"
+	"JavaVM.h"
+	"JScript.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/JScript.h
+	"JNode.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/ShapeNode.h
+	"VRMLField.h"
+	"Node.h"
+	"AppearanceNode.h"
+	"GeometryNode.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/SoundNode.h
+	"VRMLField.h"
+	"Node.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/SphereNode.h
+	"GeometryNode.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/SphereSensorNode.h
+	"SensorNode.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/SpotLightNode.h
+	"LightNode.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/SwitchNode.h
+	"VRMLField.h"
+	"Node.h"
+
+1244012702 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/TextNode.h
+	"GeometryNode.h"
+	"FontStyleNode.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/TimeSensorNode.h
+	<time.h>
+	<sys/timeb.h>
+	"SensorNode.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/TouchSensorNode.h
+	"SensorNode.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/TransformNode.h
+	"VRMLField.h"
+	"Node.h"
+	"GroupingNode.h"
+
+1244012702 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/ViewpointNode.h
+	"BindableNode.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/VisibilitySensorNode.h
+	"SensorNode.h"
+
+1244012702 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/WorldInfoNode.h
+	"VRMLField.h"
+	"Node.h"
+
+1244732207 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/Parser.h
+	<assert.h>
+	"VRMLField.h"
+	"VRMLNodes.h"
+	"VRMLParser.h"
+	"NodeList.h"
+	"Route.h"
+	"ParserNode.h"
+	"String.h"
+	"DEF.h"
+	"PROTO.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/VRMLParser.h
+	<stdio.h>
+	"SceneGraph.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/NodeList.h
+	"LinkedList.h"
+	"RootNode.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/Route.h
+	<iostream>
+	"LinkedList.h"
+	"VRMLField.h"
+	"VRMLNodes.h"
+	"JavaVM.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/ParserNode.h
+	"LinkedList.h"
+	"Node.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/DEF.h
+	"String.h"
+	"LinkedListNode.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/PROTO.h
+	"LinkedList.h"
+	"String.h"
+	"Field.h"
+	"Vector.h"
+
+1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/UrlFile.h
+	"JavaVM.h"
+	"String.h"
+
+1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/RouteList.h
+	"LinkedList.h"
+	"Route.h"
+
+1244012702 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/MathUtil.h
+	"OldCpp.h"
+
+1248685235 source:/home/medialab/Projects/SceneModeller_API/examples/GlutDraw/common.h
+	"../../src/core/scene.h"
+	"../../src/core/cylinder.h"
+	"../../src/core/cube.h"
+	"../../src/core/rectangle.h"
+	"../../src/formats/vrmldevice.h"
+	"../../src/RenderController.h"
+	"../../src/SceneDrawer.h"
+
+1248962053 source:/home/medialab/Projects/SceneModeller_API/examples/GlutDraw/glut.rc
+

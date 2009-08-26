@@ -1,0 +1,108 @@
+#VRML V2.0 utf8
+WorldInfo {
+	title "Scene Modeler for Resposive Workbench"
+	info [
+		"VRML 2.0 created by Scene Modeler for Resposive Workbench by SERHAT ANGIN"
+	]
+}
+Background {
+	skyColor [
+		0.6 0.6 0.6
+	]
+}
+DEF new_object Transform {
+	translation 0 0 0
+	rotation 0 0 0 0
+	scale 1 1 1
+	scaleOrientation 0 0 1 0
+	center 0 0 0
+	children [
+		Transform {
+			translation 0 0 0
+			rotation 0 0 0 0
+			scale 1 1 1
+			scaleOrientation 0 0 1 0
+			center 0 0 0
+			children [
+				Shape {
+					appearance Appearance {
+						material Material {
+							diffuseColor 0 0 0
+							ambientIntensity 0.2
+							specularColor 0 0 0
+							emissiveColor 0 0 0
+							shininess 0
+							transparency 0
+						}
+						texture ImageTexture {
+							repeatS TRUE
+							repeatT TRUE
+							url [
+								"texture/tiles3.bmp"
+							]
+						}
+					}
+					geometry IndexedFaceSet {
+						ccw TRUE
+						colorPerVertex TRUE
+						normalPerVertex TRUE
+						convex TRUE
+						creaseAngle 0
+						solid TRUE
+						coord Coordinate {
+							point [
+								-50 -50 0,
+								50 -50 0,
+								50 50 0,
+								-50 50 0
+							]
+						}
+						coordIndex [
+							0,
+							1,
+							2,
+							-1,
+							2,
+							3,
+							0,
+							-1
+						]
+					}
+				}
+			]
+		}
+	]
+}
+DEF new_object Transform {
+	translation 0 0 0
+	rotation 0 0 0 0
+	scale 1 1 1
+	scaleOrientation 0 0 1 0
+	center 0 0 0
+	children [
+		Transform {
+			translation 0 0 6.5
+			rotation 0 0 0 0
+			scale 4 6 0.5
+			scaleOrientation 0 0 1 0
+			center 0 0 0
+			children [
+				Shape {
+					appearance Appearance {
+						material Material {
+							diffuseColor 0 0.5 0
+							ambientIntensity 0.2
+							specularColor 0 0 0
+							emissiveColor 0 0 0
+							shininess 0
+							transparency 0
+						}
+					}
+					geometry Box {
+						size 3 3 3
+					}
+				}
+			]
+		}
+	]
+}

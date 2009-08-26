@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=Scene Viewer
+Type=Application
+Comment=VRML97 scene viewer
+TryExec=home/medialab/Projects/SceneModeller_API/examples/GlutDraw/Glut_Draw
+Exec=/home/medialab/Projects/SceneModeller_API/examples/GlutDraw/GlutDraw
+Icon=/home/medialab/Projects/SceneModeller_API/examples/GlutDraw/gd.png
+GenericName[en_US]=
