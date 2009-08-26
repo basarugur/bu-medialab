@@ -15,8 +15,6 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <arpa/inet.h>
-#include <string>
-#include "geometry.h"
 
 #define MAXLINE 1024
 
@@ -26,10 +24,15 @@ static float M_data[4][4] = { {0.76537,    0.47926,  0.45804, -114.63},
                               {0.0068819,  0.62096, -0.43108,  172.72},
                               {0,          0,        0,        1} }; */
 
-static float M_data[4][4] = { { 0.64148,  -0.60438, -0.64574,  72.029},
+/*static float M_data[4][4] = { { 0.64148,  -0.60438, -0.64574,  72.029},
                               {-0.67855,  -0.60354, -0.54447,  95.697},
                               {-0.065157,  0.52556, -0.37574,  158.82},
-                              { 0,          0,        0,        1} };
+                              { 0,          0,        0,        1} }; */
+
+static float M_data[4][4] = { { 0.64985,    -0.40669,    -0.60315,    69.29356},
+                              {-0.69327,    -0.38080,    -0.46207,    86.01625},
+                              {-0.05875,     0.79224,    -0.34371,   162.34435},
+                              { 0,           0,           0,           1      } };
 
 class StereoAnalyzer;
 class IFiWiCamera;
@@ -38,15 +41,17 @@ class IOpenCV;
 class HeadTrackerClient
 {
 public:
-    HeadTrackerClient(const std::string& ip, bool offline_mode);
+    HeadTrackerClient(const std::string& ip, bool online_mode);
     ~HeadTrackerClient();
-    bool read();
+    bool read_online();
     bool read_offline();
     StereoAnalyzer* stereo_anl;
     IFiWiCamera* cam;
     IOpenCV* cv;
-    Point headPosition, lookVector; // actual 3D points
-    Matrix4x4 *coord_trans_4x4;
+
+    Point3 headPosition;    // actual 3D position
+    Vector3 lookVector;     // look vector of the user
+    Matrix *coord_trans;
 
 private:
     std::string remote_ip;
