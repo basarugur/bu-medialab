@@ -7,16 +7,18 @@
 /// \note
 ///-----------------------------------------------------------------------------
 
+#include "common.h"
+
 #include <stdexcept>
 #include <cstring>
 #include <errno.h>
 #include <iostream>
 
-#include "HeadTrackerClient.h"
-
 #include "../HeadTracker/StereoAnalyzer.h"
 #include "../HeadTracker/IOpenCV.h"
 #include "../HeadTracker/IFiWiCamera.h"
+
+#include "HeadTrackerClient.h"
 
 using std::string;
 using std::runtime_error;
@@ -87,13 +89,13 @@ static ssize_t writen(int fd, const void *vptr, size_t n)
     return(n);
 }
 
-HeadTrackerClient::HeadTrackerClient(const string& ip, bool offline_mode): remote_ip(ip)
+HeadTrackerClient::HeadTrackerClient(const string& ip, bool online_mode): remote_ip(ip)
 {
-    headPosition = Point(0, -30, 250);
-    lookVector = Point(0, 1, 0);
-    coord_trans_4x4 = new Matrix4x4(M_data);
+    headPosition = Point3(0, -30, 250);
+    lookVector = Vector3(0, 1, 0);
+    coord_trans = new Matrix(M_data);
 
-    if (offline_mode)
+    if (!online_mode)
     {
         stereo_anl = new StereoAnalyzer(43.0, 640.0, 480.0, 12.0); // actual values
 
@@ -125,10 +127,10 @@ HeadTrackerClient::~HeadTrackerClient()
     delete stereo_anl; stereo_anl = NULL;
     delete cam; cam = NULL;
     delete cv; cv = NULL;
-    delete coord_trans_4x4; coord_trans_4x4 = NULL;
+    delete coord_trans; coord_trans = NULL;
 }
 
-bool HeadTrackerClient::read()
+bool HeadTrackerClient::read_online()
 {
     ssize_t n;
 
@@ -150,8 +152,8 @@ bool HeadTrackerClient::read()
     }
     else // Valid data!
     {
-        headPosition = Point(tempo);
-        lookVector = Point(tempo+3);
+        headPosition = Point3( tempo[0], tempo[1], tempo[2] );
+        lookVector = Vector3( tempo[3], tempo[4], tempo[5] );
         cout << tempo[0] << " " << tempo[1] << " " << tempo[2] << endl;
     }
 
@@ -169,10 +171,10 @@ bool HeadTrackerClient::read_offline()
         throw runtime_error("[-] OpenCV process exited");
     }
 
-    stereo_anl->findLocationVector(cornersL, cornersR, headPosition, lookVector, *coord_trans_4x4);
-    lookVector = Point::normalize(lookVector);
+    stereo_anl->findLocationVector(cornersL, cornersR, headPosition, lookVector, *coord_trans);
+    lookVector = lookVector.normalize();
 
-    cout << headPosition.x << " " << headPosition.y << " " << headPosition.z << endl;
+    // cout << "HP:" << headPosition.x() << " " << headPosition.y() << " " << headPosition.z() << endl;
 
     return true;
 }

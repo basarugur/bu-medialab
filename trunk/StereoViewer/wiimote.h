@@ -1,3 +1,5 @@
+#include "common.h"
+
 /**
  * Cwiid includes
  */
@@ -17,7 +19,7 @@ const static float delta_acc = .005f;
 static float delta_tr = .1f;//.05f;
 const static float rad2deg = 180.f / PI;
 
-static char wii_msg[255] = "";
+char wii_msg[255];
 
 /**
  * GLUT function to display \a string at position (\a x,\a y,\a z).
@@ -26,7 +28,7 @@ void renderString(float x, float y, float z, char *string)
 {
     char * c;
 
-   glDisable(GL_LIGHTING);
+    glDisable(GL_LIGHTING);
 
     glRasterPos3f(x, y, z);
 
@@ -130,7 +132,7 @@ bool check_wiimote()
 
             /**
             *   Wiimote will NOT be connected at first attempt,
-            *   OpenGL text message should be prompted previously
+            *   OpenGL text wii_msg should be prompted previously
             *   so that bluetooth connection attempt does not block.
             */
             if (g_connect_attempts == 0)
@@ -188,7 +190,7 @@ void disconnect_wiimote()
 /**
  * Checking wiimote connection and setting up if not exists
  */
-void update_object_by_wiimote(Rotation* ch_r, Point* ch_pos, bool object_mode, int last_x, int last_y)
+void update_object_by_wiimote(EulerRotation* ch_r, Point3* ch_pos, bool object_mode, int last_x, int last_y)
 {
 	static double ir_positions[2][2] = { { 0, 0 }, { 0, 0 } };
     static int ir_sizes[2] = { 3, 3 }; /* Expect it to be around 2-8 in wiimote state struct */
@@ -250,17 +252,17 @@ void update_object_by_wiimote(Rotation* ch_r, Point* ch_pos, bool object_mode, i
 		if ( g_wii_state.buttons & CWIID_BTN_A && g_wii_state.buttons & CWIID_BTN_B )
 			object_mode = !object_mode;
 		else if ( g_wii_state.buttons & CWIID_BTN_LEFT )
-			ch_pos->x -= delta_tr;
+			ch_pos->setX( ch_pos->x() - delta_tr );
 		else if ( g_wii_state.buttons & CWIID_BTN_RIGHT )
-			ch_pos->x += delta_tr;
+			ch_pos->setX( ch_pos->x() + delta_tr );
 		else if ( g_wii_state.buttons & CWIID_BTN_UP )
-			ch_pos->y += delta_tr;
+			ch_pos->setY( ch_pos->y() + delta_tr );
 		else if ( g_wii_state.buttons & CWIID_BTN_DOWN )
-			ch_pos->y -= delta_tr;
+			ch_pos->setY( ch_pos->y() - delta_tr );
 		else if ( g_wii_state.buttons & CWIID_BTN_A )
-			ch_pos->z += delta_tr;
+			ch_pos->setZ( ch_pos->z() + delta_tr );
 		else if ( g_wii_state.buttons & CWIID_BTN_B )
-			ch_pos->z -= delta_tr;
+			ch_pos->setZ( ch_pos->z() - delta_tr );
 
         float a_x = ((float)g_wii_state.acc[CWIID_X] - wm_cal.zero[CWIID_X]) /
         	          (wm_cal.one[CWIID_X] - wm_cal.zero[CWIID_X]);
