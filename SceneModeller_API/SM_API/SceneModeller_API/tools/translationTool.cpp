@@ -1,1 +1,0 @@
-#include "translationtool.h"
