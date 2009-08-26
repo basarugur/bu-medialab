@@ -1,0 +1,90 @@
+<Scene>
+    <Transformations>
+        <Transformation id="0">
+            <Rotation x="0" y="0" z="0" r="0" />
+            <Scale x="1" y="1" z="1" />
+            <Translation x="0" y="0" z="8" />
+        </Transformation>
+        <Transformation id="1">
+            <Rotation x="0" y="0" z="0" r="0" />
+            <Scale x="1" y="1" z="1" />
+            <Translation x="0" y="0" z="0" />
+        </Transformation>
+    </Transformations>
+    <Textures>
+        <Texture id="0">
+            <File path="texture/tiles3.bmp" />
+            <Normal x="0" y="0" z="1" />
+            <Scale x="1" y="1" />
+        </Texture>
+        <Texture id="1">
+            <File path="texture/tiles3.bmp" />
+            <Normal x="0" y="0" z="1" />
+            <Scale x="1" y="1" />
+        </Texture>
+    </Textures>
+    <Materials>
+        <Material id="0" texture_id="-1">
+            <Diffusecolor r="0" g="0.2" b="0.9" />
+            <Specularcolor r="0" g="0" b="0" />
+            <Ambientcolor r="0" g="0" b="0" />
+            <solid>1</solid>
+            <reflection>0</reflection>
+            <refraction_index>1</refraction_index>
+            <luculent>0</luculent>
+        </Material>
+        <Material id="1" texture_id="-1">
+            <Diffusecolor r="0.6" g="0.6" b="0.6" />
+            <Specularcolor r="0" g="0" b="0" />
+            <Ambientcolor r="0" g="0" b="0" />
+            <solid>1</solid>
+            <reflection>0</reflection>
+            <refraction_index>1</refraction_index>
+            <luculent>0</luculent>
+        </Material>
+    </Materials>
+    <Lights>
+        <Light id="0" type="point">
+            <Position x="0" y="10" z="50" />
+            <Direction x="0" y="1" z="0" />
+            <Coefficient>0.6</Coefficient>
+        </Light>
+        <Light id="1" type="point">
+            <Position x="0" y="-10" z="50" />
+            <Direction x="0" y="1" z="0" />
+            <Coefficient>0.6</Coefficient>
+        </Light>
+    </Lights>
+    <Camera type="perspective">
+        <Position x="10" y="10" z="20" />
+        <Up x="-0.57735" y="-0.57735" z="0.57735" />
+        <Target x="0" y="0" z="0" />
+    </Camera>
+    <Screen>
+        <Width>600</Width>
+        <Height>600</Height>
+    </Screen>
+    <Shapes>
+        <Shape id="0" type="triangle_mesh">
+            <File path="obj0.raw" />
+        </Shape>
+        <Shape id="1" type="triangle_mesh">
+            <File path="obj1.raw" />
+        </Shape>
+    </Shapes>
+    <Primitives>
+        <Primitive id="0">
+            <Shape>0</Shape>
+            <Material>0</Material>
+            <Transformation>0</Transformation>
+        </Primitive>
+        <Primitive id="1">
+            <Shape>1</Shape>
+            <Material>1</Material>
+            <Transformation>1</Transformation>
+        </Primitive>
+    </Primitives>
+    <Properties>
+        <AntiAlias>false</AntiAlias>
+    </Properties>
+</Scene>

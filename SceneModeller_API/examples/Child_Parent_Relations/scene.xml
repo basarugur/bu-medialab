@@ -1,0 +1,198 @@
+<Scene>
+    <Transformations>
+        <Transformation id="0">
+            <Rotation x="0" y="0" z="0" r="0" />
+            <Scale x="1" y="1" z="1" />
+            <Translation x="0" y="0" z="0" />
+        </Transformation>
+        <Transformation id="1">
+            <Rotation x="0" y="0" z="0" r="0" />
+            <Scale x="4" y="6" z="0.5" />
+            <Translation x="0" y="0" z="11.5" />
+        </Transformation>
+        <Transformation id="2">
+            <Rotation x="0" y="0" z="0" r="0" />
+            <Scale x="1" y="1" z="1" />
+            <Translation x="5" y="8" z="5" />
+        </Transformation>
+        <Transformation id="3">
+            <Rotation x="0" y="0" z="0" r="0" />
+            <Scale x="1" y="1" z="1" />
+            <Translation x="5" y="-8" z="5" />
+        </Transformation>
+        <Transformation id="4">
+            <Rotation x="0" y="0" z="0" r="0" />
+            <Scale x="1" y="1" z="1" />
+            <Translation x="-5" y="-8" z="5" />
+        </Transformation>
+        <Transformation id="5">
+            <Rotation x="0" y="0" z="0" r="0" />
+            <Scale x="1" y="1" z="1" />
+            <Translation x="-5" y="8" z="5" />
+        </Transformation>
+    </Transformations>
+    <Textures>
+        <Texture id="0">
+            <File path="texture/tiles3.bmp" />
+            <Normal x="0" y="0" z="1" />
+            <Scale x="30" y="30" />
+        </Texture>
+        <Texture id="1">
+            <File path="texture/tiles3.bmp" />
+            <Normal x="0" y="0" z="1" />
+            <Scale x="1" y="1" />
+        </Texture>
+        <Texture id="2">
+            <File path="texture/tiles3.bmp" />
+            <Normal x="0" y="0" z="1" />
+            <Scale x="1" y="1" />
+        </Texture>
+        <Texture id="3">
+            <File path="texture/tiles3.bmp" />
+            <Normal x="0" y="0" z="1" />
+            <Scale x="1" y="1" />
+        </Texture>
+        <Texture id="4">
+            <File path="texture/tiles3.bmp" />
+            <Normal x="0" y="0" z="1" />
+            <Scale x="1" y="1" />
+        </Texture>
+        <Texture id="5">
+            <File path="texture/tiles3.bmp" />
+            <Normal x="0" y="0" z="1" />
+            <Scale x="1" y="1" />
+        </Texture>
+    </Textures>
+    <Materials>
+        <Material id="0" texture_id="0">
+            <Diffusecolor r="0" g="0" b="0" />
+            <Specularcolor r="0" g="0" b="0" />
+            <Ambientcolor r="0" g="0" b="0" />
+            <solid>1</solid>
+            <reflection>0</reflection>
+            <refraction_index>1</refraction_index>
+            <luculent>0</luculent>
+        </Material>
+        <Material id="1" texture_id="-1">
+            <Diffusecolor r="0" g="0.5" b="0" />
+            <Specularcolor r="0" g="0" b="0" />
+            <Ambientcolor r="0" g="0" b="0" />
+            <solid>1</solid>
+            <reflection>0</reflection>
+            <refraction_index>1</refraction_index>
+            <luculent>0</luculent>
+        </Material>
+        <Material id="2" texture_id="-1">
+            <Diffusecolor r="1" g="0" b="0" />
+            <Specularcolor r="0" g="0" b="0" />
+            <Ambientcolor r="0" g="0" b="0" />
+            <solid>1</solid>
+            <reflection>0</reflection>
+            <refraction_index>1</refraction_index>
+            <luculent>0</luculent>
+        </Material>
+        <Material id="3" texture_id="-1">
+            <Diffusecolor r="1" g="0" b="0" />
+            <Specularcolor r="0" g="0" b="0" />
+            <Ambientcolor r="0" g="0" b="0" />
+            <solid>1</solid>
+            <reflection>0</reflection>
+            <refraction_index>1</refraction_index>
+            <luculent>0</luculent>
+        </Material>
+        <Material id="4" texture_id="-1">
+            <Diffusecolor r="1" g="0" b="0" />
+            <Specularcolor r="0" g="0" b="0" />
+            <Ambientcolor r="0" g="0" b="0" />
+            <solid>1</solid>
+            <reflection>0</reflection>
+            <refraction_index>1</refraction_index>
+            <luculent>0</luculent>
+        </Material>
+        <Material id="5" texture_id="-1">
+            <Diffusecolor r="1" g="0" b="0" />
+            <Specularcolor r="0" g="0" b="0" />
+            <Ambientcolor r="0" g="0" b="0" />
+            <solid>1</solid>
+            <reflection>0</reflection>
+            <refraction_index>1</refraction_index>
+            <luculent>0</luculent>
+        </Material>
+    </Materials>
+    <Lights>
+        <Light id="0" type="point">
+            <Position x="10" y="30" z="20" />
+            <Direction x="0" y="1" z="0" />
+            <Coefficient>0.6</Coefficient>
+        </Light>
+        <Light id="1" type="point">
+            <Position x="-10" y="-30" z="20" />
+            <Direction x="0" y="1" z="0" />
+            <Coefficient>0.6</Coefficient>
+        </Light>
+    </Lights>
+    <Camera type="perspective">
+        <Position x="30" y="30" z="10" />
+        <Up x="-0.0827606" y="-0.0827606" z="0.993127" />
+        <Target x="0" y="0" z="0" />
+    </Camera>
+    <Screen>
+        <Width>600</Width>
+        <Height>600</Height>
+    </Screen>
+    <Shapes>
+        <Shape id="0" type="triangle_mesh">
+            <File path="obj0.raw" />
+        </Shape>
+        <Shape id="1" type="triangle_mesh">
+            <File path="obj1.raw" />
+        </Shape>
+        <Shape id="2" type="triangle_mesh">
+            <File path="obj2.raw" />
+        </Shape>
+        <Shape id="3" type="triangle_mesh">
+            <File path="obj3.raw" />
+        </Shape>
+        <Shape id="4" type="triangle_mesh">
+            <File path="obj4.raw" />
+        </Shape>
+        <Shape id="5" type="triangle_mesh">
+            <File path="obj5.raw" />
+        </Shape>
+    </Shapes>
+    <Primitives>
+        <Primitive id="0">
+            <Shape>0</Shape>
+            <Material>0</Material>
+            <Transformation>0</Transformation>
+        </Primitive>
+        <Primitive id="1">
+            <Shape>1</Shape>
+            <Material>1</Material>
+            <Transformation>1</Transformation>
+        </Primitive>
+        <Primitive id="2">
+            <Shape>2</Shape>
+            <Material>2</Material>
+            <Transformation>2</Transformation>
+        </Primitive>
+        <Primitive id="3">
+            <Shape>3</Shape>
+            <Material>3</Material>
+            <Transformation>3</Transformation>
+        </Primitive>
+        <Primitive id="4">
+            <Shape>4</Shape>
+            <Material>4</Material>
+            <Transformation>4</Transformation>
+        </Primitive>
+        <Primitive id="5">
+            <Shape>5</Shape>
+            <Material>5</Material>
+            <Transformation>5</Transformation>
+        </Primitive>
+    </Primitives>
+    <Properties>
+        <AntiAlias>false</AntiAlias>
+    </Properties>
+</Scene>

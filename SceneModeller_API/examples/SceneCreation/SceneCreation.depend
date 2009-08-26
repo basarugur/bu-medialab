@@ -1,0 +1,199 @@
+# depslib dependency file v1.0
+1244629987 source:/home/medialab/Projects/SceneModeller_API/examples/SceneCreation/main.cpp
+	"../../src/core/scene.h"
+	"../../src/core/sphere.h"
+	"../../src/core/rectangle.h"
+	"../../src/RenderController.h"
+
+1244730827 /home/medialab/Projects/SceneModeller_API/src/core/scene.h
+	"camera.h"
+	"light.h"
+	"primitive.h"
+	"film.h"
+	"shape.h"
+	"gfxobject.h"
+	"integrator.h"
+	"sampler.h"
+	"CImg.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/camera.h
+	"point3.h"
+	"sampler.h"
+	"ray.h"
+	"primitive.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/point3.h
+	"vector3.h"
+
+1244728449 /home/medialab/Projects/SceneModeller_API/src/core/vector3.h
+	<iostream>
+	<stdlib.h>
+	<math.h>
+	<algorithm>
+	<float.h>
+	"../sm_api_dll.h"
+
+1244728389 /home/medialab/Projects/SceneModeller_API/src/sm_api_dll.h
+
+1244730286 /home/medialab/Projects/SceneModeller_API/src/core/sampler.h
+	"film.h"
+	"vector3.h"
+	"point3.h"
+
+1244555844 /home/medialab/Projects/SceneModeller_API/src/core/film.h
+	"../sm_api_dll.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/ray.h
+	"vector3.h"
+	"point3.h"
+	"normal3.h"
+	<float.h>
+	<algorithm>
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/normal3.h
+	"vector3.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/primitive.h
+	"shape.h"
+	"film.h"
+	"light.h"
+	"material.h"
+	"vector3.h"
+	"transformation.h"
+	"kdtree.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/shape.h
+	<string>
+	<fstream>
+	<iostream>
+	<vector>
+	"material.h"
+	"vector3.h"
+	"normal3.h"
+	"point3.h"
+	"triangle.h"
+	"bbox.h"
+	"ray.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/material.h
+	"film.h"
+	"vector3.h"
+	"texture.h"
+	<string>
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/texture.h
+	"film.h"
+	"vector3.h"
+	"point3.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/triangle.h
+	"vertex.h"
+	"normal3.h"
+	"point3.h"
+	"material.h"
+	"bbox.h"
+	"ray.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/vertex.h
+	"vector3.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/bbox.h
+	"point3.h"
+	"ray.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/light.h
+	"film.h"
+	"vector3.h"
+	"point3.h"
+	"shape.h"
+	"diffgeometry.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/diffgeometry.h
+	"vector3.h"
+	"point3.h"
+	"normal3.h"
+	"shape.h"
+	<float.h>
+	<algorithm>
+
+1244729697 /home/medialab/Projects/SceneModeller_API/src/core/transformation.h
+	"matrix.h"
+	"shape.h"
+	"trianglemesh.h"
+	"vector3.h"
+	"diffgeometry.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/matrix.h
+	"vector3.h"
+	"point3.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/trianglemesh.h
+	"shape.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/kdtree.h
+	"shape.h"
+	"primitive.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/gfxobject.h
+	"shape.h"
+	"film.h"
+	"light.h"
+	"material.h"
+	"vector3.h"
+	"transformation.h"
+	"primitive.h"
+	<vector>
+	<string>
+
+1244555970 /home/medialab/Projects/SceneModeller_API/src/core/integrator.h
+	"../sm_api_dll.h"
+
+1244616991 /home/medialab/Projects/SceneModeller_API/src/core/CImg.h
+	<cstdio>
+	<cstdlib>
+	<cstdarg>
+	<cstring>
+	<cmath>
+	<ctime>
+	<sys/time.h>
+	<unistd.h>
+	<windows.h>
+	<shlobj.h>
+	<X11/Xlib.h>
+	<X11/Xutil.h>
+	<X11/keysym.h>
+	<pthread.h>
+	<sys/ipc.h>
+	<sys/shm.h>
+	<X11/extensions/XShm.h>
+	<X11/extensions/Xrandr.h>
+	<Carbon/Carbon.h>
+	<pthread.h>
+	"omp.h"
+	"png.h"
+	"jpeglib.h"
+	"tiffio.h"
+	"ffmpeg/avformat.h"
+	"ffmpeg/avcodec.h"
+	"ffmpeg/swscale.h"
+	"zlib.h"
+	"Magick++.h"
+	"fftw3.h"
+	"Board.h"
+	"CImg.h"
+	"CImg.h"
+	"CImg.h"
+	"CImg.h"
+	"CImg.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/sphere.h
+	"shape.h"
+	"trianglemesh.h"
+
+1244554590 /home/medialab/Projects/SceneModeller_API/src/core/rectangle.h
+	"shape.h"
+	"trianglemesh.h"
+
+1244624644 /home/medialab/Projects/SceneModeller_API/src/RenderController.h
+	"core/scene.h"
+
