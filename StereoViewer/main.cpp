@@ -32,6 +32,4 @@ int main(int argc, char** argv)
     IGlut _iGlut(argc, argv);
 
     _iGlut.Init();
-
-    _iGlut.StartMainLoop();
 }

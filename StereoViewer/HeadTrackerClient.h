@@ -1,8 +1,9 @@
 ///-----------------------------------------------------------------------------
 ///
-/// \file	Server.h
+/// \file	HeadTrackerClient.h
 /// \author	Ebutalib Agayev & Basar Ugur
-/// \brief	Network client header, simply expecting to receive "6 float" data
+/// \brief	Network client header, a module simply expecting to receive
+///         "6 float" data
 /// \note
 ///-----------------------------------------------------------------------------
 

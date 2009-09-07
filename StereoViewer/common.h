@@ -5,6 +5,7 @@
 #include "../SceneModeller_API/src/core/scene.h"
 
 #include "../SceneModeller_API/src/SceneDrawer.h"
+#include "../SceneModeller_API/src/RenderController.h"
 #include "../SceneModeller_API/src/formats/vrmldevice.h"
 
 #endif

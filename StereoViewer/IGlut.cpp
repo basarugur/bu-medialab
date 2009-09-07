@@ -19,6 +19,12 @@ CanvasGrid* IGlut::p_grid;
 
 SceneDrawer* IGlut::p_drawer;
 
+RenderController* IGlut::p_rc;
+
+Light* IGlut::p_light;
+
+int IGlut::submenus[1];
+
 using namespace glut_env;
 
 IGlut::IGlut(int argc, char** argv)
@@ -31,7 +37,7 @@ IGlut::IGlut(int argc, char** argv)
     px_win_width = 1024;
     px_win_height = 768;
 
-    cm_user_height = 20;
+    cm_user_height = 70;
 
     cm_user_to_screen_center = 70;
 
@@ -60,7 +66,8 @@ IGlut::IGlut(int argc, char** argv)
 
     /// VRML file should be taken as program argument.
     //CreateScene(p_scene, argv[1]);
-    CreateScene(p_scene, "res/chapel_97-5.wrl");
+    CreateScene("res/chapel_97-5.wrl");
+    //CreateScene("res/box.wrl");
 
     p_camera = new Camera( Point3(0, -cm_user_to_screen_center, cm_user_height) );
 
@@ -77,6 +84,7 @@ IGlut::IGlut(int argc, char** argv)
                            (glutGet(GLUT_SCREEN_HEIGHT) - px_win_height) * 0.5 );
 
     glutCreateWindow("Stereo VRML Viewer | BoUn CmpE Medialab");
+
 }
 
 IGlut::~IGlut()
@@ -85,25 +93,33 @@ IGlut::~IGlut()
         CloseHeadTracker();
 
     disconnect_wiimote();
+
+    delete p_scene;
+    delete p_camera;
+    delete p_drawer;
+    delete p_grid;
+    delete p_rc;
+    delete p_light;
 }
 
 void IGlut::Init()
 {
     glutDisplayFunc(Display);
-	glutReshapeFunc(Reshape);
+    glutTimerFunc(20, Timer, 0);
+    glutReshapeFunc(Reshape);
 	glutMouseFunc(Mouse);
 	glutKeyboardFunc(Keyboard);
 	glutMotionFunc(Motion);
 
+    PrepareMenus();
+
     // glutFullScreen();
     glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-	GLfloat LightPosition[]={ 0.0f, 50.0f, 0.0f, 1.0f };
-	GLfloat LightIntensity[]={ 0.2f, 0.2f, 0.2f, 1.0f };
-	glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, LightIntensity);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, LightIntensity);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, LightIntensity);
+	glLightfv(GL_LIGHT0, GL_POSITION, gl_light_position);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, gl_ambient_intensity);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, gl_light_intensity);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, gl_light_intensity);
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 
 	glEnable(GL_DEPTH_TEST);
@@ -116,11 +132,12 @@ void IGlut::Init()
 	glutMainLoop();
 }
 
-void IGlut::StartMainLoop()
+void IGlut::PrepareMenus()
 {
-    // FogEffect(1.0);
-
-    glutMainLoop();
+    submenus[0] = glutCreateMenu( SelectOption );
+    glutAddMenuEntry("Toggle fullscreen view", 0);
+    glutAddMenuEntry("Render the scene", 1);
+    glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
 void IGlut::Motion(int x, int y)
@@ -141,29 +158,62 @@ void IGlut::Motion(int x, int y)
 	glutPostRedisplay();
 }
 
+void IGlut::SelectOption(int opt)
+{
+    glutSetMenu( -1 );
+
+    switch (opt)
+    {
+        case TOGGLE_FULLSCREEN:
+            full_screen = !full_screen;
+
+            if ( full_screen && glutGameModeGet(GLUT_GAME_MODE_ACTIVE) == 0 ) //argc > 2 && strcmp(argv[2], "f") == 0)
+            {
+                // Enter game mode:
+                char mode_string[100];
+                // DOUBLE SCREEN:
+                // sprintf(mode_string, "%dx%d:%d@%d", 1024, 1536, 32, 120);
+                // SINGLE SCREEN:
+                sprintf(mode_string, "%dx%d:%d@%d", 1024, 768, 32, 120);
+                cout << "GLUT-Game-Mode: " << mode_string << endl;
+                glutGameModeString( mode_string );
+                glutEnterGameMode();
+
+                // register callbacks again
+                Init();
+            }
+            else
+            {
+                glutLeaveGameMode();
+            }
+            break;
+
+        case RENDER_SCENE:
+            if (p_rc == NULL)
+                p_rc = new RenderController();
+
+            /// We use asymmetric frustum for off-axis projection in OpenGL;
+            /// therefore we have to correct the camera direction for rendering:
+            Point3 save_lookAt( p_camera->atPoint() );
+            Vector3 save_upVector( p_camera->upVector() );
+
+            p_camera->setAtPoint( Point3(0, 0, 0) );
+            p_camera->setUpVector( Vector3(0, 0, 1) );
+
+            p_rc->render(p_scene, p_camera);
+
+            p_camera->setAtPoint( save_lookAt );
+            p_camera->setUpVector( save_upVector );
+
+            break;
+    }
+}
+
 void IGlut::Keyboard(unsigned char key, int x, int y)
 {
     if (key == 'g' || key == 'G')
     {
-        full_screen = !full_screen;
-
-        if ( full_screen && glutGameModeGet(GLUT_GAME_MODE_ACTIVE) == 0 ) //argc > 2 && strcmp(argv[2], "f") == 0)
-        {
-            // Enter game mode:
-            char mode_string[100];
-            // DOUBLE SCREEN:
-            // sprintf(mode_string, "%dx%d:%d@%d", 1024, 1536, 32, 120);
-            // SINGLE SCREEN:
-            sprintf(mode_string, "%dx%d:%d@%d", 1024, 768, 32, 120);
-            cout << "GLUT-Game-Mode: " << mode_string << endl;
-            glutGameModeString( mode_string );
-            glutEnterGameMode();
-
-            // register callbacks again
-			Init();
-        }
-        else
-            glutLeaveGameMode();
+        SelectOption( TOGGLE_FULLSCREEN );
     }
     else if (key == 'c' || key == 'C')
     {
@@ -180,8 +230,8 @@ void IGlut::Keyboard(unsigned char key, int x, int y)
     else if (key == 'd' || key == 'D')
     {
         // let maximum delta_t be 1.f
-        if ( (delta_t = delta_t + 0.1f) > 1.f )
-            delta_t = 0.1f;
+        /*if ( (delta_t = delta_t + 0.1f) > 1.f )
+            delta_t = 0.1f;*/
     }
     else if (key == 'w' || key == 'W')
     {
@@ -193,6 +243,10 @@ void IGlut::Keyboard(unsigned char key, int x, int y)
     else if (key == 'z' || key == 'Z')
     {
         cout << "Height: " << p_camera->position().z() << endl;
+    }
+    else if (key == 'r' || key == 'R')
+    {
+        SelectOption( RENDER_SCENE );
     }
 
     /*else if (key == 'f' || key == 'F')
@@ -290,7 +344,7 @@ void IGlut::Reshape(int w, int h)
 	glLoadIdentity();*/
 }
 
-void IGlut::CreateScene(Scene* scn_, string VRMLfile)
+void IGlut::CreateScene(string VRMLfile)
 {
 	/*GfxObject* new_obj1 = new GfxObject(new RectangleShape(),new Material(),new Transformation());
 	new_obj1->getMaterial()->enableTexture(true);
@@ -344,21 +398,33 @@ void IGlut::CreateScene(Scene* scn_, string VRMLfile)
 	new_obj2->addChild(new_obj5);
 	new_obj2->addChild(new_obj6);
 
-	//*scn_ += new_obj1;
-	*scn_ += new_obj2;
-    *scn_ += new_obj3;
-	*scn_ += new_obj4;
-	*scn_ += new_obj5;
-	*scn_ += new_obj6;*/
+	//*p_scene += new_obj1;
+	*p_scene += new_obj2;
+    *p_scene += new_obj3;
+	*p_scene += new_obj4;
+	*p_scene += new_obj5;
+	*p_scene += new_obj6;*/
 
     VrmlDevice vrml_dev;
 
-    vrml_dev.loadScene(VRMLfile, scn_);
-    cout << "OBJS:" << scn_->objects().size() << endl;
+    vrml_dev.loadScene(VRMLfile, p_scene);
 
-    for (int i = 0; i<scn_->objects().size(); i++)
+    // Add GL lights to the Scene;
+    Point3 l_pos( gl_light_position[0], gl_light_position[2], gl_light_position[1] );
+    Vector3 l_dir( -gl_light_position[0], -gl_light_position[2], -gl_light_position[1] );
+
+    p_light = new PointLight( l_pos, l_dir );
+
+    if ( p_scene->lights().empty() )
+        p_scene->lights().push_back( p_light );
+    else
+        p_scene->lights()[0] = p_light;
+
+    // cout << "OBJS:" << p_scene->objects().size() << endl;
+
+    for (int i = 0; i<p_scene->objects().size(); i++)
     {
-        GfxObject* gobj = scn_->objects()[i];
+        GfxObject* gobj = p_scene->objects()[i];
         /*if (gobj->getChildList().size() == 0)
         {
             Transformation xf;
@@ -370,15 +436,15 @@ void IGlut::CreateScene(Scene* scn_, string VRMLfile)
     return;
 
     /// skip this part;
-    if (scn_->cameras().size() != 0)
+    if (p_scene->cameras().size() != 0)
     {
         // blender setup
-        p_camera = scn_->cameras()[0];
+        p_camera = p_scene->cameras()[0];
         cout << "CFR: " << p_camera->position().x() << " * " << p_camera->position().y() << " * " << p_camera->position().z() << endl;
         cout << "CTO: " << p_camera->atPoint().x() << " * " << p_camera->atPoint().y() << " * " << p_camera->atPoint().z() << endl;
         cout << "CUP: " << p_camera->upVector().x() << " * " << p_camera->upVector().y() << " * " << p_camera->upVector().z() << endl;
 
-        cout << "OBJ::" << scn_->objects()[0]->getName() << endl;
+        cout << "OBJ::" << p_scene->objects()[0]->getName() << endl;
     }
     else
     {
@@ -395,18 +461,13 @@ void IGlut::CreateScene(Scene* scn_, string VRMLfile)
     }
 
 
-    //	vrml_dev.saveToFile("output.wrl", scn_);
+    //	vrml_dev.saveToFile("output.wrl", p_scene);
 }
 
-void IGlut::Display(void)
+void IGlut::Timer(int timer_id)
 {
-
-    /*if (use_wiimote)
-        update_object_by_wiimote( (object_mode ? &obj_rot : &world_rot),
-                                  (object_mode ? &obj_pos : &cam_pos ),
-                                   object_mode,
-                                   last_x, last_y );
-                                   */
+    if (use_wiimote)
+        update_scene_by_wiimote( p_scene, last_x, last_y );
 
     if (use_camera && p_htc != NULL)
     {
@@ -427,6 +488,17 @@ void IGlut::Display(void)
         }
     }
 
+    if ( glutGetWindow())
+	{
+	    glutPostRedisplay(); // triggers a display event
+        glutSwapBuffers();
+	}
+
+    glutTimerFunc(20, Timer, 0);
+}
+
+void IGlut::Display(void)
+{
     //usleep(25000);
 
     glDrawBuffer(GL_BACK_LEFT);
@@ -510,6 +582,7 @@ void IGlut::DrawBaseGrid()
 
     glPopMatrix();
 }*/
+float z_h = 10;
 
 void IGlut::DrawToOneBuffer(float cm_camera_tilt_x, float cm_camera_tilt_y)
 {
@@ -555,10 +628,15 @@ void IGlut::DrawToOneBuffer(float cm_camera_tilt_x, float cm_camera_tilt_y)
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 
+    ((PointLight*)p_scene->lights()[0])->position() =
+            Point3(gl_light_position[0],
+                   gl_light_position[2],
+                   gl_light_position[1]);
+
 	// sert bak
 	Point3 glEyePos(p_camera->position().x() + cm_camera_tilt_x,
                     p_camera->position().y() + cm_camera_tilt_y,
-                    p_camera->position().z());
+                    p_camera->position().z() );
 
     Point3 glCenterPos(p_camera->position().x() + cm_camera_tilt_x,
                        p_camera->position().y() + cm_camera_tilt_y,
@@ -582,9 +660,11 @@ void IGlut::DrawToOneBuffer(float cm_camera_tilt_x, float cm_camera_tilt_y)
 
     // DrawBaseGrid();
 
+    glTranslatef(0, 0, -z_h);
+
     if (p_drawer != NULL)
 	{
-		p_drawer->drawShadedScene(p_scene, p_camera, p_grid);
+		p_drawer->drawShadedScene(p_scene, p_camera);
 	}
 
     /// Display Wiimote text message if exists
@@ -593,11 +673,6 @@ void IGlut::DrawToOneBuffer(float cm_camera_tilt_x, float cm_camera_tilt_y)
 
 	glPopMatrix();
 
-    if (glutGetWindow())
-	{
-        glutPostRedisplay(); /* Inform GLUT to constantly update the screen */
-        glutSwapBuffers();
-	}
 }
 
 void IGlut::UpdateUserPositionByMouse(int mouse_x, int mouse_y)
@@ -609,7 +684,7 @@ void IGlut::UpdateUserPositionByMouse(int mouse_x, int mouse_y)
 
     p_camera->setPosition( Point3( user_vector_x * PX_2_CM, // cm_user_to_screen_center * cos(deg_user_yaw);
                                     user_vector_y * PX_2_CM, // cm_user_to_screen_center * sin(deg_user_yaw);
-                                    cm_user_height ) );
+                                    cm_user_height + z_h ) );
 
     half_eye_sep_x = HALF_EYE_SEP_CM * -sin(deg_user_yaw);
     half_eye_sep_y = HALF_EYE_SEP_CM * cos(deg_user_yaw);
@@ -629,7 +704,10 @@ void IGlut::UpdateUserPositionByTracking()
 
     //cout << p_htc->lookVector.x() << ", " << p_htc->lookVector.y() << endl;
     /// constant x;
-    p_camera->position().setX( -80 );
+    // p_camera->position().setX( -80 );
+    p_camera->position().setX( p_camera->position().x() +
+                               ( p_htc->headPosition.x() - p_camera->position().x() ) * delta_t );
+
     p_camera->position().setY( p_camera->position().y() +
                                ( p_htc->headPosition.y() - p_camera->position().y() ) * delta_t );
     //cam_pos.z += ( p_htc->headPosition.z - cam_pos.z ) * delta_t;

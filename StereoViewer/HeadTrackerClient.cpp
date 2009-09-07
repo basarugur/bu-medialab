@@ -1,6 +1,6 @@
 ///-----------------------------------------------------------------------------
 ///
-/// \file	Server.h
+/// \file	HeadTrackerClient.cpp
 /// \author	Ebutalib Agayev & Basar Ugur
 /// \brief	Network client implementation, simply expecting to receive "6 float"
 ///         data
@@ -174,7 +174,8 @@ bool HeadTrackerClient::read_offline()
     stereo_anl->findLocationVector(cornersL, cornersR, headPosition, lookVector, *coord_trans);
     lookVector = lookVector.normalize();
 
-    // cout << "HP:" << headPosition.x() << " " << headPosition.y() << " " << headPosition.z() << endl;
+    //cout << "HP:" << headPosition.x() << " " << headPosition.y() << " " << headPosition.z() << endl;
+    //cout << "LV:" << lookVector.x() << " " << lookVector.y() << " " << lookVector.z() << endl;
 
     return true;
 }
