@@ -12,9 +12,9 @@
 #define PI 3.141592654
 #define PI_HALF 1.570796327
 
-#define HALF_EYE_SEP_CM 3
+#define HALF_EYE_SEP_CM 2
 
-// For simulation purposes: 1024 Pixels = 40 cm
+// For with-mouse simulation purposes: 1024 Pixels = 40 cm
 #define PX_2_CM 0.16
 
 #define SERVER_IP "79.123.176.157"
@@ -24,6 +24,8 @@ class SceneDrawer;
 class Scene;
 class Camera;
 class CanvasGrid;
+class RenderController;
+class Light;
 
 using namespace std;
 
@@ -68,6 +70,15 @@ namespace glut_env
 
     static float half_eye_sep_x, /// half of eye separation in x axis
                  half_eye_sep_y; /// half of eye separation in y axis
+
+    static GLfloat gl_light_position[4] = { 100.0f, 150.0f, 0.0f, 1.0f };
+    static GLfloat gl_light_intensity[4] = { 0.8f, 0.8f, 0.8f, 1.0f };
+    static GLfloat gl_ambient_intensity[4] = { 0.2f, 0.2f, 0.2f, 1.0f };
+
+    static enum {
+        TOGGLE_FULLSCREEN = 0,
+        RENDER_SCENE = 1
+    } options;
 }
 
 class IGlut
@@ -82,8 +93,8 @@ public:
     static void Init();
 
     //-------------------------------------------------------------------------------
-    /// \brief Starting main loop for GLUT
-    void StartMainLoop();
+    /// \brief Right click menu items preparation
+    static void PrepareMenus();
 
     //-------------------------------------------------------------------------------
     /// \brief	Called when a mouse motion occurs
@@ -104,6 +115,12 @@ public:
 
 
     //-------------------------------------------------------------------------------
+    /// \brief	Called when a timer function period is passed
+    //
+    static void Timer(int timer_id);
+
+
+    //-------------------------------------------------------------------------------
     /// \brief	Called when the screen gets resized
     /// \param	w	-	the new width
     /// \param	h	-	the new height
@@ -115,8 +132,12 @@ public:
     static void Display(void);
 
     //-------------------------------------------------------------------------------
+    /// \brief Selects from several action options, such as "toggle fullscreen", etc
+    static void SelectOption(int opt);
+
+    //-------------------------------------------------------------------------------
     /// \brief Creates a drawable 3D scene
-    void CreateScene(Scene* scn_, string VRMLfile);
+    void CreateScene(string VRMLfile);
 
     //-------------------------------------------------------------------------------
     /// \brief Draw the current 3D scene with GL functions (obsolete)
@@ -152,7 +173,7 @@ public:
     /// \brief Closing Head Tracker module
     static void CloseHeadTracker();
 
-/** VARIABLES */
+/** ATTRIBUTES */
 
     static HeadTrackerClient* p_htc;
 
@@ -160,4 +181,8 @@ public:
     static Camera* p_camera;
     static SceneDrawer* p_drawer;
     static CanvasGrid* p_grid;
+    static RenderController* p_rc;
+    static Light* p_light;
+
+    static int submenus[1];
 };

@@ -21,6 +21,8 @@ const static float rad2deg = 180.f / PI;
 
 char wii_msg[255];
 
+#define NEXT_OBJ_BY_BTN ((g_wii_state.buttons==CWIID_BTN_MINUS)?-1:+1)
+
 /**
  * GLUT function to display \a string at position (\a x,\a y,\a z).
  */
@@ -53,7 +55,7 @@ bool setup_wiimote_connection()
     fflush(stdout);
 
     /* Establish a continous and non-blocking connection */
-    g_wiimote = cwiid_connect(&g_bluetooth_address, CWIID_FLAG_CONTINUOUS|CWIID_FLAG_NONBLOCK);
+    g_wiimote = cwiid_connect(&g_bluetooth_address, CWIID_FLAG_CONTINUOUS | CWIID_FLAG_NONBLOCK);
 
     if (g_wiimote==0)
     {
@@ -148,7 +150,7 @@ bool check_wiimote()
         {
             sprintf(wii_msg, "Unable to connect to Wiimote! Press <Esc> to quit.");
 
-            //renderString(-2, -2, 10, "Unable to connect to Wiimote! Press <Esc> to quit.");
+            renderString(-2, -2, 10, "Unable to connect to Wiimote! Press <Esc> to quit.");
             glutPostRedisplay(); /* Inform GLUT to constantly update the screen */
             glutSwapBuffers(); /* High-end-machines may need this */
         }
@@ -187,16 +189,30 @@ void disconnect_wiimote()
     g_connect_attempts = 0;
 }
 
-/**
- * Checking wiimote connection and setting up if not exists
- */
-void update_object_by_wiimote(EulerRotation* ch_r, Point3* ch_pos, bool object_mode, int last_x, int last_y)
+///-----------------------------------------------------------------------------
+/// \brief Updating the scene by wiimote connection and
+///        setting up the connection if not exists
+int active_obj_index = -1;
+int g_wii_last_btn = -1;
+TRadiance active_obj_rad;
+
+void update_scene_by_wiimote(Scene* scene_, int last_x, int last_y)
 {
 	static double ir_positions[2][2] = { { 0, 0 }, { 0, 0 } };
     static int ir_sizes[2] = { 3, 3 }; /* Expect it to be around 2-8 in wiimote state struct */
 
     if ( check_wiimote() )
     {
+        GfxObject* active_obj = scene_->objects()[ max(active_obj_index, 0) ];
+        if (active_obj_index == -1)
+        {
+            active_obj_index = 0;
+            active_obj_rad = active_obj->getMaterial()->diffcolor();
+            active_obj->getMaterial()->setDiffColor( TRadiance(0.5, 1, 0.5) );
+        }
+
+        Transformation tr_;
+
         int diffx, diffy;
 		if (last_x > 0) // Valid data
 		{
@@ -249,20 +265,32 @@ void update_object_by_wiimote(EulerRotation* ch_r, Point3* ch_pos, bool object_m
 		    exit(EXIT_SUCCESS);
 		}
 
-		if ( g_wii_state.buttons & CWIID_BTN_A && g_wii_state.buttons & CWIID_BTN_B )
-			object_mode = !object_mode;
+		if ( (g_wii_last_btn == 0) &&
+             ( (g_wii_state.buttons & CWIID_BTN_MINUS) || (g_wii_state.buttons & CWIID_BTN_PLUS )) )
+		{
+		    active_obj->getMaterial()->setDiffColor( active_obj_rad );
+
+            /// change active object
+		    active_obj_index = (active_obj_index + NEXT_OBJ_BY_BTN) % scene_->objects().size();
+
+		    active_obj_rad = scene_->objects()[active_obj_index]->getMaterial()->diffcolor();
+		    scene_->objects()[active_obj_index]->getMaterial()->setDiffColor( TRadiance(0.5, 1, 0.5) );
+
+		}
 		else if ( g_wii_state.buttons & CWIID_BTN_LEFT )
-			ch_pos->setX( ch_pos->x() - delta_tr );
+			tr_.translate( - delta_tr, 0, 0 );
 		else if ( g_wii_state.buttons & CWIID_BTN_RIGHT )
-			ch_pos->setX( ch_pos->x() + delta_tr );
+			tr_.translate( + delta_tr, 0, 0 );
 		else if ( g_wii_state.buttons & CWIID_BTN_UP )
-			ch_pos->setY( ch_pos->y() + delta_tr );
+			tr_.translate( 0, + delta_tr, 0 );
 		else if ( g_wii_state.buttons & CWIID_BTN_DOWN )
-			ch_pos->setY( ch_pos->y() - delta_tr );
+			tr_.translate( 0, - delta_tr, 0 );
 		else if ( g_wii_state.buttons & CWIID_BTN_A )
-			ch_pos->setZ( ch_pos->z() + delta_tr );
+			tr_.translate( 0, 0, + delta_tr );
 		else if ( g_wii_state.buttons & CWIID_BTN_B )
-			ch_pos->setZ( ch_pos->z() - delta_tr );
+			tr_.translate( 0, 0, - delta_tr );
+
+        g_wii_last_btn = g_wii_state.buttons;
 
         float a_x = ((float)g_wii_state.acc[CWIID_X] - wm_cal.zero[CWIID_X]) /
         	          (wm_cal.one[CWIID_X] - wm_cal.zero[CWIID_X]);
@@ -283,8 +311,8 @@ void update_object_by_wiimote(EulerRotation* ch_r, Point3* ch_pos, bool object_m
 
 		//printf("%d %d %d\n",g_wii_state.acc[CWIID_X] - wm_cal.zero[CWIID_X], g_wii_state.acc[CWIID_Y] - wm_cal.zero[CWIID_Y], g_wii_state.acc[CWIID_Z] - wm_cal.zero[CWIID_Z]);
 
-        ch_r->pitch = ch_r->pitch + (atan(a_y/a_z*cos(a_t)) * rad2deg - ch_r->pitch) * delta_acc;
-        ch_r->roll = ch_r->roll + (a_t*rad2deg - ch_r->roll) * delta_acc;
+///        ch_r->pitch = ch_r->pitch + (atan(a_y/a_z*cos(a_t)) * rad2deg - ch_r->pitch) * delta_acc;
+///        ch_r->roll = ch_r->roll + (a_t*rad2deg - ch_r->roll) * delta_acc;
 
         //printf("accelerator data\n");
 		/*for (int i = 0; i < 3; i++)
@@ -297,6 +325,10 @@ void update_object_by_wiimote(EulerRotation* ch_r, Point3* ch_pos, bool object_m
 		tx += (float) 0.05f * diffx;
 		ty -= (float) 0.05f * diffy;
 		*/
+
+        tr_ = *(active_obj->getIndividualTransform()) + tr_;
+
+        active_obj->setIndividualTransform( &tr_ );
 
 		return;
 	}
