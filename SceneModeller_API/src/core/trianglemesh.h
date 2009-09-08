@@ -9,19 +9,19 @@
 class SM_API_EXPORT TriangleMesh : public Shape
 {
 	public:
-		TriangleMesh() 
+		TriangleMesh()
 		{
 			m_type = TRIANGLE_MESH;
 		};
 
-		TriangleMesh(const std::string& str) 
+		TriangleMesh(const std::string& str)
 		{
 			m_filename = str;
 			load();
 			calculatebounds();
 		};
 
-		TriangleMesh(std::vector<Triangle*> m_list) 
+		TriangleMesh(std::vector<Triangle*> m_list)
 		{
 			m_facelist = m_list;
 			calculatebounds();
@@ -52,18 +52,23 @@ class SM_API_EXPORT TriangleMesh : public Shape
 
 		void calculatebounds();
 
-		void copyToMesh(TriangleMesh* msh_);
-
 		std::vector<Triangle*> getSelectedFaceList();
 		std::vector<Vertex*> getSelectedVertexList();
 		void clearFaceSelections();
 		void clearVertexSelections();
 
+		Shape* getNewCopy();
+
+		void copyToMesh(TriangleMesh* msh_);
+
+		void draw( drawType dt_ );
+
+
 	private:
 		mutable std::vector<Triangle*> m_facelist;
 		mutable std::vector<Vertex*> m_vertex_list;
-		double max_x,max_y,max_z;
-		double min_x,min_y,min_z;	
+		double max_x, max_y, max_z;
+		double min_x, min_y, min_z;
 
 		std::string m_filename;
 

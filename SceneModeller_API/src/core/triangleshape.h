@@ -10,9 +10,9 @@
 
 class SM_API_EXPORT TriangleShape : public Shape
 {
-	public:	
+	public:
 		TriangleShape(): Shape() {
-		
+
 
 			m_p1 = Vertex(0,2,0);
 			m_p2 = Vertex(1.5,-1,0);
@@ -20,9 +20,10 @@ class SM_API_EXPORT TriangleShape : public Shape
 
 			m_type = TRIANGLE_SHAPE;
 
-		};						
+		};
 		BBox object_bound() const ;
 		void copyToMesh(TriangleMesh* msh_);
+		void draw( drawType dt_ );
 
 		virtual bool can_intersect() const { return false; } ;
 		virtual const std::vector<Triangle*>& refine() const {  std::vector<Triangle*> ms; return ms;  };

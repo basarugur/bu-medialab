@@ -138,7 +138,7 @@ void VrmlDevice::addNewNode(Scene* scn_, Node* node_, GfxObject* parentObj_,
         cmr_->setAtPoint(cmr_->position() + 10 * dir_);
         */
 
-        cmr_->setAtPoint( Point3(0, 0, 0) );
+        cmr_->setLookAtPoint( Point3(0, 0, 0) );
 
         cout << "cam_x:" << cmr_->position().x() << endl;
 
@@ -256,7 +256,7 @@ void VrmlDevice::saveToFile(std::string fl_ , Scene* sce_)
 	{
 		// calculate camera totation
 		Matrix rotationMat;
-		Vector3 vz_ = (sce_->cameras()[i]->atPoint()-sce_->cameras()[i]->position()).normalize();
+		Vector3 vz_ = (sce_->cameras()[i]->lookAtPoint() - sce_->cameras()[i]->position()).normalize();
 		Vector3 vx_ = (vz_^sce_->cameras()[i]->upVector()).normalize();
 		Vector3 vy_ = sce_->cameras()[i]->upVector();
 		rotationMat.setcell(0,0, vx_.x() );
@@ -390,22 +390,24 @@ void VrmlDevice::addShapeNode(Scene* sce_, Node* node_, GfxObject* parentObj_,
 
     if (shp_ != NULL)
     {
-        cout << localTrans_.translation().x() << " , " <<  localTrans_.translation().y() << " , " <<  localTrans_.translation().z() << " , " << endl;
+        cout << localTrans_.translation().x() << " , " <<  localTrans_.translation().y() << " , " <<  localTrans_.translation().z() << endl;
 
-        cout << globalTrans_.translation().x() << " , " <<  globalTrans_.translation().y() << " , " <<  globalTrans_.translation().z() << " , " << endl;
+        cout << globalTrans_.translation().x() << " , " <<  globalTrans_.translation().y() << " , " <<  globalTrans_.translation().z() << endl;
 
         GfxObject* newObj_ = new GfxObject(shp_, mat_, &globalTrans_, parentObj_);
-        newObj_->setIndividualTransform(&localTrans_);
+        newObj_->setLocalTransform(&localTrans_);
         newObj_->setName(lastDEF);
 
-        cout << "NOPTT_X: " << newObj_->getPublicTransform()->scale().x() << endl;
-        cout << "NOITT_X: " << newObj_->getIndividualTransform()->scale().x() << endl;
+        cout << "NOPTT_X: " << newObj_->getGlobalTransform()->scale().x() << endl;
+        cout << "NOITT_X: " << newObj_->getLocalTransform()->scale().x() << endl;
 
-        *sce_ += newObj_;
-
-        if (parentObj_ != NULL)
+        if (parentObj_ != NULL) // if there is a parent object, add as CHILD
         {
             parentObj_->addChild(newObj_);
+        }
+        else // else, add it directly to the SCENE
+        {
+            *sce_ += newObj_;
         }
     }
 }
@@ -454,7 +456,7 @@ void VrmlDevice::TriangulateFace(std::vector<Triangle*>& trList,std::vector<Vert
 		TriangulateFace(trList,vrtList,newList);
 	}
 }
-void VrmlDevice::createShapeNode(Shape* shp_, Material* mat_,ShapeNode* shpNode_)
+void VrmlDevice::createShapeNode(Shape* shp_, Material* mat_, ShapeNode* shpNode_)
 {
 	AppearanceNode* appNde_ = new AppearanceNode();
 	MaterialNode* mtrlNde_ = new MaterialNode();
@@ -629,7 +631,7 @@ void VrmlDevice::saveToTransformNode( GfxObject* obj_ , TransformNode *nde_ )
 
 	nde_->setName((char*)obj_->getName().c_str());
 
-	Transformation* crnTrans_ = obj_->getPublicTransform();
+	Transformation* crnTrans_ = obj_->getGlobalTransform();
 	Material* crntMat_ = obj_->getMaterial();
 	Shape* crnShp_ = obj_->getShape();
 
@@ -651,7 +653,7 @@ void VrmlDevice::saveToTransformNode( GfxObject* obj_ , TransformNode *nde_ )
 	nde_->setTranslation(trs_);
 
 	// individual
-	crnTrans_ = obj_->getIndividualTransform();
+	crnTrans_ = obj_->getLocalTransform();
 	TransformNode* trnsNode1_ = new TransformNode();
 	rot_[0]=crnTrans_->rotation().ax();
 	rot_[1]=crnTrans_->rotation().ay();

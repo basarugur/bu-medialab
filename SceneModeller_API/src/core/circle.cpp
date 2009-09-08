@@ -1,8 +1,18 @@
 #include "circle.h"
 
-BBox Circle::object_bound() const 
+BBox Circle::object_bound() const
 {
 	return BBox(Point3(-m_r,-m_r,0),Point3(m_r,m_r,0));
+}
+
+Shape* Circle::getNewCopy()
+{
+    Circle* c_ = new Circle();
+    c_->m_r = m_r;
+    c_->m_loops = m_loops;
+    c_->m_slices = m_slices;
+
+    return c_;
 }
 
 void Circle::copyToMesh(TriangleMesh* msh_)
@@ -13,7 +23,7 @@ void Circle::copyToMesh(TriangleMesh* msh_)
 	double deltaR_ = (m_r-inR_)/(double)loops_;
 
 	double angle_,cosAng_,sinAng_;
-	double x_ , y_; 
+	double x_ , y_;
 	x_ = inR_;
 	y_ = 0;
 	for(int j=0 ; j<= loops_ ; j++ ) // circle
@@ -26,7 +36,7 @@ void Circle::copyToMesh(TriangleMesh* msh_)
 	{
 		for(int j=0 ; j<= loops_ ; j++)
 		{
-			Vertex* vr1_ = msh_->vertexList()[j]; 
+			Vertex* vr1_ = msh_->vertexList()[j];
 
 			angle_  = (double)(i)*deltaSlicesAng_;
 			cosAng_ = cos(angle_);
@@ -89,3 +99,19 @@ void Circle::copyToMesh(TriangleMesh* msh_)
 }
 
 
+void Circle::draw( drawType dt_ )
+{
+    if ( dt_ & SHADED )
+    {
+        gluQuadricDrawStyle( p_qdr, GLU_FILL );
+
+        gluDisk(p_qdr, 0, m_r, m_slices, m_loops );
+    }
+
+    if ( dt_ & WIRED )
+    {
+        gluQuadricDrawStyle( p_qdr, GLU_LINE );
+
+        gluDisk(p_qdr, 0, m_r, m_slices, m_loops );
+    }
+}

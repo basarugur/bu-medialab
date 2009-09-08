@@ -1,9 +1,20 @@
 #include "cylinder.h"
 #include "math.h"
 
-BBox Cylinder::object_bound() const 
+BBox Cylinder::object_bound() const
 {
 	return BBox(Point3(-m_r,-m_r,0),Point3(m_r,m_r,m_h));
+}
+
+Shape* Cylinder::getNewCopy()
+{
+    Cylinder* cyl_ = new Cylinder();
+    cyl_->m_h = m_h;
+    cyl_->m_r = m_r;
+    cyl_->m_slices = m_slices;
+    cyl_->m_stacks = m_stacks;
+
+    return cyl_;
 }
 
 void Cylinder::copyToMesh(TriangleMesh* msh_)
@@ -12,7 +23,7 @@ void Cylinder::copyToMesh(TriangleMesh* msh_)
 	double deltaHgh_ = m_h / (double)m_stacks;
 
 	double angle_,cosAng_,sinAng_;
-	double x_ , y_ ; 
+	double x_ , y_ ;
 	x_ = 0;
 	y_ = m_r;
 	for(int j=0 ; j< m_slices ; j++ ) // circle
@@ -98,4 +109,28 @@ void Cylinder::copyToMesh(TriangleMesh* msh_)
 	msh_->calculatebounds();
 }
 
+void Cylinder::draw( drawType dt_ )
+{
+    if ( dt_ & SHADED )
+    {
+        gluQuadricDrawStyle( p_qdr, GLU_FILL );
 
+        gluCylinder(p_qdr, m_r, m_r, m_h, m_slices, m_stacks);
+		gluDisk(p_qdr, 0, m_r, m_slices, 1);
+		glTranslatef(0, 0, m_h);
+		gluDisk(p_qdr, 0, m_r, m_slices, 1);
+		glTranslatef(0, 0, -m_h);
+    }
+
+    if ( dt_ & WIRED )
+    {
+        gluQuadricDrawStyle( p_qdr, GLU_LINE );
+
+        gluCylinder(p_qdr, m_r, m_r, m_h, m_slices, m_stacks);
+		gluDisk(p_qdr, 0, m_r, m_slices, 1);
+		glTranslatef(0, 0, m_h);
+		gluDisk(p_qdr, 0, m_r, m_slices, 1);
+		glTranslatef(0, 0, -m_h);
+    }
+
+}

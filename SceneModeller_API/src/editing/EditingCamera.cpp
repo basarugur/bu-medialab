@@ -16,29 +16,29 @@ void EditingCamera::returnTheta(double scale_)
 }
 
 void EditingCamera::setPosition(Point3 pos_) {
-	m_position = pos_; 
+	m_position = pos_;
 }
 void EditingCamera::setUpVector(Vector3 up_){
 	m_upvector = up_;
 }
 void EditingCamera::zoomIn(double fctr)
 {
-	Vector3 dir_ = (m_at_point-m_position).normalize();
-	Vector3 direction = dir_*((m_at_point-m_position).length())*(0.001*fctr);
+	Vector3 dir_ = (m_look_at_point - m_position).normalize();
+	Vector3 direction = dir_*((m_look_at_point - m_position).length())*(0.001*fctr);
 
 	m_position = m_position + direction;
 }
 void EditingCamera::zoomOut(double fctr)
 {
-	Vector3 dir_ = (m_at_point-m_position).normalize();
-	Vector3 direction = dir_*((m_at_point-m_position).length())*(0.001*fctr);
+	Vector3 dir_ = (m_look_at_point - m_position).normalize();
+	Vector3 direction = dir_*((m_look_at_point - m_position).length())*(0.001*fctr);
 
 	m_position = m_position - direction;
 }
 void EditingCamera::setToCamera(Camera* cmr_)
 {
 	m_position = cmr_->position();
-	m_at_point = cmr_->atPoint();
+	m_look_at_point = cmr_->lookAtPoint();
 	m_upvector = cmr_->upVector();
 	m_name = cmr_->getName();
 
@@ -100,7 +100,7 @@ void EditingCamera::setToCamera(Camera* cmr_)
 //
 //	matrix<double> allTrans1(4,4);
 //	allTrans1.settoproduct(inv_trans,rot);
-//	
+//
 //	matrix<double> allTrans(4,4);
 //	allTrans.settoproduct(allTrans1,trans);
 //

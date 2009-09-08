@@ -1,11 +1,11 @@
 # depslib dependency file v1.0
-1244629987 source:/home/medialab/Projects/SceneModeller_API/examples/SceneCreation/main.cpp
+1251707827 source:/home/medialab/Projects/SceneModeller_API/examples/SceneCreation/main.cpp
 	"../../src/core/scene.h"
 	"../../src/core/sphere.h"
 	"../../src/core/rectangle.h"
 	"../../src/RenderController.h"
 
-1244730827 /home/medialab/Projects/SceneModeller_API/src/core/scene.h
+1251707329 /home/medialab/Projects/SceneModeller_API/src/core/scene.h
 	"camera.h"
 	"light.h"
 	"primitive.h"
@@ -16,13 +16,13 @@
 	"sampler.h"
 	"CImg.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/camera.h
+1249914998 /home/medialab/Projects/SceneModeller_API/src/core/camera.h
 	"point3.h"
 	"sampler.h"
 	"ray.h"
 	"primitive.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/point3.h
+1249913932 /home/medialab/Projects/SceneModeller_API/src/core/point3.h
 	"vector3.h"
 
 1244728449 /home/medialab/Projects/SceneModeller_API/src/core/vector3.h
@@ -94,7 +94,7 @@
 	"bbox.h"
 	"ray.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/vertex.h
+1248961813 /home/medialab/Projects/SceneModeller_API/src/core/vertex.h
 	"vector3.h"
 
 1244554590 /home/medialab/Projects/SceneModeller_API/src/core/bbox.h
@@ -116,14 +116,14 @@
 	<float.h>
 	<algorithm>
 
-1244729697 /home/medialab/Projects/SceneModeller_API/src/core/transformation.h
+1249911877 /home/medialab/Projects/SceneModeller_API/src/core/transformation.h
 	"matrix.h"
 	"shape.h"
 	"trianglemesh.h"
 	"vector3.h"
 	"diffgeometry.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/matrix.h
+1250517802 /home/medialab/Projects/SceneModeller_API/src/core/matrix.h
 	"vector3.h"
 	"point3.h"
 
@@ -134,7 +134,7 @@
 	"shape.h"
 	"primitive.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/gfxobject.h
+1248952724 /home/medialab/Projects/SceneModeller_API/src/core/gfxobject.h
 	"shape.h"
 	"film.h"
 	"light.h"

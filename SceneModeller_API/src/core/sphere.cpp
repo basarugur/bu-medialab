@@ -1,9 +1,18 @@
 #include "sphere.h"
 
-BBox Sphere::object_bound() const 
+BBox Sphere::object_bound() const
 {
 	return BBox(Point3(-m_r,-m_r,-m_r),Point3(m_r,m_r,m_r));
 }
+
+Shape* Sphere::getNewCopy()
+{
+    Sphere* sph_ = new Sphere();
+    sph_->m_r = m_r;
+
+    return sph_;
+}
+
 void Sphere::copyToMesh(TriangleMesh* msh_)
 {
 	double deltaSlicesAng_ = 0.0174532925*(double)360.0/(double)m_slices;
@@ -55,7 +64,7 @@ void Sphere::copyToMesh(TriangleMesh* msh_)
 
 			msh_->faceList().push_back(tr1_);
 			msh_->faceList().push_back(tr2_);
-		}		
+		}
 	}
 	for(int j=0 ; j< m_stacks-2 ; j++ ) // circle
 	{
@@ -69,12 +78,12 @@ void Sphere::copyToMesh(TriangleMesh* msh_)
 
 		msh_->faceList().push_back(tr1_);
 		msh_->faceList().push_back(tr2_);
-	}	
+	}
 
 
 	Vertex* rot1_ =  new Vertex(0,0,m_r);
 	for(int i=0 ; i< m_slices-1 ; i++) // height
-	{	
+	{
 		Vertex* v1_ = msh_->vertexList()[i*(m_stacks-1)];
 		Vertex* v2_ = msh_->vertexList()[(i+1)*(m_stacks-1)];
 
@@ -87,7 +96,7 @@ void Sphere::copyToMesh(TriangleMesh* msh_)
 
 	Vertex* rot2_ =  new Vertex(0,0,-m_r);
 	for(int i=0 ; i< m_slices-1 ; i++) // height
-	{	
+	{
 		Vertex* v1_ = msh_->vertexList()[i*(m_stacks-1)+(m_stacks-2)];
 		Vertex* v2_ = msh_->vertexList()[(i+1)*(m_stacks-1)+(m_stacks-2)];
 
@@ -102,4 +111,13 @@ void Sphere::copyToMesh(TriangleMesh* msh_)
 	msh_->calculatebounds();
 }
 
+void Sphere::draw( drawType dt_ )
+{
 
+    if ( dt_ & SHADED )
+        glutSolidSphere( m_r, m_slices, m_stacks );
+
+    if ( dt_ & WIRED )
+        glutWireSphere( m_r, m_slices, m_stacks );
+
+}

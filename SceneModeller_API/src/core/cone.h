@@ -10,19 +10,25 @@
 
 class SM_API_EXPORT Cone : public Shape
 {
-	public:	
+	public:
 		Cone(): Shape() {
-		
-			m_r = 2 ; 
+
+			m_r = 2 ;
 			m_h = 5 ;
 			m_slices = 10;
 			m_stacks = 10;
 
 			m_type = CONE;
 
-		};						
+		};
+
 		BBox object_bound() const ;
+
+		Shape* getNewCopy();
+
 		void copyToMesh(TriangleMesh* msh_);
+
+		void draw( drawType dt_ );
 
 		double buttomRadius(){ return m_r; }
 		double height(){ return m_h; }

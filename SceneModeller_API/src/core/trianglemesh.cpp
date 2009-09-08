@@ -88,6 +88,15 @@ void TriangleMesh::clearVertexSelections()
 	}
 }
 
+Shape* TriangleMesh::getNewCopy()
+{
+    TriangleMesh* tm_ = new TriangleMesh();
+
+    this->copyToMesh(tm_);
+
+    return tm_;
+}
+
 void TriangleMesh::copyToMesh(TriangleMesh* msh_)
 {
 	std::map<std::string, int> vertexHash_;
@@ -211,4 +220,43 @@ bool TriangleMesh::load()
 
 		return false;
 	}
+}
+
+void TriangleMesh::draw( drawType dt_ )
+{
+
+    if ( dt_ & SHADED )
+    {
+        glBegin(GL_TRIANGLES);
+
+        for(int i=0 ; i<m_facelist.size(); i++)
+        {
+            glNormal3f( m_facelist[i]->n().x(), m_facelist[i]->n().y(), m_facelist[i]->n().z() );
+            glVertex3f( m_facelist[i]->a()->x(), m_facelist[i]->a()->y(), m_facelist[i]->a()->z() );
+            glVertex3f( m_facelist[i]->b()->x(), m_facelist[i]->b()->y(), m_facelist[i]->b()->z() );
+            glVertex3f( m_facelist[i]->c()->x(), m_facelist[i]->c()->y(), m_facelist[i]->c()->z() );
+        }
+
+        glEnd();
+    }
+
+    if ( dt_ & WIRED )
+    {
+        glBegin(GL_LINES);
+
+        for(int i=0 ; i<m_facelist.size();i++)
+        {
+            glVertex3f(m_facelist[i]->a()->x(), m_facelist[i]->a()->y(), m_facelist[i]->a()->z());
+            glVertex3f(m_facelist[i]->b()->x(), m_facelist[i]->b()->y(), m_facelist[i]->b()->z());
+
+            glVertex3f(m_facelist[i]->b()->x(), m_facelist[i]->b()->y(), m_facelist[i]->b()->z());
+            glVertex3f(m_facelist[i]->c()->x(), m_facelist[i]->c()->y(), m_facelist[i]->c()->z());
+
+            glVertex3f(m_facelist[i]->c()->x(), m_facelist[i]->c()->y(), m_facelist[i]->c()->z());
+            glVertex3f(m_facelist[i]->a()->x(), m_facelist[i]->a()->y(), m_facelist[i]->a()->z());
+        }
+
+        glEnd();
+    }
+
 }

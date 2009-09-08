@@ -1,8 +1,19 @@
 #include "disk.h"
 
-BBox Disk::object_bound() const 
+BBox Disk::object_bound() const
 {
 	return BBox(Point3(-m_out_r,-m_out_r,0),Point3(m_out_r,m_out_r,0));
+}
+
+Shape* Disk::getNewCopy()
+{
+    Disk* disk_ = new Disk();
+    disk_->m_in_r = m_in_r;
+    disk_->m_out_r = m_out_r;
+    disk_->m_slices = m_slices;
+    disk_->m_loops = m_loops;
+
+    return disk_;
 }
 
 void Disk::copyToMesh(TriangleMesh* msh_)
@@ -11,7 +22,7 @@ void Disk::copyToMesh(TriangleMesh* msh_)
 	double deltaR_ = (m_out_r-m_in_r)/(double)m_loops;
 
 	double angle_,cosAng_,sinAng_;
-	double x_ , y_; 
+	double x_ , y_;
 	x_ = m_in_r;
 	y_ = 0;
 	for(int j=0 ; j<= m_loops ; j++ ) // circle
@@ -24,7 +35,7 @@ void Disk::copyToMesh(TriangleMesh* msh_)
 	{
 		for(int j=0 ; j<= m_loops ; j++)
 		{
-			Vertex* vr1_ = msh_->vertexList()[j]; 
+			Vertex* vr1_ = msh_->vertexList()[j];
 
 			angle_  = (double)(i)*deltaSlicesAng_;
 			cosAng_ = cos(angle_);
@@ -68,6 +79,25 @@ void Disk::copyToMesh(TriangleMesh* msh_)
 	}
 
 	msh_->calculatebounds();
+}
+
+
+void Disk::draw( drawType dt_ )
+{
+    if ( dt_ & SHADED )
+    {
+        gluQuadricDrawStyle( p_qdr, GLU_FILL );
+
+        gluDisk(p_qdr, m_in_r, m_out_r, m_slices, m_loops);
+	}
+
+    if ( dt_ & WIRED )
+    {
+        gluQuadricDrawStyle( p_qdr, GLU_LINE );
+
+        gluDisk(p_qdr, m_in_r, m_out_r, m_slices, m_loops);
+    }
+
 }
 
 

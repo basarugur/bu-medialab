@@ -1,8 +1,21 @@
 #include "partialdisk.h"
 
-BBox PartialDisk::object_bound() const 
+BBox PartialDisk::object_bound() const
 {
 	return  BBox(Point3(-m_out_r,-m_out_r,0),Point3(m_out_r,m_out_r,0));
+}
+
+Shape* PartialDisk::getNewCopy()
+{
+    PartialDisk* pd_ = new PartialDisk();
+    pd_->m_in_r = m_in_r;
+    pd_->m_out_r = m_out_r;
+    pd_->m_loops = m_loops;
+    pd_->m_slices = m_slices;
+    pd_->start_ang = start_ang;
+    pd_->sweep_ang = sweep_ang;
+
+    return pd_;
 }
 
 void PartialDisk::copyToMesh(TriangleMesh* msh_)
@@ -12,7 +25,7 @@ void PartialDisk::copyToMesh(TriangleMesh* msh_)
 	double deltaR_ = (m_out_r-m_in_r)/(double)m_loops;
 
 	double angle_,cosAng_,sinAng_;
-	double x_ , y_; 
+	double x_ , y_;
 	x_ = m_in_r;
 	y_ = 0;
 
@@ -33,7 +46,7 @@ void PartialDisk::copyToMesh(TriangleMesh* msh_)
 	{
 		for(int j=0 ; j<= m_loops ; j++)
 		{
-			Vertex* vr1_ = msh_->vertexList()[j]; 
+			Vertex* vr1_ = msh_->vertexList()[j];
 
 			angle_  = (double)(i)*deltaSlicesAng_;
 			cosAng_ = cos(angle_);
@@ -66,6 +79,19 @@ void PartialDisk::copyToMesh(TriangleMesh* msh_)
 	msh_->calculatebounds();
 }
 
+void PartialDisk::draw( drawType dt_ )
+{
+    if ( dt_ & SHADED )
+    {
+        gluQuadricDrawStyle( p_qdr, GLU_FILL );
 
+        gluPartialDisk(p_qdr, m_in_r, m_out_r, m_slices, m_loops, start_ang, sweep_ang);
+    }
 
+    if ( dt_ & WIRED )
+    {
+        gluQuadricDrawStyle( p_qdr, GLU_LINE );
 
+        gluPartialDisk(p_qdr, m_in_r, m_out_r, m_slices, m_loops, start_ang, sweep_ang);
+    }
+}

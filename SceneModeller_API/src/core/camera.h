@@ -25,31 +25,27 @@ class SM_API_EXPORT Camera
 		virtual float generate_rays(const Sampler*,Ray*,Vector3*,int){return 0 ; };
 
 		virtual void setPosition(Point3 pos_) { m_position = pos_; }
-		virtual void setUpVector(Vector3 up_){ m_upvector = up_; }
-
+		virtual void setUpVector(Vector3 up_) { m_upvector = up_; }
 
 		virtual Point3& position(){ return m_position; }
 		virtual Vector3& upVector(){ return m_upvector; }
-		virtual void setAtPoint(Point3 pnt_ ){
-			m_at_point = pnt_;
-		}
+		virtual void setLookAtPoint(Point3 pnt_ ){ m_look_at_point = pnt_; }
 
 
 		virtual void setName(std::string st_){ m_name = st_; }
 		virtual std::string getName() { return m_name; }
-		virtual Point3 atPoint(){
-			return m_at_point;
-		};
+		virtual Point3 lookAtPoint() { return m_look_at_point; };
 
 		void select(bool bl_){ m_is_selected = bl_; }
 		bool isSelected() { return m_is_selected; }
 
+        void draw();
 
 	protected:
 		bool m_is_selected;
 		Point3 m_position;
 		Vector3 m_upvector;
-		Point3 m_at_point;
+		Point3 m_look_at_point;
 		std::string m_name;
 
 		Vector3 apply_transform(const Vector3& p) {

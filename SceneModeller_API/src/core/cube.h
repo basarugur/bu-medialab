@@ -10,15 +10,20 @@
 
 class SM_API_EXPORT Cube : public Shape
 {
-	public:	
+	public:
 		Cube(): Shape() {
-		
+
 			m_d = 3 ;
 			m_type = CUBE;
 
-		};						
+		};
 		BBox object_bound() const ;
+
 		void copyToMesh(TriangleMesh* msh_);
+
+		Shape* getNewCopy();
+
+		void draw( drawType dt_ );
 
 		double Dim(){ return m_d; }
 

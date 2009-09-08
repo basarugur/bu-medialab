@@ -15,25 +15,25 @@ int main()
 	if (new_obj1->getShape()->type() == RECTANGLE)
 	{
 		RectangleShape* rct_ = static_cast<RectangleShape*>(new_obj1->getShape());
-		rct_->m_x = 100 ; 
+		rct_->m_x = 100 ;
 		rct_->m_y = 100 ;
 	}
 
 	if (new_obj->getShape()->type() == SPHERE)
 	{
 		Sphere* sph_ = static_cast<Sphere*>(new_obj->getShape());
-		sph_->m_r = 5 ; 
+		sph_->m_r = 5 ;
 		sph_->m_slices = 30;
 		sph_->m_stacks = 30;
 	}
 
-	new_obj->getIndividualTranform()->translate(0,0,8);
+	new_obj->getIndividualTransform()->translate(0,0,8);
 	new_obj->getMaterial()->setDiffColor(TRadiance(0.0,0.2,0.9));
 
 	new_obj1->getMaterial()->setDiffColor(TRadiance(0.6,0.6,0.6));
 
 	PointLight* lgh1_ = new PointLight();
-	lgh1_->setPos(Point3(0,10,50));	
+	lgh1_->setPos(Point3(0,10,50));
 	lgh1_->set_coeff(0.6);
 
 	PointLight* lgh2_ = new PointLight();

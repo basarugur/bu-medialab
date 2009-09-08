@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1248952787 source:/home/medialab/Projects/SceneModeller_API/src/RenderController.cpp
+1252402749 source:/home/medialab/Projects/SceneModeller_API/src/RenderController.cpp
 	"RenderController.h"
 	"formats/rawdevice.h"
 	<sstream>
@@ -23,7 +23,7 @@
 1244624644 /home/medialab/Projects/SceneModeller_API/src/RenderController.h
 	"core/scene.h"
 
-1244730827 /home/medialab/Projects/SceneModeller_API/src/core/scene.h
+1252400742 /home/medialab/Projects/SceneModeller_API/src/core/scene.h
 	"camera.h"
 	"light.h"
 	"primitive.h"
@@ -34,7 +34,7 @@
 	"sampler.h"
 	"CImg.h"
 
-1249914998 /home/medialab/Projects/SceneModeller_API/src/core/camera.h
+1252402733 /home/medialab/Projects/SceneModeller_API/src/core/camera.h
 	"point3.h"
 	"sampler.h"
 	"ray.h"
@@ -43,7 +43,7 @@
 1249913932 /home/medialab/Projects/SceneModeller_API/src/core/point3.h
 	"vector3.h"
 
-1244728449 /home/medialab/Projects/SceneModeller_API/src/core/vector3.h
+1251709423 /home/medialab/Projects/SceneModeller_API/src/core/vector3.h
 	<iostream>
 	<stdlib.h>
 	<math.h>
@@ -71,7 +71,7 @@
 1244554590 /home/medialab/Projects/SceneModeller_API/src/core/normal3.h
 	"vector3.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/primitive.h
+1252324125 /home/medialab/Projects/SceneModeller_API/src/core/primitive.h
 	"shape.h"
 	"film.h"
 	"light.h"
@@ -80,7 +80,7 @@
 	"transformation.h"
 	"kdtree.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/shape.h
+1252401892 /home/medialab/Projects/SceneModeller_API/src/core/shape.h
 	<string>
 	<fstream>
 	<iostream>
@@ -92,6 +92,8 @@
 	"triangle.h"
 	"bbox.h"
 	"ray.h"
+	"GL/glu.h"
+	"GL/glut.h"
 
 1244554590 /home/medialab/Projects/SceneModeller_API/src/core/material.h
 	"film.h"
@@ -119,12 +121,13 @@
 	"point3.h"
 	"ray.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/light.h
+1252329609 /home/medialab/Projects/SceneModeller_API/src/core/light.h
 	"film.h"
 	"vector3.h"
 	"point3.h"
 	"shape.h"
 	"diffgeometry.h"
+	"GL/glut.h"
 
 1244554590 /home/medialab/Projects/SceneModeller_API/src/core/diffgeometry.h
 	"vector3.h"
@@ -145,14 +148,14 @@
 	"vector3.h"
 	"point3.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/trianglemesh.h
+1252399894 /home/medialab/Projects/SceneModeller_API/src/core/trianglemesh.h
 	"shape.h"
 
 1244554590 /home/medialab/Projects/SceneModeller_API/src/core/kdtree.h
 	"shape.h"
 	"primitive.h"
 
-1248952724 /home/medialab/Projects/SceneModeller_API/src/core/gfxobject.h
+1252398324 /home/medialab/Projects/SceneModeller_API/src/core/gfxobject.h
 	"shape.h"
 	"film.h"
 	"light.h"
@@ -162,6 +165,7 @@
 	"primitive.h"
 	<vector>
 	<string>
+	<iostream>
 
 1244555970 /home/medialab/Projects/SceneModeller_API/src/core/integrator.h
 	"../sm_api_dll.h"
@@ -211,47 +215,47 @@
 1244554592 /home/medialab/Projects/SceneModeller_API/src/formats/SMIODevice.h
 	"../core/scene.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/sphere.h
+1252399261 /home/medialab/Projects/SceneModeller_API/src/core/sphere.h
 	"shape.h"
 	"trianglemesh.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/cube.h
+1252399875 /home/medialab/Projects/SceneModeller_API/src/core/cube.h
 	"shape.h"
 	"trianglemesh.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/cone.h
+1252399863 /home/medialab/Projects/SceneModeller_API/src/core/cone.h
 	"shape.h"
 	"trianglemesh.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/cylinder.h
+1252399717 /home/medialab/Projects/SceneModeller_API/src/core/cylinder.h
 	"shape.h"
 	"trianglemesh.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/twosidedcylinder.h
+1252399849 /home/medialab/Projects/SceneModeller_API/src/core/twosidedcylinder.h
 	"shape.h"
 	"trianglemesh.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/torus.h
+1252399923 /home/medialab/Projects/SceneModeller_API/src/core/torus.h
 	"shape.h"
 	"trianglemesh.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/triangleshape.h
+1252400030 /home/medialab/Projects/SceneModeller_API/src/core/triangleshape.h
 	"shape.h"
 	"trianglemesh.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/rectangle.h
+1252400180 /home/medialab/Projects/SceneModeller_API/src/core/rectangle.h
 	"shape.h"
 	"trianglemesh.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/circle.h
+1252400370 /home/medialab/Projects/SceneModeller_API/src/core/circle.h
 	"shape.h"
 	"trianglemesh.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/disk.h
+1252400435 /home/medialab/Projects/SceneModeller_API/src/core/disk.h
 	"shape.h"
 	"trianglemesh.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/partialdisk.h
+1252401954 /home/medialab/Projects/SceneModeller_API/src/core/partialdisk.h
 	"shape.h"
 	"trianglemesh.h"
 
@@ -280,26 +284,27 @@
 1244012610 source:/home/medialab/Projects/SceneModeller_API/src/core/bbox.cpp
 	"bbox.h"
 
-1244012610 source:/home/medialab/Projects/SceneModeller_API/src/core/camera.cpp
+1252402690 source:/home/medialab/Projects/SceneModeller_API/src/core/camera.cpp
 	"camera.h"
+	"GL/glut.h"
 
-1244209198 source:/home/medialab/Projects/SceneModeller_API/src/core/circle.cpp
+1252400691 source:/home/medialab/Projects/SceneModeller_API/src/core/circle.cpp
 	"circle.h"
 
-1244209198 source:/home/medialab/Projects/SceneModeller_API/src/core/cone.cpp
+1252400627 source:/home/medialab/Projects/SceneModeller_API/src/core/cone.cpp
 	"cone.h"
 
-1244012610 source:/home/medialab/Projects/SceneModeller_API/src/core/cube.cpp
+1252399103 source:/home/medialab/Projects/SceneModeller_API/src/core/cube.cpp
 	"cube.h"
 
-1244209198 source:/home/medialab/Projects/SceneModeller_API/src/core/cylinder.cpp
+1252413592 source:/home/medialab/Projects/SceneModeller_API/src/core/cylinder.cpp
 	"cylinder.h"
 	"math.h"
 
 1244012610 source:/home/medialab/Projects/SceneModeller_API/src/core/diffgeometry.cpp
 	"diffgeometry.h"
 
-1244209198 source:/home/medialab/Projects/SceneModeller_API/src/core/disk.cpp
+1252400650 source:/home/medialab/Projects/SceneModeller_API/src/core/disk.cpp
 	"disk.h"
 
 1244012610 source:/home/medialab/Projects/SceneModeller_API/src/core/face.cpp
@@ -313,20 +318,9 @@
 1244012610 source:/home/medialab/Projects/SceneModeller_API/src/core/film.cpp
 	"film.h"
 
-1248952759 source:/home/medialab/Projects/SceneModeller_API/src/core/gfxobject.cpp
+1252414139 source:/home/medialab/Projects/SceneModeller_API/src/core/gfxobject.cpp
 	"gfxobject.h"
-	"sphere.h"
-	"cube.h"
-	"cone.h"
-	"trianglemesh.h"
-	"cylinder.h"
-	"twosidedcylinder.h"
-	"torus.h"
-	"triangleshape.h"
-	"rectangle.h"
-	"circle.h"
-	"disk.h"
-	"partialdisk.h"
+	"shape.h"
 	<iostream>
 
 1244012610 source:/home/medialab/Projects/SceneModeller_API/src/core/integrator.cpp
@@ -356,7 +350,7 @@
 	"shape.h"
 	"vector3.h"
 
-1244209198 source:/home/medialab/Projects/SceneModeller_API/src/core/partialdisk.cpp
+1252400544 source:/home/medialab/Projects/SceneModeller_API/src/core/partialdisk.cpp
 	"partialdisk.h"
 
 1244012610 source:/home/medialab/Projects/SceneModeller_API/src/core/point3.cpp
@@ -365,7 +359,7 @@
 1244012610 source:/home/medialab/Projects/SceneModeller_API/src/core/ray.cpp
 	"ray.h"
 
-1244012610 source:/home/medialab/Projects/SceneModeller_API/src/core/rectangle.cpp
+1252402010 source:/home/medialab/Projects/SceneModeller_API/src/core/rectangle.cpp
 	"rectangle.h"
 
 1244012610 source:/home/medialab/Projects/SceneModeller_API/src/core/sampler.cpp
@@ -375,19 +369,19 @@
 	"primitive.h"
 	<time.h>
 
-1249561116 source:/home/medialab/Projects/SceneModeller_API/src/core/scene.cpp
+1252402815 source:/home/medialab/Projects/SceneModeller_API/src/core/scene.cpp
 	"scene.h"
 
 1244012610 source:/home/medialab/Projects/SceneModeller_API/src/core/shape.cpp
 	"shape.h"
 
-1244209198 source:/home/medialab/Projects/SceneModeller_API/src/core/sphere.cpp
+1252399232 source:/home/medialab/Projects/SceneModeller_API/src/core/sphere.cpp
 	"sphere.h"
 
 1244012610 source:/home/medialab/Projects/SceneModeller_API/src/core/texture.cpp
 	"texture.h"
 
-1244012610 source:/home/medialab/Projects/SceneModeller_API/src/core/torus.cpp
+1252400005 source:/home/medialab/Projects/SceneModeller_API/src/core/torus.cpp
 	"torus.h"
 
 1248952996 source:/home/medialab/Projects/SceneModeller_API/src/core/transformation.cpp
@@ -397,16 +391,16 @@
 	"triangle.h"
 	"diffgeometry.h"
 
-1244731186 source:/home/medialab/Projects/SceneModeller_API/src/core/trianglemesh.cpp
+1252399034 source:/home/medialab/Projects/SceneModeller_API/src/core/trianglemesh.cpp
 	"trianglemesh.h"
 	<time.h>
 	<map>
 	<sstream>
 
-1244012610 source:/home/medialab/Projects/SceneModeller_API/src/core/triangleshape.cpp
+1252400144 source:/home/medialab/Projects/SceneModeller_API/src/core/triangleshape.cpp
 	"triangleshape.h"
 
-1244209198 source:/home/medialab/Projects/SceneModeller_API/src/core/twosidedcylinder.cpp
+1252400676 source:/home/medialab/Projects/SceneModeller_API/src/core/twosidedcylinder.cpp
 	"twosidedcylinder.h"
 
 1244012610 source:/home/medialab/Projects/SceneModeller_API/src/core/vector3.cpp
@@ -415,7 +409,7 @@
 1244012610 source:/home/medialab/Projects/SceneModeller_API/src/core/vertex.cpp
 	"vertex.h"
 
-1244012612 source:/home/medialab/Projects/SceneModeller_API/src/editing/EditingCamera.cpp
+1252402880 source:/home/medialab/Projects/SceneModeller_API/src/editing/EditingCamera.cpp
 	"EditingCamera.h"
 	<math.h>
 
@@ -425,7 +419,7 @@
 1244012706 source:/home/medialab/Projects/SceneModeller_API/src/formats/SMIODevice.cpp
 	"SMIODevice.h"
 
-1248952886 source:/home/medialab/Projects/SceneModeller_API/src/formats/rawdevice.cpp
+1252333084 source:/home/medialab/Projects/SceneModeller_API/src/formats/rawdevice.cpp
 	"rawdevice.h"
 	"fstream"
 	<map>
@@ -443,7 +437,7 @@
 	"../core/disk.h"
 	"../core/partialdisk.h"
 
-1248952906 source:/home/medialab/Projects/SceneModeller_API/src/formats/stldevice.cpp
+1252333103 source:/home/medialab/Projects/SceneModeller_API/src/formats/stldevice.cpp
 	"stldevice.h"
 	<map>
 	<sstream>
@@ -1497,7 +1491,7 @@
 
 1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/vrml.tab.h
 
-1249991448 source:/home/medialab/Projects/SceneModeller_API/src/formats/vrmldevice.cpp
+1252402910 source:/home/medialab/Projects/SceneModeller_API/src/formats/vrmldevice.cpp
 	"vrmldevice.h"
 	"../core/sphere.h"
 	"../core/cube.h"
@@ -1544,7 +1538,7 @@
 1244012610 source:/home/medialab/Projects/SceneModeller_API/src/tools/CameraTool.cpp
 	"CameraTool.h"
 
-1244554592 /home/medialab/Projects/SceneModeller_API/src/tools/CameraTool.h
+1252403032 /home/medialab/Projects/SceneModeller_API/src/tools/CameraTool.h
 	"../core/transformation.h"
 	"../editing/EditingCamera.h"
 	<iostream>
@@ -1552,7 +1546,7 @@
 1244795430 source:/home/medialab/Projects/SceneModeller_API/src/tools/rotationTool.cpp
 	"rotationTool.h"
 
-1244554592 /home/medialab/Projects/SceneModeller_API/src/tools/rotationTool.h
+1252403063 /home/medialab/Projects/SceneModeller_API/src/tools/rotationTool.h
 	"../core/transformation.h"
 	"../core/camera.h"
 	<iostream>
@@ -1561,7 +1555,7 @@
 1244012610 source:/home/medialab/Projects/SceneModeller_API/src/tools/scaleTool.cpp
 	"scaleTool.h"
 
-1244554592 /home/medialab/Projects/SceneModeller_API/src/tools/scaleTool.h
+1252403074 /home/medialab/Projects/SceneModeller_API/src/tools/scaleTool.h
 	"../core/transformation.h"
 	"../core/camera.h"
 	<iostream>
@@ -1569,7 +1563,7 @@
 1244795550 source:/home/medialab/Projects/SceneModeller_API/src/tools/translationTool.cpp
 	"translationTool.h"
 
-1244554592 /home/medialab/Projects/SceneModeller_API/src/tools/translationTool.h
+1252403153 /home/medialab/Projects/SceneModeller_API/src/tools/translationTool.h
 	"../core/transformation.h"
 	"../core/camera.h"
 	"../core/light.h"
@@ -1585,7 +1579,7 @@
 	"GL/glut.h"
 	"common.h"
 
-1250854884 source:/home/medialab/Projects/SceneModeller_API/src/SceneDrawer.cpp
+1252414169 source:/home/medialab/Projects/SceneModeller_API/src/SceneDrawer.cpp
 	"SceneDrawer.h"
 	"core/sphere.h"
 	"core/cube.h"
@@ -1600,8 +1594,7 @@
 	"core/disk.h"
 	"core/partialdisk.h"
 
-1245064237 /home/medialab/Projects/SceneModeller_API/src/SceneDrawer.h
+1252414201 /home/medialab/Projects/SceneModeller_API/src/SceneDrawer.h
 	"core/scene.h"
 	"CanvasGrid.h"
-	"GL/glut.h"
 
