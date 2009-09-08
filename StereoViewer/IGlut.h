@@ -20,7 +20,6 @@
 #define SERVER_IP "79.123.176.157"
 
 class HeadTrackerClient;
-class SceneDrawer;
 class Scene;
 class Camera;
 class CanvasGrid;
@@ -77,7 +76,8 @@ namespace glut_env
 
     static enum {
         TOGGLE_FULLSCREEN = 0,
-        RENDER_SCENE = 1
+        TOGGLE_WIIMOTE = 1,
+        RENDER_SCENE = 2
     } options;
 }
 
@@ -179,7 +179,6 @@ public:
 
     static Scene* p_scene;
     static Camera* p_camera;
-    static SceneDrawer* p_drawer;
     static CanvasGrid* p_grid;
     static RenderController* p_rc;
     static Light* p_light;
