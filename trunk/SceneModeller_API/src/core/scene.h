@@ -1,7 +1,5 @@
 
 
-
-
 #ifndef SCENE_H
 #define SCENE_H
 
@@ -20,6 +18,8 @@
 #include "CImg.h"
 
 using namespace cimg_library;
+
+class CanvasGrid;
 
 inline TextureBuffer* load_texture(std::string str) {
 
@@ -63,7 +63,7 @@ class SM_API_EXPORT Scene
 
 		void operator += (GfxObject *obj_)
 		{
-			m_primitves.push_back(obj_);
+			m_primitives.push_back(obj_);
 		}
 		void operator += (Camera *cmr_)
 		{
@@ -79,7 +79,7 @@ class SM_API_EXPORT Scene
 			return m_background_color;
 		};
 
-		std::vector<GfxObject*>& objects(){ return m_primitves; };
+		std::vector<GfxObject*>& objects(){ return m_primitives; };
 		std::vector<Light*>& lights(){ return m_lights; };
 		std::vector<Camera*>& cameras(){ return m_cameras; };
 
@@ -136,6 +136,12 @@ class SM_API_EXPORT Scene
 		Triangle* getSelectedFace();
 		void restoreTriangles();
 
+		void draw(  Camera* cm_,
+                    CanvasGrid* grd_ = NULL,
+                    drawType dt_ = SHADED,
+                    bool draw_light = false,
+                    bool draw_camera = false   );
+
 	private:
 		void initialize();
 
@@ -143,7 +149,7 @@ class SM_API_EXPORT Scene
 
 		GfxObject* traverseObject(int ind_,GfxObject* obj_);
 
-		std::vector<GfxObject*> m_primitves;
+		std::vector<GfxObject*> m_primitives;
 		std::vector<Light*> m_lights;
 		std::vector<Camera*> m_cameras;
 

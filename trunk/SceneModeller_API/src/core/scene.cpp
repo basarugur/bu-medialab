@@ -1,5 +1,7 @@
 #include "scene.h"
 
+#include "../CanvasGrid.h"
+
 #define max(a,b) a > b ? a : b
 
 Scene::Scene()
@@ -73,8 +75,8 @@ void Scene::setTmpChild(GfxObject* obj_)
 }
 void Scene::clearobjectSelections()
 {
-	for(int i=0 ; i<m_primitves.size(); i++)
-		m_primitves[i]->select(false);
+	for(int i=0 ; i<m_primitives.size(); i++)
+		m_primitives[i]->select(false);
 }
 void Scene::clearLightSelection()
 {
@@ -128,9 +130,9 @@ GfxObject* Scene::getSelectedTreeRoot()
 }
 GfxObject* Scene::getSelectedObject()
 {
-	for(int i=0 ; i<m_primitves.size(); i++)
-		if(m_primitves[i]->isSelected())
-			return m_primitves[i];
+	for(int i=0 ; i<m_primitives.size(); i++)
+		if(m_primitives[i]->isSelected())
+			return m_primitives[i];
 	return NULL;
 }
 Light* Scene::getSelectedLight()
@@ -163,7 +165,7 @@ void Scene::duplicateSelectedTree()
 			nwObj_->getGlobalTransform()->translation().y()+1,
 			nwObj_->getGlobalTransform()->translation().z()+1
 			);
-		m_primitves.push_back(nwObj_);
+		m_primitives.push_back(nwObj_);
 		for(int i=0 ; i<m_selected_tree_root->getChildList().size();i++)
 			duplicateTree(m_selected_tree_root->getChildList()[i],nwObj_);
 	}
@@ -173,17 +175,17 @@ void Scene::duplicateTree(GfxObject* obj_,GfxObject* nwPrnt_)
 	GfxObject* nwObj_;
 	obj_->getCopy(nwObj_);
 	nwPrnt_->addChild(nwObj_);
-	m_primitves.push_back(nwObj_);
+	m_primitives.push_back(nwObj_);
 	for(int i=0 ; i<obj_->getChildList().size();i++)
 			duplicateTree(obj_->getChildList()[i],nwObj_);
 }
 void Scene::deleteSelectedObject()
 {
-	for(int i=0 ; i<m_primitves.size(); i++)
-		if(m_primitves[i]->isSelected())
+	for(int i=0 ; i<m_primitives.size(); i++)
+		if(m_primitives[i]->isSelected())
 		{
-			delete m_primitves[i];
-			m_primitves.erase(m_primitves.begin()+i);
+			delete m_primitives[i];
+			m_primitives.erase(m_primitives.begin()+i);
 			i--;
 		}
 }
@@ -237,7 +239,7 @@ void Scene::duplicateSelectedObject()
 			nwObj_->getLocalTransform()->translation().y()+1,
 			nwObj_->getLocalTransform()->translation().z()+1
 			);
-		m_primitves.push_back(nwObj_);
+		m_primitives.push_back(nwObj_);
 	}
 }
 GfxObject* Scene::traverseTree(int ind_)
@@ -245,10 +247,10 @@ GfxObject* Scene::traverseTree(int ind_)
 	GfxObject* obj_ = NULL;
 
 	m_tree_traverse_counter = 1;
-	for(int i=0 ; i<m_primitves.size();i++)
-			if(m_primitves[i]->getParent() == NULL)
+	for(int i=0 ; i<m_primitives.size();i++)
+			if(m_primitives[i]->getParent() == NULL)
 			{
-				if( (obj_ = traverseObject(ind_,m_primitves[i]))!= NULL)
+				if( (obj_ = traverseObject(ind_,m_primitives[i]))!= NULL)
 					break;
 			}
 	return obj_;
@@ -278,11 +280,11 @@ void Scene::selectTree(GfxObject* obj_)
 // for face
 void Scene::clearFaceSelections()
 {
-	for (int i=0 ; i<m_primitves.size();i++)
+	for (int i=0 ; i<m_primitives.size();i++)
 	{
-		if (m_primitves[i]->getShape()->type() == TRIANGLE_MESH)
+		if (m_primitives[i]->getShape()->type() == TRIANGLE_MESH)
 		{
-			TriangleMesh* ms_ = static_cast<TriangleMesh*>(m_primitves[i]->getShape());
+			TriangleMesh* ms_ = static_cast<TriangleMesh*>(m_primitives[i]->getShape());
 			ms_->clearFaceSelections();
 		}
 	}
@@ -290,11 +292,11 @@ void Scene::clearFaceSelections()
 int Scene::totalFaceCount()
 {
 	int rslt_ = 0;
-	for (int i=0 ; i<m_primitves.size();i++)
+	for (int i=0 ; i<m_primitives.size();i++)
 	{
-		if (m_primitves[i]->getShape()->type() == TRIANGLE_MESH)
+		if (m_primitives[i]->getShape()->type() == TRIANGLE_MESH)
 		{
-			TriangleMesh* ms_ = static_cast<TriangleMesh*>(m_primitves[i]->getShape());
+			TriangleMesh* ms_ = static_cast<TriangleMesh*>(m_primitives[i]->getShape());
 			rslt_ += ms_->faceList().size();
 		}
 	}
@@ -303,11 +305,11 @@ int Scene::totalFaceCount()
 int Scene::totalVertexCount()
 {
 	int rslt_ = 0;
-	for (int i=0 ; i<m_primitves.size();i++)
+	for (int i=0 ; i<m_primitives.size();i++)
 	{
-		if (m_primitves[i]->getShape()->type() == TRIANGLE_MESH)
+		if (m_primitives[i]->getShape()->type() == TRIANGLE_MESH)
 		{
-			TriangleMesh* ms_ = static_cast<TriangleMesh*>(m_primitves[i]->getShape());
+			TriangleMesh* ms_ = static_cast<TriangleMesh*>(m_primitives[i]->getShape());
 			rslt_ += ms_->vertexList().size();
 		}
 	}
@@ -317,11 +319,11 @@ Triangle* Scene::getSelectedFace()
 {
 	Triangle* trng_ = NULL;
 	std::vector<Triangle*> fc_ ;
-	for (int i=0 ; i<m_primitves.size();i++)
+	for (int i=0 ; i<m_primitives.size();i++)
 	{
-		if (m_primitves[i]->getShape()->type() == TRIANGLE_MESH)
+		if (m_primitives[i]->getShape()->type() == TRIANGLE_MESH)
 		{
-			TriangleMesh* ms_ = static_cast<TriangleMesh*>(m_primitves[i]->getShape());
+			TriangleMesh* ms_ = static_cast<TriangleMesh*>(m_primitives[i]->getShape());
 			fc_ = ms_->getSelectedFaceList();
 			if (fc_.size() != 0)
 			{
@@ -335,11 +337,11 @@ Triangle* Scene::getSelectedFace()
 void Scene::splitSelectedFace()
 {
 	std::vector<Triangle*> fc_ ;
-	for (int i=0 ; i<m_primitves.size();i++)
+	for (int i=0 ; i<m_primitives.size();i++)
 	{
-		if (m_primitves[i]->getShape()->type() == TRIANGLE_MESH)
+		if (m_primitives[i]->getShape()->type() == TRIANGLE_MESH)
 		{
-			TriangleMesh* ms_ = static_cast<TriangleMesh*>(m_primitves[i]->getShape());
+			TriangleMesh* ms_ = static_cast<TriangleMesh*>(m_primitives[i]->getShape());
 			fc_ = ms_->getSelectedFaceList();
 			if (fc_.size() != 0)
 			{
@@ -366,11 +368,11 @@ void Scene::splitSelectedFace()
 void Scene::deleteSelectedFace()
 {
 	std::vector<Triangle*> fc_ ;
-	for (int i=0 ; i<m_primitves.size();i++)
+	for (int i=0 ; i<m_primitives.size();i++)
 	{
-		if (m_primitves[i]->getShape()->type() == TRIANGLE_MESH)
+		if (m_primitives[i]->getShape()->type() == TRIANGLE_MESH)
 		{
-			TriangleMesh* ms_ = static_cast<TriangleMesh*>(m_primitves[i]->getShape());
+			TriangleMesh* ms_ = static_cast<TriangleMesh*>(m_primitives[i]->getShape());
 			for (int k=0 ; k<ms_->faceList().size() ; k++)
 			{
 				if (ms_->faceList()[k]->isSelected())
@@ -439,11 +441,11 @@ void Scene::deleteSelectedFace()
 }
 void Scene::restoreTriangles()
 {
-	for (int i=0 ; i<m_primitves.size();i++)
+	for (int i=0 ; i<m_primitives.size();i++)
 	{
-		if (m_primitves[i]->getShape()->type() == TRIANGLE_MESH)
+		if (m_primitives[i]->getShape()->type() == TRIANGLE_MESH)
 		{
-			TriangleMesh* ms_ = static_cast<TriangleMesh*>(m_primitves[i]->getShape());
+			TriangleMesh* ms_ = static_cast<TriangleMesh*>(m_primitives[i]->getShape());
 			ms_->restoreTriangles();
 		}
 	}
@@ -453,11 +455,11 @@ Triangle* Scene::getExtrudingFace()
 
 	std::vector<Triangle*> fc_ ;
 	Triangle* original_ = NULL;
-	for (int i=0 ; i<m_primitves.size();i++)
+	for (int i=0 ; i<m_primitives.size();i++)
 	{
-		if (m_primitves[i]->getShape()->type() == TRIANGLE_MESH)
+		if (m_primitives[i]->getShape()->type() == TRIANGLE_MESH)
 		{
-			TriangleMesh* ms_ = static_cast<TriangleMesh*>(m_primitves[i]->getShape());
+			TriangleMesh* ms_ = static_cast<TriangleMesh*>(m_primitives[i]->getShape());
 			fc_ = ms_->getSelectedFaceList();
 			if (fc_.size() != 0)
 			{
@@ -501,11 +503,11 @@ Triangle* Scene::getExtrudingFace()
 // for Vertex
 void Scene::clearVertexSelections()
 {
-	for (int i=0 ; i<m_primitves.size();i++)
+	for (int i=0 ; i<m_primitives.size();i++)
 	{
-		if (m_primitves[i]->getShape()->type() == TRIANGLE_MESH)
+		if (m_primitives[i]->getShape()->type() == TRIANGLE_MESH)
 		{
-			TriangleMesh* ms_ = static_cast<TriangleMesh*>(m_primitves[i]->getShape());
+			TriangleMesh* ms_ = static_cast<TriangleMesh*>(m_primitives[i]->getShape());
 			ms_->clearVertexSelections();
 		}
 	}
@@ -514,11 +516,11 @@ Vertex* Scene::getSelectedVertex()
 {
 	Vertex* trng_ = NULL;
 	std::vector<Vertex*> fc_ ;
-	for (int i=0 ; i<m_primitves.size();i++)
+	for (int i=0 ; i<m_primitives.size();i++)
 	{
-		if (m_primitves[i]->getShape()->type() == TRIANGLE_MESH)
+		if (m_primitives[i]->getShape()->type() == TRIANGLE_MESH)
 		{
-			TriangleMesh* ms_ = static_cast<TriangleMesh*>(m_primitves[i]->getShape());
+			TriangleMesh* ms_ = static_cast<TriangleMesh*>(m_primitives[i]->getShape());
 			fc_ = ms_->getSelectedVertexList();
 			if (fc_.size() != 0)
 			{
@@ -531,11 +533,11 @@ Vertex* Scene::getSelectedVertex()
 }
 void Scene::clearScene()
 {
-	for (int i=0 ; i<m_primitves.size();i++)
+	for (int i=0 ; i<m_primitives.size();i++)
 	{
-		delete m_primitves[i];
+		delete m_primitives[i];
 	}
-	m_primitves.clear();
+	m_primitives.clear();
 
 	for (int i=0 ; i<m_lights.size(); i++)
 	{
@@ -949,5 +951,47 @@ void Scene::anti_alias(SMScreen* s,int x, int y) {
 			//s->set_color(TRadiance(1.0,0.0,0.0),x,y);
 		}
 
+	}
+}
+
+
+void Scene::draw(Camera* cm_,
+                 CanvasGrid* grd_,
+                 drawType dt_,
+                 bool draw_light,
+                 bool draw_camera )
+{
+    gluLookAt( cm_->position().x(), cm_->position().y(), cm_->position().z(),
+               cm_->lookAtPoint().x(),cm_->lookAtPoint().y(),cm_->lookAtPoint().z(),
+               cm_->upVector().x(),cm_->upVector().y(),cm_->upVector().z() );
+
+	if (grd_ != NULL)
+	{
+		grd_->draw();
+	}
+
+    /*glTranslatef(0, 0, 30);
+
+    glRotatef(-90, 1, 0, 0);*/
+
+	for(int i=0 ; i<m_primitives.size(); i++)
+	{
+		m_primitives[i]->draw( dt_ );
+	}
+
+	if (draw_light)
+	{
+		glDisable(GL_LIGHTING);
+		glLineWidth(3);
+		for(int i=0 ; i<m_lights.size();i++)
+			m_lights[i]->draw();
+		glLineWidth(1);
+		glEnable(GL_LIGHTING);
+	}
+
+	if (draw_camera)
+	{
+		for(int i=0 ; i<m_cameras.size();i++)
+			m_cameras[i]->draw();
 	}
 }
