@@ -1,6 +1,5 @@
 #include "SceneDrawer.h"
 
-
 #include "core/sphere.h"
 #include "core/cube.h"
 #include "core/cone.h"

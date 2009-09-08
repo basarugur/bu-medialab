@@ -23,7 +23,7 @@
 1244624644 /home/medialab/Projects/SceneModeller_API/src/RenderController.h
 	"core/scene.h"
 
-1252400742 /home/medialab/Projects/SceneModeller_API/src/core/scene.h
+1252415664 /home/medialab/Projects/SceneModeller_API/src/core/scene.h
 	"camera.h"
 	"light.h"
 	"primitive.h"
@@ -369,8 +369,9 @@
 	"primitive.h"
 	<time.h>
 
-1252402815 source:/home/medialab/Projects/SceneModeller_API/src/core/scene.cpp
+1252415508 source:/home/medialab/Projects/SceneModeller_API/src/core/scene.cpp
 	"scene.h"
+	"../CanvasGrid.h"
 
 1244012610 source:/home/medialab/Projects/SceneModeller_API/src/core/shape.cpp
 	"shape.h"
@@ -1579,7 +1580,7 @@
 	"GL/glut.h"
 	"common.h"
 
-1252414169 source:/home/medialab/Projects/SceneModeller_API/src/SceneDrawer.cpp
+1252415421 source:/home/medialab/Projects/SceneModeller_API/src/SceneDrawer.cpp
 	"SceneDrawer.h"
 	"core/sphere.h"
 	"core/cube.h"
