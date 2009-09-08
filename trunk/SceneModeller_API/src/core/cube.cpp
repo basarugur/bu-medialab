@@ -1,8 +1,16 @@
 #include "cube.h"
 
-BBox Cube::object_bound() const 
+BBox Cube::object_bound() const
 {
 	return BBox(Point3(-m_d/2.0,-m_d/2.0,-m_d/2.0),Point3(m_d/2.0,m_d/2.0,m_d/2.0));
+}
+
+Shape* Cube::getNewCopy()
+{
+    Cube* c_ = new Cube();
+    c_->m_d = m_d;
+
+    return c_;
 }
 
 void Cube::copyToMesh(TriangleMesh* msh_)
@@ -55,3 +63,13 @@ void Cube::copyToMesh(TriangleMesh* msh_)
 	msh_->calculatebounds();
 }
 
+void Cube::draw( drawType dt_ )
+{
+
+    if ( dt_ & SHADED )
+        glutSolidCube( m_d );
+
+    if ( dt_ & WIRED )
+        glutWireCube( m_d );
+
+}

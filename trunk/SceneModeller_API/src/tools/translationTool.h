@@ -29,7 +29,7 @@ public:
 	void setViewport(int mx_,int my_){
 		double ratio = (double)mx_ / (double)my_;
 		m_x_ratio = ratio/(double)mx_;
-		m_y_ratio = (double)1.0/ (double)my_; 
+		m_y_ratio = (double)1.0/ (double)my_;
 	};
 	void startTranslate(Transformation* tr_,int sx_,int sy_)
 	{
@@ -37,10 +37,10 @@ public:
 		m_light = NULL;
 		m_transform = tr_;
 		m_star_translation = tr_->translation();
-		m_start_x = sx_ ; 
+		m_start_x = sx_ ;
 		m_start_y = sy_ ;
 
-		Vector3 dir_ = (m_camera->atPoint()-m_camera->position()).normalize();
+		Vector3 dir_ = (m_camera->lookAtPoint()-m_camera->position()).normalize();
 		transX_ = (dir_^m_camera->upVector()).normalize();
 		transY_ = m_camera->upVector();
 
@@ -54,10 +54,10 @@ public:
 		m_transform = NULL;
 
 		m_star_translation = Vector3(vr_->x(),vr_->y(),vr_->z());
-		m_start_x = sx_ ; 
+		m_start_x = sx_ ;
 		m_start_y = sy_ ;
 
-		Vector3 dir_ = (m_camera->atPoint()-m_camera->position()).normalize();
+		Vector3 dir_ = (m_camera->lookAtPoint()-m_camera->position()).normalize();
 		transX_ = (dir_^m_camera->upVector()).normalize();
 		transY_ = m_camera->upVector();
 
@@ -72,10 +72,10 @@ public:
 
 		Point3 md_= m_face->mid();
 		m_star_translation = Vector3(md_.x(),md_.y(),md_.z());
-		m_start_x = sx_ ; 
+		m_start_x = sx_ ;
 		m_start_y = sy_ ;
 
-		Vector3 dir_ = (m_camera->atPoint()-m_camera->position()).normalize();
+		Vector3 dir_ = (m_camera->lookAtPoint()-m_camera->position()).normalize();
 		transX_ = (dir_^m_camera->upVector()).normalize();
 		transY_ = m_camera->upVector();
 
@@ -87,10 +87,10 @@ public:
 		m_translating_camera = NULL;
 		m_transform = NULL;
 		m_star_translation = Vector3(m_light->p().x(),m_light->p().y(),m_light->p().z());
-		m_start_x = sx_ ; 
+		m_start_x = sx_ ;
 		m_start_y = sy_ ;
 
-		Vector3 dir_ = (m_camera->atPoint()-m_camera->position()).normalize();
+		Vector3 dir_ = (m_camera->lookAtPoint()-m_camera->position()).normalize();
 		transX_ = (dir_^m_camera->upVector()).normalize();
 		transY_ = m_camera->upVector();
 
@@ -104,13 +104,13 @@ public:
 		m_star_translation = Vector3(m_translating_camera->position().x(),
 			                         m_translating_camera->position().y(),
 									 m_translating_camera->position().z());
-		m_star_translation_2 = Vector3(m_translating_camera->atPoint().x(),
-			                         m_translating_camera->atPoint().y(),
-									 m_translating_camera->atPoint().z());
-		m_start_x = sx_ ; 
+		m_star_translation_2 = Vector3(m_translating_camera->lookAtPoint().x(),
+			                           m_translating_camera->lookAtPoint().y(),
+									   m_translating_camera->lookAtPoint().z());
+		m_start_x = sx_ ;
 		m_start_y = sy_ ;
 
-		Vector3 dir_ = (m_camera->atPoint()-m_camera->position()).normalize();
+		Vector3 dir_ = (m_camera->lookAtPoint()-m_camera->position()).normalize();
 		transX_ = (dir_^m_camera->upVector()).normalize();
 		transY_ = m_camera->upVector();
 
@@ -121,14 +121,14 @@ public:
 		m_translating_camera = cm_;
 		m_transform = NULL;
 		m_light = NULL;
-		m_star_translation = Vector3(m_translating_camera->atPoint().x(),
-			m_translating_camera->atPoint().y(),
-			m_translating_camera->atPoint().z());
+		m_star_translation = Vector3(m_translating_camera->lookAtPoint().x(),
+                                     m_translating_camera->lookAtPoint().y(),
+                                     m_translating_camera->lookAtPoint().z());
 
-		m_start_x = sx_ ; 
+		m_start_x = sx_ ;
 		m_start_y = sy_ ;
 
-		Vector3 dir_ = (m_camera->atPoint()-m_camera->position()).normalize();
+		Vector3 dir_ = (m_camera->lookAtPoint() - m_camera->position()).normalize();
 		transX_ = (dir_^m_camera->upVector()).normalize();
 		transY_ = m_camera->upVector();
 
@@ -143,10 +143,10 @@ public:
 			m_translating_camera->position().y(),
 			m_translating_camera->position().z());
 
-		m_start_x = sx_ ; 
+		m_start_x = sx_ ;
 		m_start_y = sy_ ;
 
-		Vector3 dir_ = (m_camera->atPoint()-m_camera->position()).normalize();
+		Vector3 dir_ = (m_camera->lookAtPoint()-m_camera->position()).normalize();
 		transX_ = (dir_^m_camera->upVector()).normalize();
 		transY_ = m_camera->upVector();
 
@@ -187,7 +187,7 @@ public:
 			Vector3 vc2_ = m_star_translation_2+deltaY_*transY_+deltaX_*transX_;
 
 			m_translating_camera->setPosition(Point3(vc1_.x(),vc1_.y(),vc1_.z()));
-			m_translating_camera->setAtPoint(Point3(vc2_.x(),vc2_.y(),vc2_.z()));
+			m_translating_camera->setLookAtPoint(Point3(vc2_.x(),vc2_.y(),vc2_.z()));
 		}
 		else if( m_vertex != NULL)
 		{
@@ -236,11 +236,11 @@ public:
 
 			Point3 newPos_ = m_translating_camera->position()+deltaY_*transY_+deltaX_*transX_;
 
-			Vector3 dir1_ = (m_translating_camera->position()-m_translating_camera->atPoint()).normalize();
+			Vector3 dir1_ = (m_translating_camera->position()-m_translating_camera->lookAtPoint()).normalize();
 
 			m_translating_camera->setPosition(newPos_);
 
-			Vector3 dir2_ = (m_translating_camera->position()-m_translating_camera->atPoint()).normalize();
+			Vector3 dir2_ = (m_translating_camera->position()-m_translating_camera->lookAtPoint()).normalize();
 
 			if(!(dir1_ == dir2_))
 			{
@@ -262,14 +262,14 @@ public:
 			double deltaX_ = m_x_ratio*(double)(x_ - m_start_x)*m_dist; // window coordinate system
 			double deltaY_ = m_y_ratio*(double)(m_start_y - y_)*m_dist; //is reversed
 
-			Point3 newPos_ = m_translating_camera->atPoint()+deltaY_*transY_+deltaX_*transX_;
+			Point3 newPos_ = m_translating_camera->lookAtPoint()+deltaY_*transY_+deltaX_*transX_;
 
 			//
-			Vector3 dir1_ = (m_translating_camera->atPoint()-m_translating_camera->position()).normalize();
+			Vector3 dir1_ = (m_translating_camera->lookAtPoint()-m_translating_camera->position()).normalize();
 
-			m_translating_camera->setAtPoint(newPos_);
+			m_translating_camera->setLookAtPoint(newPos_);
 
-			Vector3 dir2_ = (m_translating_camera->atPoint()-m_translating_camera->position()).normalize();
+			Vector3 dir2_ = (m_translating_camera->lookAtPoint()-m_translating_camera->position()).normalize();
 
 			if ( !(dir1_ == dir2_) )
 			{
@@ -287,7 +287,7 @@ public:
 	}
 	double orthogonalDistanceToCamera()
 	{
-		Vector3 dir_ = (m_camera->atPoint()-m_camera->position()).normalize();
+		Vector3 dir_ = (m_camera->lookAtPoint()-m_camera->position()).normalize();
 		double a_ = dir_.x();
 		double b_ = dir_.y();
 		double c_ = dir_.z();

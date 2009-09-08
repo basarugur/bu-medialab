@@ -10,6 +10,8 @@
 #include "shape.h"
 #include "diffgeometry.h"
 
+#include "GL/glut.h"
+
 enum LightType
 {
 	POINT_LIGHT = 0,
@@ -20,7 +22,7 @@ enum LightType
 
 class SM_API_EXPORT Light
 {
-	public:	
+	public:
 
 		Light()
 		{
@@ -34,8 +36,8 @@ class SM_API_EXPORT Light
 			m_coeff  = 1.0;
 		};
 
-		virtual TRadiance l(const Ray& v,DifferentialGeometry* dg) const = 0;						
-		virtual TRadiance s(const Ray& v,DifferentialGeometry* dg) const {			
+		virtual TRadiance l(const Ray& v,DifferentialGeometry* dg) const = 0;
+		virtual TRadiance s(const Ray& v,DifferentialGeometry* dg) const {
 			double r = 0;
 			double g = 0;
 			double b = 0;
@@ -45,9 +47,9 @@ class SM_API_EXPORT Light
 
 			r = 0.3*dg->material()->ambientcolor().r*dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).r;
 			g = 0.3*dg->material()->ambientcolor().g*dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).g;
-			b = 0.3*dg->material()->ambientcolor().b*dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).b;				
+			b = 0.3*dg->material()->ambientcolor().b*dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).b;
 
-			return TRadiance(r,g,b);			
+			return TRadiance(r,g,b);
 		}
 		virtual bool intersect(const Ray& r) const = 0;
 		virtual Point3 pick_point() const = 0;
@@ -59,7 +61,8 @@ class SM_API_EXPORT Light
 
 		Light(Point3& p) : m_p(p) {};
 
-		
+        virtual void draw() = 0;
+
 
 		void setPos(Point3 p_){ m_p = p_; };
 
@@ -74,7 +77,7 @@ class SM_API_EXPORT Light
 		double m_coeff;
 };
 
-class SM_API_EXPORT SkyLight : public Light 
+class SM_API_EXPORT SkyLight : public Light
 {
 public:
 	SkyLight(Point3& p,Vector3& d) : Light(p,d) {};
@@ -86,7 +89,7 @@ public:
 
 		double r = dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).r;
 		double g = dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).g;
-		double b = dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).b;			
+		double b = dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).b;
 		return TRadiance(r,g,b);
 
 	};
@@ -102,6 +105,8 @@ public:
 	LightType type() const {
 		return SKY_LIGHT;
 	}
+
+	void draw() {};
 };
 
 class SM_API_EXPORT PointLight : public Light
@@ -117,16 +122,16 @@ class SM_API_EXPORT PointLight : public Light
 
 			double r = 0;
 			double g = 0;
-			double b = 0;			
+			double b = 0;
 			double shade = 0;
 			double spec  = 0;
 			Vector3 dir = dg->p() - p();
-			Vector3 d = v.direction();				
+			Vector3 d = v.direction();
 			Point3 c;
 			Point3 p = dg->p();
 
 
-			shade = (dir * dg->n()) / (dir.length() * dg->n().length());				
+			shade = (dir * dg->n()) / (dir.length() * dg->n().length());
 			Vector3 reflect = (dir - 2.0*dg->n()*(dir*dg->n())).normalize();
 			double dot = d*reflect;
 
@@ -137,14 +142,14 @@ class SM_API_EXPORT PointLight : public Light
 
 			r = dg->material()->ambientcolor().r*dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).r + dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).r*shade + dg->material()->speccolor().r*spec;
 			g = dg->material()->ambientcolor().g*dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).g + dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).g*shade + dg->material()->speccolor().g*spec;
-			b = dg->material()->ambientcolor().b*dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).b + dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).b*shade + dg->material()->speccolor().b*spec;					
+			b = dg->material()->ambientcolor().b*dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).b + dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).b*shade + dg->material()->speccolor().b*spec;
 
 			if (r > 1.0) r = 1.0;
 			if (g > 1.0) g = 1.0;
 			if (b > 1.0) b = 1.0;
 
 
-			return TRadiance(r,g,b);			
+			return TRadiance(r,g,b);
 		}
 
 		virtual bool intersect(const Ray& r) const {
@@ -155,25 +160,53 @@ class SM_API_EXPORT PointLight : public Light
 			return Point3();
 		}
 
-					
-
 
 		LightType type() const {
 			return POINT_LIGHT;
 		}
 
 		Point3&  position(){ return m_p; }
+
+        virtual void draw()
+        {
+            GLUquadric* qdr_ =  gluNewQuadric();
+
+            if( m_is_selected )
+                glColor3f(1.0,0.5,0.5);
+            else
+                glColor3f(1.0,1.0,1.0);
+
+            gluQuadricDrawStyle(qdr_, GLU_FILL);
+
+            glTranslatef( m_p.x(), m_p.y(), m_p.z() );
+            gluSphere(qdr_, 0.5, 30, 30);
+
+            glBegin(GL_LINES);
+            glVertex3f(0.7,0,0); glVertex3f(1,0,0);
+            glVertex3f(-0.7,0,0); glVertex3f(-1,0,0);
+
+            glVertex3f(0,0.7,0); glVertex3f(0,1,0);
+            glVertex3f(0,-0.7,0); glVertex3f(0,-1,0);
+
+            glVertex3f(0,0,0.7); glVertex3f(0,0,1);
+            glVertex3f(0,0,-0.7); glVertex3f(0,0,-1);
+            glEnd();
+
+            glTranslatef( -m_p.x(), -m_p.y(), -m_p.z() );
+
+            gluDeleteQuadric(qdr_);
+        }
 };
 
 class SM_API_EXPORT AreaLight : public Light
 {
 	public:
-		AreaLight(Point3& pp) : Light(pp) {	
+		AreaLight(Point3& pp) : Light(pp) {
 			m_w = 2;
 			m_h = 2;
 		};
 
-		AreaLight() : Light() {	
+		AreaLight() : Light() {
 			m_w = 2;
 			m_h = 2;
 		};
@@ -207,13 +240,13 @@ class SM_API_EXPORT AreaLight : public Light
 			double shade = 0;
 			double spec  = 0;
 			Vector3 dir = dg->p() - p();
-			Vector3 d = v.direction();				
+			Vector3 d = v.direction();
 			Point3 c;
 			Point3 p = dg->p();
 
 
 
-			shade = (dir * dg->n()) / (dir.length() * dg->n().length());				
+			shade = (dir * dg->n()) / (dir.length() * dg->n().length());
 			Vector3 reflect = (dir - 2.0*dg->n()*(dir*dg->n())).normalize();
 			double dot = d*reflect;
 
@@ -224,19 +257,19 @@ class SM_API_EXPORT AreaLight : public Light
 
 			r = 0.3*dg->material()->ambientcolor().r*dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).r  + 1.0*dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).r*shade + 0.9*dg->material()->speccolor().r*spec;
 			g = 0.3*dg->material()->ambientcolor().g*dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).g  + 1.0*dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).g*shade + 0.9*dg->material()->speccolor().g*spec;
-			b = 0.3*dg->material()->ambientcolor().b*dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).b  + 1.0*dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).b*shade + 0.9*dg->material()->speccolor().b*spec;					
+			b = 0.3*dg->material()->ambientcolor().b*dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).b  + 1.0*dg->material()->diffcolor(dg->u(),dg->v(),dg->w()).b*shade + 0.9*dg->material()->speccolor().b*spec;
 
 			if (r > 1.0) r = 1.0;
 			if (g > 1.0) g = 1.0;
 			if (b > 1.0) b = 1.0;
 
-			return TRadiance(r,g,b);	
+			return TRadiance(r,g,b);
 
 		}
 
 		virtual bool intersect(const Ray& r) const {
 			float t = 0;
-			return  ( (m_fa->intersectp(r,&t)) || (m_fb->intersectp(r,&t)) );				
+			return  ( (m_fa->intersectp(r,&t)) || (m_fb->intersectp(r,&t)) );
 		}
 
 		virtual Point3 pick_point() const {
@@ -250,6 +283,37 @@ class SM_API_EXPORT AreaLight : public Light
 		Point3&  position(){ return m_p; }
 		double& w(){ return m_w; }
 		double& h(){ return m_h; }
+
+		virtual void draw()
+		{
+            glTranslatef(m_p.x(), m_p.y(), m_p.z());
+
+            glBegin(GL_QUADS);
+            glVertex3f(m_w/2, m_h/2,0);
+            glVertex3f(m_w/2, -m_h/2,0);
+            glVertex3f(-m_w/2, -m_h/2,0);
+            glVertex3f(-m_w/2, m_h/2,0);
+            glEnd();
+
+            glBegin(GL_LINES);
+            glVertex3f(0,0,0.2); glVertex3f(0,0,0.5);
+            glVertex3f(0,0,-0.2); glVertex3f(0,0,-0.5);
+
+            glVertex3f(m_w/4,m_h/4,0.2);glVertex3f(m_w/4,m_h/4,0.5);
+            glVertex3f(m_w/4,m_h/4,-0.2);glVertex3f(m_w/4,m_h/4,-0.5);
+
+            glVertex3f(m_w/4,-m_h/4,0.2);glVertex3f(m_w/4,-m_h/4,0.5);
+            glVertex3f(m_w/4,-m_h/4,-0.2);glVertex3f(m_w/4,-m_h/4,-0.5);
+
+            glVertex3f(-m_w/4,-m_h/4,0.2);glVertex3f(-m_w/4,-m_h/4,0.5);
+            glVertex3f(-m_w/4,-m_h/4,-0.2);glVertex3f(-m_w/4,-m_h/4,-0.5);
+
+            glVertex3f(-m_w/4,m_h/4,0.2);glVertex3f(-m_w/4,m_h/4,0.5);
+            glVertex3f(-m_w/4,m_h/4,-0.2);glVertex3f(-m_w/4,m_h/4,-0.5);
+            glEnd();
+
+            glTranslatef(-m_p.x(), -m_p.y(), -m_p.z());
+		}
 
 		void setW(double w_){ m_w = w_ ; }
 		void setH(double h_){ m_h = h_ ; }

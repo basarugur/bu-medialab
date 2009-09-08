@@ -35,8 +35,9 @@ RenderController::~RenderController(void)
 {
 }
 
-void RenderController::render(Scene* sc_,Camera* cm_,bool skyLight , double skyCoeff  , bool antiAlisng  ,
-			int width , int height )
+void RenderController::render(Scene* sc_, Camera* cm_,
+                              bool skyLight, double skyCoeff, bool antiAlisng,
+                              int width, int height)
 {
 	saveRawFiles(sc_);
 	saveXML( sc_, cm_,skyLight ,skyCoeff , antiAlisng,
@@ -51,8 +52,9 @@ void RenderController::render(Scene* sc_,Camera* cm_,bool skyLight , double skyC
 	#endif
 }
 
-void RenderController::saveXML(Scene* scene_,Camera* cm_,bool skyLight , double skyCoeff , bool antiAlisng,
-			 int width , int height)
+void RenderController::saveXML(Scene* scene_, Camera* cm_,
+                               bool skyLight, double skyCoeff, bool antiAlisng,
+                               int width, int height)
 {
 	TiXmlDocument doc;
 	TiXmlElement* root_ = new TiXmlElement("Scene");
@@ -79,11 +81,11 @@ void RenderController::saveXML(Scene* scene_,Camera* cm_,bool skyLight , double 
 	for (int i=0 ; i<scene_->objects().size() ; i++)
 	{
 		GfxObject* obj_ = scene_->objects()[i];
-		Transformation globalTrns_ =  *obj_->getIndividualTransform()+*obj_->getPublicTransform();
+		Transformation globalTrns_ =  *obj_->getLocalTransform()+*obj_->getGlobalTransform();
 		GfxObject* tmp_ = obj_->getParent();
 		while(tmp_ != NULL)
 		{
-			globalTrns_ = globalTrns_ * (*tmp_->getPublicTransform());
+			globalTrns_ = globalTrns_ * (*tmp_->getGlobalTransform());
 			tmp_ = tmp_->getParent();
 		}
 
@@ -318,9 +320,9 @@ void RenderController::saveXML(Scene* scene_,Camera* cm_,bool skyLight , double 
 
 	TiXmlElement* normal_ = new TiXmlElement("Target");
 	cmr_->LinkEndChild(normal_);
-	std::ostringstream ss12; ss12<<cm_->atPoint().x();
-	std::ostringstream ss13; ss13<<cm_->atPoint().y();
-	std::ostringstream ss14; ss14<<cm_->atPoint().z();
+	std::ostringstream ss12; ss12<<cm_->lookAtPoint().x();
+	std::ostringstream ss13; ss13<<cm_->lookAtPoint().y();
+	std::ostringstream ss14; ss14<<cm_->lookAtPoint().z();
 	normal_->SetAttribute("x",(char*)ss12.str().c_str());
 	normal_->SetAttribute("y",(char*)ss13.str().c_str());
 	normal_->SetAttribute("z",(char*)ss14.str().c_str());
@@ -422,7 +424,7 @@ void RenderController::saveRawFiles(Scene* m_scene)
 				break;
 			}
 
-			m_raw_device->saveMesh(ss.str(),meshShape_);
+			m_raw_device->saveMesh(ss.str(), meshShape_);
 			delete meshShape_;
 		}
 	}

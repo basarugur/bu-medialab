@@ -27,24 +27,24 @@ public:
 	void setViewport(int mx_,int my_){
 		double ratio = (double)mx_ / (double)my_;
 		m_x_ratio = ratio/(double)mx_;
-		m_y_ratio = (double)1.0/ (double)my_; 
+		m_y_ratio = (double)1.0/ (double)my_;
 	};
 	void startAction(int sx_,int sy_)
 	{
-		m_start_x = sx_ ; 
+		m_start_x = sx_ ;
 		m_start_y = sy_ ;
 
-		Vector3 dir_ = (m_camera->atPoint()-m_camera->position()).normalize();
+		Vector3 dir_ = (m_camera->lookAtPoint() - m_camera->position()).normalize();
 		transX_ = (dir_^m_camera->upVector()).normalize();
 		transY_ = m_camera->upVector();
 
-		m_star_position = m_camera->position();
-		m_start_upvector = m_camera->upVector();
+		m_start_position = m_camera->position();
+		m_start_up_vector = m_camera->upVector();
 
 		m_start_direct = dir_;
-		m_start_atpoint = m_camera->atPoint();
+		m_start_look_at_point = m_camera->lookAtPoint();
 
-		m_dist = (m_camera->atPoint()-m_camera->position()).length();
+		m_dist = (m_camera->lookAtPoint() - m_camera->position()).length();
 	}
 	void release()
 	{
@@ -52,11 +52,11 @@ public:
 	}
 	void setType( CameraToolType typ_)
 	{
-		m_type = typ_ ; 
+		m_type = typ_ ;
 	}
 	CameraToolType getType()
 	{
-		return m_type ; 
+		return m_type ;
 	}
 	void takeAction(int x_,int y_)
 	{
@@ -69,21 +69,21 @@ public:
 			deltaX_ = m_x_ratio*(double)(x_ - m_start_x)*m_dist; // window coordinate system
 		    deltaY_ = m_y_ratio*(double)(m_start_y - y_)*m_dist; //is reversed
 		    delta_  = deltaY_*transY_+deltaX_*transX_;
-			m_camera->setPosition(m_star_position-delta_);
-			m_camera->setAtPoint(m_start_atpoint-delta_);
+			m_camera->setPosition(m_start_position-delta_);
+			m_camera->setLookAtPoint(m_start_look_at_point-delta_);
 			break;
 		case ROTATE_TOOL:
 			deltaX_ = m_x_ratio*(double)(m_start_x - x_); // window coordinate system
 		    deltaY_ = m_y_ratio*(double)(m_start_y - y_); //is reversed
-			delta_ =  m_star_position-m_start_atpoint;
-			delta_ =  RotateVectorAroundVector(delta_,m_start_upvector,deltaX_*3.0);
-			delta_ =  RotateVectorAroundVector(delta_,m_start_direct^m_start_upvector,deltaY_*3.0);
-			m_camera->setPosition(m_start_atpoint+delta_);
-			m_camera->setAtPoint(m_camera->position()+(-delta_.normalize()*m_dist));
+			delta_ =  m_start_position-m_start_look_at_point;
+			delta_ =  RotateVectorAroundVector(delta_,m_start_up_vector,deltaX_*3.0);
+			delta_ =  RotateVectorAroundVector(delta_,m_start_direct^m_start_up_vector,deltaY_*3.0);
+			m_camera->setPosition(m_start_look_at_point+delta_);
+			m_camera->setLookAtPoint(m_camera->position()+(-delta_.normalize()*m_dist));
 			break;
 		case ZOOM_TOOL:
-			deltaY_ = 0.003*(double)(m_start_y - y_)*((m_camera->atPoint()-m_camera->position()).length());
-			m_camera->setPosition(m_star_position+deltaY_*m_start_direct);
+			deltaY_ = 0.003*(double)(m_start_y - y_)*((m_camera->lookAtPoint()-m_camera->position()).length());
+			m_camera->setPosition(m_start_position+deltaY_*m_start_direct);
 			break;
 		}
 	}
@@ -141,11 +141,11 @@ private:
 	Vector3 transX_;
 	Vector3 transY_;
 
-	Point3 m_star_position;
-	Point3 m_start_atpoint;
-	Vector3 m_start_upvector;
+	Point3 m_start_position;
+	Point3 m_start_look_at_point;
+	Vector3 m_start_up_vector;
 	Vector3 m_start_direct;
-	
+
 
 	int m_start_x;
 	int m_start_y;

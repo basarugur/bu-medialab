@@ -54,8 +54,8 @@ class SM_API_EXPORT Scene
 		bool intersect(const Ray& ray,Intersection* isect) const;
 
 		//method, which checks for any intersection  along a ray, again returning a boolean
-		//result. Because it doesn’t return information about the geometry at the intersection
-		//point and because it doesn’t need to search for the closest intersection, it can be more efficient
+		//result. Because it doesn't return information about the geometry at the intersection
+		//point and because it doesn't need to search for the closest intersection, it can be more efficient
 		bool intersectp(const Ray& ray) const;
 		void antialias_on() { m_aa_on = true; };
 		void antialias_off() { m_aa_on = false; };

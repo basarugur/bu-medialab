@@ -24,7 +24,7 @@
 class SM_API_EXPORT Vector3
 {
 	public:
-		 Vector3(double _x=0,double _y=0,double _z=0)
+		 Vector3(double _x=0, double _y=0, double _z=0)
 		 {
 			m_v[0] = _x;
 			m_v[1] = _y;

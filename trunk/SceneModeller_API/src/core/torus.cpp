@@ -1,16 +1,28 @@
 #include "torus.h"
 
-BBox Torus::object_bound() const 
+BBox Torus::object_bound() const
 {
 	return BBox(Point3(-m_out_r,-m_out_r,-m_in_r),Point3(m_out_r,m_out_r,m_in_r));
 }
+
+Shape* Torus::getNewCopy()
+{
+    Torus* trs_ = new Torus();
+    trs_->m_in_r = m_in_r;
+    trs_->m_out_r = m_out_r;
+    trs_->m_rings = m_rings;
+    trs_->m_sides = m_sides;
+
+    return trs_;
+}
+
 void Torus::copyToMesh(TriangleMesh* msh_)
 {
 	double deltaSlcAng_ = 0.0174532925*(double)360.0/(double)m_sides;
 	double deltaRngAng_ = 0.0174532925*(double)360.0/(double)m_rings;
 
 	double angle_,cosAng_,sinAng_;
-	double x_ , z_ , y_; 
+	double x_ , z_ , y_;
 	x_ = m_in_r;
 	z_ = 0;
 	for(int j=0 ; j< m_sides ; j++ ) // circle
@@ -96,4 +108,19 @@ void Torus::copyToMesh(TriangleMesh* msh_)
 
 	msh_->calculatebounds();
 }
+
+void Torus::draw( drawType dt_ )
+{
+    if ( dt_ & SHADED )
+    {
+        glutSolidTorus( m_in_r, m_out_r, m_sides, m_rings );
+    }
+
+    if ( dt_ & WIRED )
+    {
+        glutWireTorus( m_in_r, m_out_r, m_sides, m_rings );
+    }
+
+}
+
 

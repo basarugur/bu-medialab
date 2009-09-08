@@ -10,19 +10,24 @@
 
 class SM_API_EXPORT Disk : public Shape
 {
-	public:	
+	public:
 		Disk(): Shape() {
-		
-			m_in_r = 2 ; 
+
+			m_in_r = 2 ;
 			m_out_r = 4 ;
 			m_slices = 10;
 			m_loops = 10;
 
 			m_type = DISK;
 
-		};						
+		};
 		BBox object_bound() const ;
+
+		Shape* getNewCopy();
+
 		void copyToMesh(TriangleMesh* msh_);
+
+		void draw( drawType dt_ );
 
 		virtual bool can_intersect() const { return false; } ;
 		virtual const std::vector<Triangle*>& refine() const {  std::vector<Triangle*> ms; return ms;  };

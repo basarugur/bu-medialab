@@ -23,18 +23,18 @@ public:
 	void setViewport(int mx_,int my_){
 		double ratio = (double)mx_ / (double)my_;
 		m_x_ratio = ratio/(double)mx_;
-		m_y_ratio = (double)1.0/ (double)my_; 
+		m_y_ratio = (double)1.0/ (double)my_;
 	};
 	void startRotate(Transformation* tr_,int sx_,int sy_)
 	{
 		m_transform = tr_;
 		m_rotating_camera = NULL;
 		m_star_rotation = tr_->rotation();
-		m_start_x = sx_ ; 
+		m_start_x = sx_ ;
 		m_start_y = sy_ ;
 
-	
-		Vector3 dir_ = (m_camera->atPoint()-m_camera->position()).normalize();
+
+		Vector3 dir_ = (m_camera->lookAtPoint()-m_camera->position()).normalize();
 		transX_ = (dir_^m_camera->upVector()).normalize();
 		transY_ = m_camera->upVector();
 
@@ -43,21 +43,21 @@ public:
 	void startRotate(Camera* cm_,int sx_,int sy_)
 	{
 		m_transform = NULL;
-		m_rotating_camera = cm_ ; 
+		m_rotating_camera = cm_ ;
 
 
-		//m_start_direction = cm_->atPoint()-cm_->position();
+		//m_start_direction = cm_->lookAtPoint()-cm_->position();
 		//m_target_dist = m_start_direction.length();
 		//m_start_direction = m_start_direction.normalize();
 		//m_start_upvector = cm_->upVector();
-	
-		m_start_delta_vector = cm_->atPoint()-cm_->position();
+
+		m_start_delta_vector = cm_->lookAtPoint()-cm_->position();
 		m_start_up_vector = cm_->upVector();
 
-		m_start_x = sx_ ; 
+		m_start_x = sx_ ;
 		m_start_y = sy_ ;
 
-		Vector3 dir_ = (m_camera->atPoint()-m_camera->position()).normalize();
+		Vector3 dir_ = (m_camera->lookAtPoint()-m_camera->position()).normalize();
 		transX_ = (dir_^m_camera->upVector()).normalize();
 		transY_ = m_camera->upVector();
 
@@ -89,7 +89,7 @@ public:
 			Vector3 delta_ =  m_start_delta_vector;
 			delta_ =  RotateVectorAroundVector(delta_,transX_,deltaX_*3.0);
 			delta_ =  RotateVectorAroundVector(delta_,transY_,deltaY_*3.0);
-			m_rotating_camera->setAtPoint(m_rotating_camera->position()+delta_);
+			m_rotating_camera->setLookAtPoint(m_rotating_camera->position()+delta_);
 			delta_ =  m_start_up_vector;
 			delta_ =  RotateVectorAroundVector(delta_,transX_,deltaX_*3.0);
 			delta_ =  RotateVectorAroundVector(delta_,transY_,deltaY_*3.0);
@@ -98,7 +98,7 @@ public:
 	}
 	double orthogonalDistanceToCamera()
 	{
-		Vector3 dir_ = (m_camera->atPoint()-m_camera->position()).normalize();
+		Vector3 dir_ = (m_camera->lookAtPoint()-m_camera->position()).normalize();
 		double a_ = dir_.x();
 		double b_ = dir_.y();
 		double c_ = dir_.z();

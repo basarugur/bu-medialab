@@ -10,17 +10,22 @@
 
 class SM_API_EXPORT RectangleShape : public Shape
 {
-	public:	
+	public:
 		RectangleShape(): Shape() {
-		
-			m_x = 4 ; 
+
+			m_x = 4 ;
 			m_y = 2 ;
 
 			m_type = RECTANGLE;
 
-		};						
+		};
 		BBox object_bound() const ;
+
+		Shape* getNewCopy();
+
 		void copyToMesh(TriangleMesh* msh_);
+
+		void draw( drawType dt_ );
 
 		virtual bool can_intersect() const { return false; } ;
 		virtual const std::vector<Triangle*>& refine() const { std::vector<Triangle*> ms; return ms;  };

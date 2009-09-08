@@ -1,16 +1,28 @@
 #include "cone.h"
 
-BBox Cone::object_bound() const 
+BBox Cone::object_bound() const
 {
 	return BBox(Point3(-m_r,-m_r,0),Point3(m_r,m_r,m_h));
 }
+
+Shape* Cone::getNewCopy()
+{
+    Cone* cone_ = new Cone();
+    cone_ ->m_h = m_h;
+    cone_ ->m_r = m_r;
+    cone_ ->m_slices = m_slices;
+    cone_ ->m_stacks = m_stacks;
+
+    return cone_;
+}
+
 void Cone::copyToMesh(TriangleMesh* msh_)
 {
 	double deltaAng_ = 0.0174532925*(double)360.0/(double)m_slices;
 	double deltaHgh_ = m_h / (double)m_stacks;
 
 	double angle_,cosAng_,sinAng_;
-	double x_ , y_ ; 
+	double x_ , y_ ;
 	x_ = 0;
 	y_ = m_r;
 
@@ -115,4 +127,23 @@ void Cone::copyToMesh(TriangleMesh* msh_)
 
 
 	msh_->calculatebounds();
+}
+
+
+void Cone::draw( drawType dt_ )
+{
+    if ( dt_ & SHADED )
+    {
+        gluQuadricDrawStyle( p_qdr, GLU_FILL );
+        gluCylinder(p_qdr, m_r, 0.0, m_h, m_slices, m_stacks);
+		gluDisk(p_qdr, 0, m_r, m_slices, 1);
+    }
+
+    if ( dt_ & WIRED )
+    {
+        gluQuadricDrawStyle( p_qdr, GLU_LINE );
+        gluCylinder(p_qdr, m_r, 0.0, m_h, m_slices, m_stacks);
+		gluDisk(p_qdr, 0, m_r, m_slices, 1);
+    }
+
 }

@@ -17,6 +17,17 @@
 #include "bbox.h"
 #include "ray.h"
 
+#include "GL/glu.h"
+#include "GL/glut.h"
+
+class TriangleMesh;
+
+enum drawType
+{
+    SHADED = 0x0001,
+    WIRED = 0x0002
+};
+
 enum ShapeType
 {
 	TRIANGLE_MESH = 0,
@@ -35,23 +46,40 @@ enum ShapeType
 
 class SM_API_EXPORT Shape
 {
-	public:	
-		Shape() {};	
-		virtual BBox object_bound() const = 0;
-		virtual bool can_intersect() const = 0;
-		virtual const std::vector<Triangle*>& refine() const = 0;
+public:
+    Shape()
+    {
+        p_qdr = gluNewQuadric();
+    };
 
-		virtual bool intersect(const Ray& r,float *hit,DifferentialGeometry* d) const {
-			return  false;
-		};
-		virtual bool intersectp(const Ray& r) const {
-			return false;
-		};
+    ~Shape()
+    {
+        gluDeleteQuadric( p_qdr );
+    }
 
-		ShapeType type() { return m_type; };
+    virtual BBox object_bound() const = 0;
+    virtual bool can_intersect() const = 0;
+    virtual const std::vector<Triangle*>& refine() const = 0;
+
+    virtual bool intersect(const Ray& r,float *hit,DifferentialGeometry* d) const {
+        return  false;
+    };
+    virtual bool intersectp(const Ray& r) const {
+        return false;
+    };
+
+    ShapeType type() { return m_type; };
+
+    virtual Shape* getNewCopy() = 0;
+
+    virtual void copyToMesh(TriangleMesh* msh_) = 0;
+
+    virtual void draw(drawType dt_) = 0;
 
 protected:
 	ShapeType m_type;
+
+	GLUquadricObj* p_qdr;
 };
 
 #endif

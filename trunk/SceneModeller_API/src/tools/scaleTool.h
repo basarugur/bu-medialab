@@ -19,16 +19,16 @@ public:
 	void setViewport(int mx_,int my_){
 		double ratio = (double)mx_ / (double)my_;
 		m_x_ratio = ratio/(double)mx_;
-		m_y_ratio = (double)1.0/ (double)my_; 
+		m_y_ratio = (double)1.0/ (double)my_;
 	};
 	void startScale(Transformation* tr_,int sx_,int sy_)
 	{
 		m_transform = tr_;
 		m_star_scale = tr_->scale();
-		m_start_x = sx_ ; 
+		m_start_x = sx_ ;
 		m_start_y = sy_ ;
 
-		Vector3 dir_ = (m_camera->atPoint()-m_camera->position()).normalize();
+		Vector3 dir_ = (m_camera->lookAtPoint()-m_camera->position()).normalize();
 		transX_ = (dir_^m_camera->upVector()).normalize();
 		transY_ = m_camera->upVector();
 
@@ -50,7 +50,7 @@ public:
 	}
 	double orthogonalDistanceToCamera()
 	{
-		Vector3 dir_ = (m_camera->atPoint()-m_camera->position()).normalize();
+		Vector3 dir_ = (m_camera->lookAtPoint() - m_camera->position()).normalize();
 		double a_ = dir_.x();
 		double b_ = dir_.y();
 		double c_ = dir_.z();

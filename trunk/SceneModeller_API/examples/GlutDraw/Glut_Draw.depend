@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1249565848 source:/home/medialab/Projects/SceneModeller_API/examples/GlutDraw/main.cpp
+1251981717 source:/home/medialab/Projects/SceneModeller_API/examples/GlutDraw/main.cpp
 	"common.h"
 
-1244730827 /home/medialab/Projects/SceneModeller_API/src/core/scene.h
+1251707329 /home/medialab/Projects/SceneModeller_API/src/core/scene.h
 	"camera.h"
 	"light.h"
 	"primitive.h"
@@ -13,16 +13,16 @@
 	"sampler.h"
 	"CImg.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/camera.h
+1249914998 /home/medialab/Projects/SceneModeller_API/src/core/camera.h
 	"point3.h"
 	"sampler.h"
 	"ray.h"
 	"primitive.h"
 
-1249566507 /home/medialab/Projects/SceneModeller_API/src/core/point3.h
+1249913932 /home/medialab/Projects/SceneModeller_API/src/core/point3.h
 	"vector3.h"
 
-1244728449 /home/medialab/Projects/SceneModeller_API/src/core/vector3.h
+1251709423 /home/medialab/Projects/SceneModeller_API/src/core/vector3.h
 	<iostream>
 	<stdlib.h>
 	<math.h>
@@ -113,14 +113,14 @@
 	<float.h>
 	<algorithm>
 
-1248938220 /home/medialab/Projects/SceneModeller_API/src/core/transformation.h
+1249911877 /home/medialab/Projects/SceneModeller_API/src/core/transformation.h
 	"matrix.h"
 	"shape.h"
 	"trianglemesh.h"
 	"vector3.h"
 	"diffgeometry.h"
 
-1244554590 /home/medialab/Projects/SceneModeller_API/src/core/matrix.h
+1250517802 /home/medialab/Projects/SceneModeller_API/src/core/matrix.h
 	"vector3.h"
 	"point3.h"
 
@@ -203,7 +203,7 @@
 	"CanvasGrid.h"
 	"GL/glut.h"
 
-1245065152 /home/medialab/Projects/SceneModeller_API/src/CanvasGrid.h
+1250778058 /home/medialab/Projects/SceneModeller_API/src/CanvasGrid.h
 	"GL/glut.h"
 	"common.h"
 
@@ -610,7 +610,7 @@
 	"Node.h"
 	"FileImage.h"
 
-1244012704 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/FileImage.h
+1249909797 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/FileImage.h
 	"OldCpp.h"
 
 1244012706 /home/medialab/Projects/SceneModeller_API/src/formats/vrml/IndexedFaceSetNode.h

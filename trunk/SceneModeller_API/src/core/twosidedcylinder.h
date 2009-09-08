@@ -10,10 +10,10 @@
 
 class SM_API_EXPORT TwoSidedCylinder : public Shape
 {
-	public:	
+	public:
 		TwoSidedCylinder(): Shape() {
-		
-			m_base_r = 4 ; 
+
+			m_base_r = 4 ;
 			m_top_r = 2;
 			m_h = 5 ;
 			m_slices = 10;
@@ -21,8 +21,13 @@ class SM_API_EXPORT TwoSidedCylinder : public Shape
 
 			m_type = TWO_SIDED_CYLINDER;
 
-		};						
+		};
 		BBox object_bound() const ;
+
+		Shape* getNewCopy();
+
+        void draw( drawType dt_ );
+
 		void copyToMesh(TriangleMesh* msh_);
 
 		virtual bool can_intersect() const { return false; } ;

@@ -1,17 +1,30 @@
 #include "twosidedcylinder.h"
 
-BBox TwoSidedCylinder::object_bound() const 
+BBox TwoSidedCylinder::object_bound() const
 {
 	double maxR =std::max(m_base_r,m_top_r);
 	return BBox(Point3(-maxR,-maxR,0),Point3(maxR,maxR,m_h));
 }
+
+Shape* TwoSidedCylinder::getNewCopy()
+{
+    TwoSidedCylinder* tsc_ = new TwoSidedCylinder();
+    tsc_->m_base_r = m_base_r;
+    tsc_->m_top_r = m_top_r;
+    tsc_->m_h = m_h;
+    tsc_->m_slices = m_slices;
+    tsc_->m_stacks = m_stacks;
+
+    return tsc_;
+}
+
 void TwoSidedCylinder::copyToMesh(TriangleMesh* msh_)
 {
 	double deltaAng_ = 0.0174532925*(double)360.0/(double)m_slices;
 	double deltaHgh_ = m_h / (double)m_stacks;
 
 	double angle_,cosAng_,sinAng_;
-	double x_ , y_ ; 
+	double x_ , y_ ;
 	x_ = 0;
 	y_ = m_base_r;
 
@@ -110,4 +123,28 @@ void TwoSidedCylinder::copyToMesh(TriangleMesh* msh_)
 	msh_->calculatebounds();
 }
 
+void TwoSidedCylinder::draw( drawType dt_ )
+{
+    if ( dt_ & SHADED )
+    {
+        gluQuadricDrawStyle( p_qdr, GLU_FILL );
 
+        gluCylinder(p_qdr, m_base_r, m_top_r, m_h, m_slices, m_stacks);
+        gluDisk(p_qdr, 0, m_base_r, m_slices, 1);
+        glTranslatef(0, 0, m_h);
+        gluDisk(p_qdr, 0, m_top_r, m_slices, 1);
+        glTranslatef(0, 0,-m_h);
+    }
+
+    if ( dt_ & WIRED )
+    {
+        gluQuadricDrawStyle( p_qdr, GLU_LINE );
+
+        gluCylinder(p_qdr, m_base_r, m_top_r, m_h, m_slices, m_stacks);
+        gluDisk(p_qdr, 0, m_base_r, m_slices, 1);
+        glTranslatef(0, 0, m_h);
+        gluDisk(p_qdr, 0, m_top_r, m_slices, 1);
+        glTranslatef(0, 0,-m_h);
+    }
+
+}

@@ -49,7 +49,7 @@ void initGLOptions()
 
 void createScene(Scene* scn_)
 {
-	/*GfxObject* new_obj1 = new GfxObject(new RectangleShape(),new Material(),new Transformation());
+	GfxObject* new_obj1 = new GfxObject(new RectangleShape(),new Material(),new Transformation());
 	new_obj1->getMaterial()->enableTexture(true);
 	new_obj1->getMaterial()->getTexture().m_scale_x = 30 ;
 	new_obj1->getMaterial()->getTexture().m_scale_y = 30 ;
@@ -62,8 +62,8 @@ void createScene(Scene* scn_)
 	}
 
 	GfxObject* new_obj2 = new GfxObject(new Cube(),new Material(),new Transformation());
-	new_obj2->getIndividualTranform()->scale(4,6,0.5);
-	new_obj2->getIndividualTranform()->translate(0,0,6.5);
+	new_obj2->getIndividualTransform()->scale(4,6,0.5);
+	new_obj2->getIndividualTransform()->translate(0,0,6.5);
 	new_obj2->getMaterial()->setDiffColor(TRadiance(0,0.5,0));
 
 
@@ -77,10 +77,10 @@ void createScene(Scene* scn_)
 	new_obj5->getMaterial()->setDiffColor(TRadiance(1,0,0));
 	new_obj6->getMaterial()->setDiffColor(TRadiance(1,0,0));
 
-	new_obj3->getIndividualTranform()->translate(5,8,0);
-	new_obj4->getIndividualTranform()->translate(5,-8,0);
-	new_obj5->getIndividualTranform()->translate(-5,-8,0);
-	new_obj6->getIndividualTranform()->translate(-5,8,0);
+	new_obj3->getIndividualTransform()->translate(5,8,0);
+	new_obj4->getIndividualTransform()->translate(5,-8,0);
+	new_obj5->getIndividualTransform()->translate(-5,-8,0);
+	new_obj6->getIndividualTransform()->translate(-5,8,0);
 
 
 	Cylinder* tmp_ = static_cast<Cylinder*>(new_obj3->getShape());
@@ -101,14 +101,14 @@ void createScene(Scene* scn_)
 	new_obj2->addChild(new_obj5);
 	new_obj2->addChild(new_obj6);
 
-	//*scn_ += new_obj1;
+	*scn_ += new_obj1;
 	*scn_ += new_obj2;
     *scn_ += new_obj3;
 	*scn_ += new_obj4;
 	*scn_ += new_obj5;
-	*scn_ += new_obj6;*/
+	*scn_ += new_obj6;
 
-    VrmlDevice vrml_dev;
+    /*VrmlDevice vrml_dev;
 
     vrml_dev.loadScene("chapel_97-3.wrl", scn_);
     // cout << "OBJS:" << scn_->objects().size() << endl;
@@ -127,18 +127,18 @@ void createScene(Scene* scn_)
         cout << "OBJ::" << scn_->objects()[0]->getName() << endl;
     }
     else
-    {
+    {*/
         cmr_ = new Camera();
-        // serhat's setup:
-        // cmr_->setPosition(Point3(30,30,10));
-        // cmr_->setAtPoint(Point3(0,0,0));
-        // cmr_->setUpVector(Vector3(-0.5,-0.5,6).normalize());
+        /// serhat's setup:
+        cmr_->setPosition(Point3(30,30,10));
+        cmr_->setAtPoint(Point3(0,0,0));
+        cmr_->setUpVector(Vector3(-0.5,-0.5,6).normalize());
 
-        // basar's manual setup: for chapel.wrl
+       /* // basar's manual setup: for chapel.wrl
         cmr_->setPosition( Point3(0, 5, 5) );
         cmr_->setAtPoint( Point3(0, 0, 0) );
         cmr_->setUpVector( Vector3(0, 1, 0).normalize() );
-    }
+    }*/
 
 
 //	vrml_dev.saveToFile("output.wrl", scn_);

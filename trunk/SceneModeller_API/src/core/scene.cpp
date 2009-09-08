@@ -104,10 +104,10 @@ void Scene::duplicateSelectedCamera()
 		if(m_cameras[i]->isSelected())
 		{
 			Camera* nwCmr_ = new Camera();
-			nwCmr_->setPosition(m_cameras[i]->position()+Point3(1,1,1));
-			nwCmr_->setName(m_cameras[i]->getName());
-			nwCmr_->setUpVector(m_cameras[i]->upVector());
-			nwCmr_->setAtPoint(m_cameras[i]->atPoint()+Point3(1,1,1));
+			nwCmr_->setPosition( m_cameras[i]->position() + Point3(1,1,1) );
+			nwCmr_->setName( m_cameras[i]->getName() );
+			nwCmr_->setUpVector( m_cameras[i]->upVector() );
+			nwCmr_->setLookAtPoint( m_cameras[i]->lookAtPoint() + Point3(1,1,1) );
 
 			m_cameras.push_back(nwCmr_);
 		}
@@ -158,10 +158,10 @@ void Scene::duplicateSelectedTree()
 	{
 		GfxObject* nwObj_;
 		m_selected_tree_root->getCopy(nwObj_);
-		nwObj_->getPublicTransform()->translate(
-			nwObj_->getPublicTransform()->translation().x()+1,
-			nwObj_->getPublicTransform()->translation().y()+1,
-			nwObj_->getPublicTransform()->translation().z()+1
+		nwObj_->getGlobalTransform()->translate(
+			nwObj_->getGlobalTransform()->translation().x()+1,
+			nwObj_->getGlobalTransform()->translation().y()+1,
+			nwObj_->getGlobalTransform()->translation().z()+1
 			);
 		m_primitves.push_back(nwObj_);
 		for(int i=0 ; i<m_selected_tree_root->getChildList().size();i++)
@@ -232,10 +232,10 @@ void Scene::duplicateSelectedObject()
 	{
 		GfxObject* nwObj_;
 		slected_->getCopy(nwObj_);
-		nwObj_->getIndividualTransform()->translate(
-			nwObj_->getIndividualTransform()->translation().x()+1,
-			nwObj_->getIndividualTransform()->translation().y()+1,
-			nwObj_->getIndividualTransform()->translation().z()+1
+		nwObj_->getLocalTransform()->translate(
+			nwObj_->getLocalTransform()->translation().x()+1,
+			nwObj_->getLocalTransform()->translation().y()+1,
+			nwObj_->getLocalTransform()->translation().z()+1
 			);
 		m_primitves.push_back(nwObj_);
 	}

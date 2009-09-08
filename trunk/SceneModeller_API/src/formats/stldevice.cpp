@@ -193,12 +193,12 @@ void StlDevice::saveToFile(std::string fl_ , Scene* sce_)
 		for (int i=0 ; i<sce_->objects().size() ; i++)
 		{
 			GfxObject* obj_ = sce_->objects()[i];
-			trns_ =  *obj_->getIndividualTransform()+
-				*obj_->getPublicTransform();
+			trns_ =  *obj_->getLocalTransform()+
+				*obj_->getGlobalTransform();
 			GfxObject* tmp_ = obj_->getParent();
 			while(tmp_ != NULL)
 			{
-				trns_ = trns_*(*tmp_->getPublicTransform());
+				trns_ = trns_*(*tmp_->getGlobalTransform());
 				tmp_ = tmp_->getParent();
 			}
 			stltream << "solid " << obj_->getName() << std::endl;

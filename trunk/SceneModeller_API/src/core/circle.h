@@ -10,18 +10,23 @@
 
 class SM_API_EXPORT Circle : public Shape
 {
-	public:	
+	public:
 		Circle(): Shape() {
-		
-			m_r = 2 ; 
+
+			m_r = 2 ;
 			m_slices = 10;
 			m_loops = 10;
 
 			m_type = CIRCLE;
 
-		};						
+		};
 		BBox object_bound() const ;
+
+		Shape* getNewCopy();
+
 		void copyToMesh(TriangleMesh* msh_);
+
+		void draw( drawType dt_ );
 
 		virtual bool can_intersect() const { return false; } ;
 		virtual const std::vector<Triangle*>& refine() const {  std::vector<Triangle*> ms; return ms;  };
