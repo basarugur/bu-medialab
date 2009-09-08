@@ -7,6 +7,11 @@
 #include <fstream>
 #include <stdexcept>
 
+#include "../SceneModeller_API/src/core/gfxobject.h"
+#include "../SceneModeller_API/src/core/rectangle.h"
+#include "../SceneModeller_API/src/core/cube.h"
+#include "../SceneModeller_API/src/core/cylinder.h"
+
 extern char wii_msg[255]; // to use in opengl context
 
 HeadTrackerClient* IGlut::p_htc;
@@ -16,8 +21,6 @@ Scene* IGlut::p_scene;
 Camera* IGlut::p_camera;
 
 CanvasGrid* IGlut::p_grid;
-
-SceneDrawer* IGlut::p_drawer;
 
 RenderController* IGlut::p_rc;
 
@@ -64,7 +67,7 @@ IGlut::IGlut(int argc, char** argv)
 
     p_scene = new Scene();
 
-    /// VRML file should be taken as program argument.
+    /// Notice: VRML file should be taken as program argument.
     //CreateScene(p_scene, argv[1]);
     CreateScene("res/chapel_97-5.wrl");
     //CreateScene("res/box.wrl");
@@ -73,8 +76,6 @@ IGlut::IGlut(int argc, char** argv)
 
     p_grid = new CanvasGrid( XY_GRID );
     p_grid->setAxesDrawn(false);
-
-    p_drawer = new SceneDrawer();
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_STEREO);
@@ -96,7 +97,6 @@ IGlut::~IGlut()
 
     delete p_scene;
     delete p_camera;
-    delete p_drawer;
     delete p_grid;
     delete p_rc;
     delete p_light;
@@ -136,7 +136,8 @@ void IGlut::PrepareMenus()
 {
     submenus[0] = glutCreateMenu( SelectOption );
     glutAddMenuEntry("Toggle fullscreen view", 0);
-    glutAddMenuEntry("Render the scene", 1);
+    glutAddMenuEntry("Use wiimote", 1);
+    glutAddMenuEntry("Render the scene", 2);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
@@ -188,21 +189,31 @@ void IGlut::SelectOption(int opt)
             }
             break;
 
+        case TOGGLE_WIIMOTE:
+            use_wiimote = !use_wiimote;
+
+            glutChangeToMenuEntry(2, use_wiimote ? "Disconnect Wiimote" : "Use Wiimote", TOGGLE_WIIMOTE);
+
+            if (!use_wiimote)
+                disconnect_wiimote();
+
+            break;
+
         case RENDER_SCENE:
             if (p_rc == NULL)
                 p_rc = new RenderController();
 
             /// We use asymmetric frustum for off-axis projection in OpenGL;
             /// therefore we have to correct the camera direction for rendering:
-            Point3 save_lookAt( p_camera->atPoint() );
+            Point3 save_lookAtPoint( p_camera->lookAtPoint() );
             Vector3 save_upVector( p_camera->upVector() );
 
-            p_camera->setAtPoint( Point3(0, 0, 0) );
+            p_camera->setLookAtPoint( Point3(0, 0, 0) );
             p_camera->setUpVector( Vector3(0, 0, 1) );
 
             p_rc->render(p_scene, p_camera);
 
-            p_camera->setAtPoint( save_lookAt );
+            p_camera->setLookAtPoint( save_lookAtPoint );
             p_camera->setUpVector( save_upVector );
 
             break;
@@ -235,10 +246,7 @@ void IGlut::Keyboard(unsigned char key, int x, int y)
     }
     else if (key == 'w' || key == 'W')
     {
-        use_wiimote = !use_wiimote;
-
-        if (!use_wiimote)
-            disconnect_wiimote();
+        SelectOption( TOGGLE_WIIMOTE );
     }
     else if (key == 'z' || key == 'Z')
     {
@@ -359,8 +367,8 @@ void IGlut::CreateScene(string VRMLfile)
 	}
 
 	GfxObject* new_obj2 = new GfxObject(new Cube(),new Material(),new Transformation());
-	new_obj2->getIndividualTranform()->scale(4,6,0.5);
-	new_obj2->getIndividualTranform()->translate(0,0,6.5);
+	new_obj2->getLocalTransform()->scale(4,6,0.5);
+	new_obj2->getLocalTransform()->translate(4,0,6.5);
 	new_obj2->getMaterial()->setDiffColor(TRadiance(0,0.5,0));
 
 
@@ -374,11 +382,11 @@ void IGlut::CreateScene(string VRMLfile)
 	new_obj5->getMaterial()->setDiffColor(TRadiance(1,0,0));
 	new_obj6->getMaterial()->setDiffColor(TRadiance(1,0,0));
 
-	new_obj3->getIndividualTranform()->translate(5,8,0);
-	new_obj4->getIndividualTranform()->translate(5,-8,0);
-	new_obj5->getIndividualTranform()->translate(-5,-8,0);
-	new_obj6->getIndividualTranform()->translate(-5,8,0);
-
+	// new_obj3->getLocalTransform()->scale(0.25, 0.16666, 2);
+	// new_obj3->getLocalTransform()->translate(0.25, 4/3, -13);
+    // new_obj4->getLocalTransform()->translate(1,-8,0);
+	// new_obj5->getLocalTransform()->translate(-5,-8,0);
+	// new_obj6->getLocalTransform()->translate(-5,8,0);
 
 	Cylinder* tmp_ = static_cast<Cylinder*>(new_obj3->getShape());
 	tmp_->m_h = 6 ;
@@ -398,12 +406,14 @@ void IGlut::CreateScene(string VRMLfile)
 	new_obj2->addChild(new_obj5);
 	new_obj2->addChild(new_obj6);
 
-	//*p_scene += new_obj1;
+	*p_scene += new_obj1;
 	*p_scene += new_obj2;
-    *p_scene += new_obj3;
-	*p_scene += new_obj4;
-	*p_scene += new_obj5;
-	*p_scene += new_obj6;*/
+    // *p_scene += new_obj3;
+	//*p_scene += new_obj4;
+	// *p_scene += new_obj5;
+	// *p_scene += new_obj6;
+
+    */
 
     VrmlDevice vrml_dev;
 
@@ -420,28 +430,21 @@ void IGlut::CreateScene(string VRMLfile)
     else
         p_scene->lights()[0] = p_light;
 
-    // cout << "OBJS:" << p_scene->objects().size() << endl;
+    cout << "OBJS:" << p_scene->objects().size() << endl;
 
     for (int i = 0; i<p_scene->objects().size(); i++)
     {
         GfxObject* gobj = p_scene->objects()[i];
-        /*if (gobj->getChildList().size() == 0)
-        {
-            Transformation xf;
-            xf.rotate(1, 0, 0, 90);
-            gobj->setPublicTransform( &xf );
-        }*/
+        cout << "CN: " << gobj->getChildList().size() << endl;
     }
 
-    return;
-
-    /// skip this part;
+     /// skip this part;
     if (p_scene->cameras().size() != 0)
     {
         // blender setup
         p_camera = p_scene->cameras()[0];
         cout << "CFR: " << p_camera->position().x() << " * " << p_camera->position().y() << " * " << p_camera->position().z() << endl;
-        cout << "CTO: " << p_camera->atPoint().x() << " * " << p_camera->atPoint().y() << " * " << p_camera->atPoint().z() << endl;
+        cout << "CTO: " << p_camera->lookAtPoint().x() << " * " << p_camera->lookAtPoint().y() << " * " << p_camera->lookAtPoint().z() << endl;
         cout << "CUP: " << p_camera->upVector().x() << " * " << p_camera->upVector().y() << " * " << p_camera->upVector().z() << endl;
 
         cout << "OBJ::" << p_scene->objects()[0]->getName() << endl;
@@ -450,14 +453,14 @@ void IGlut::CreateScene(string VRMLfile)
     {
         p_camera = new Camera();
         // serhat's setup:
-        // cmr_->setPosition(Point3(30,30,10));
-        // cmr_->setAtPoint(Point3(0,0,0));
-        // cmr_->setUpVector(Vector3(-0.5,-0.5,6).normalize());
+        p_camera->setPosition(Point3(30,30,10));
+        p_camera->setLookAtPoint(Point3(0,0,0));
+        p_camera->setUpVector(Vector3(-0.5,-0.5,6).normalize());
 
         // basar's manual setup: for chapel.wrl
         //p_camera->setPosition( Point3(0, 5, 5) );
-        p_camera->setAtPoint( Point3(0, 0, 0) );
-        p_camera->setUpVector( Vector3(0, 1, 0).normalize() );
+        //p_camera->setLookAtPoint( Point3(0, 0, 0) );
+        //p_camera->setUpVector( Vector3(0, 1, 0).normalize() );
     }
 
 
@@ -645,7 +648,7 @@ void IGlut::DrawToOneBuffer(float cm_camera_tilt_x, float cm_camera_tilt_y)
     Vector3 glUpVector(0, 1, 0);
 
 	p_camera->setPosition( glEyePos );
-	p_camera->setAtPoint( glCenterPos );
+	p_camera->setLookAtPoint( glCenterPos );
 	p_camera->setUpVector( glUpVector );
 
 	/*gluLookAt(cam_pos.x+eye_sep_x, cam_pos.y - cm_win_height * .5 + eye_sep_y, cam_pos.z - cm_win_height * .5,
@@ -662,10 +665,7 @@ void IGlut::DrawToOneBuffer(float cm_camera_tilt_x, float cm_camera_tilt_y)
 
     glTranslatef(0, 0, -z_h);
 
-    if (p_drawer != NULL)
-	{
-		p_drawer->drawShadedScene(p_scene, p_camera);
-	}
+    p_scene->draw(p_camera, NULL, SHADED);
 
     /// Display Wiimote text message if exists
     glColor3f(0.0f, 1.0f, 0.0f);

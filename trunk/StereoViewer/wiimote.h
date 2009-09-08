@@ -192,9 +192,8 @@ void disconnect_wiimote()
 ///-----------------------------------------------------------------------------
 /// \brief Updating the scene by wiimote connection and
 ///        setting up the connection if not exists
-int active_obj_index = -1;
+int active_obj_index = 0;
 int g_wii_last_btn = -1;
-TRadiance active_obj_rad;
 
 void update_scene_by_wiimote(Scene* scene_, int last_x, int last_y)
 {
@@ -203,13 +202,9 @@ void update_scene_by_wiimote(Scene* scene_, int last_x, int last_y)
 
     if ( check_wiimote() )
     {
-        GfxObject* active_obj = scene_->objects()[ max(active_obj_index, 0) ];
-        if (active_obj_index == -1)
-        {
-            active_obj_index = 0;
-            active_obj_rad = active_obj->getMaterial()->diffcolor();
-            active_obj->getMaterial()->setDiffColor( TRadiance(0.5, 1, 0.5) );
-        }
+        GfxObject* active_obj = scene_->objects()[ active_obj_index ];
+
+        active_obj->select( true );
 
         Transformation tr_;
 
@@ -268,13 +263,13 @@ void update_scene_by_wiimote(Scene* scene_, int last_x, int last_y)
 		if ( (g_wii_last_btn == 0) &&
              ( (g_wii_state.buttons & CWIID_BTN_MINUS) || (g_wii_state.buttons & CWIID_BTN_PLUS )) )
 		{
-		    active_obj->getMaterial()->setDiffColor( active_obj_rad );
+		    active_obj->select( false );
 
             /// change active object
-		    active_obj_index = (active_obj_index + NEXT_OBJ_BY_BTN) % scene_->objects().size();
+		    active_obj_index = (active_obj_index + scene_->objects().size() + NEXT_OBJ_BY_BTN) % scene_->objects().size();
 
-		    active_obj_rad = scene_->objects()[active_obj_index]->getMaterial()->diffcolor();
-		    scene_->objects()[active_obj_index]->getMaterial()->setDiffColor( TRadiance(0.5, 1, 0.5) );
+		    active_obj = scene_->objects()[active_obj_index];
+		    active_obj->select( true );
 
 		}
 		else if ( g_wii_state.buttons & CWIID_BTN_LEFT )
@@ -326,9 +321,9 @@ void update_scene_by_wiimote(Scene* scene_, int last_x, int last_y)
 		ty -= (float) 0.05f * diffy;
 		*/
 
-        tr_ = *(active_obj->getIndividualTransform()) + tr_;
+        tr_ = *(active_obj->getLocalTransform()) + tr_;
 
-        active_obj->setIndividualTransform( &tr_ );
+        active_obj->setLocalTransform( &tr_ );
 
 		return;
 	}
