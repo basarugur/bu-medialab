@@ -2,7 +2,7 @@
 ///
 /// \file	main.cpp
 /// \author	Basar Ugur
-/// \brief	A simple server which applies HeadTracking and serves found
+/// \brief	A simple server which applies Head Tracking and serves found
 ///         coordinate data on network
 /// \note
 ///-----------------------------------------------------------------------------
@@ -19,19 +19,30 @@
 #define PI 3.141592654
 #define PI_HALF 1.570796327
 
-SceneObject *o1, *o2;
 StereoAnalyzer* stereo_anl;
 IFiWiCamera* cam;
 IOpenCV* cv;
 
-Point headPosition, lookVector; // actual 3D points
+Point3 headPosition;    // actual 3D points
+Vector3 lookVector;     // look vector of the user
 
-float M_data[4][4] = { {0.76537,    0.47926,  0.45804, -114.63},
+/*float M_data[4][4] = { {0.76537,    0.47926,  0.45804, -114.63},
                        {0.57352,   -0.57671, -0.65950,  123.04},
-                       {0.0068819,  0.62096, -0.43108,  162.72},
-                       {0,          0,        0,        1} };
+                       {0.0068819,  0.62096, -0.43108,  172.72},
+                       {0,          0,        0,        1} }; */
 
-Matrix4x4 coord_trans_4x4(M_data);
+/*static float M_data[4][4] = { { 0.64148,   -0.60438, -0.64574,  72.029},
+                              {-0.67855,   -0.60354, -0.54447,  95.697},
+                              {-0.065157,  0.52556, -0.37574,  158.82},
+                              { 0,          0,        0,        1} };*/
+
+static float M_data[4][4] = { { 0.64985,    -0.40669,    -0.60315,    69.29356},
+                              {-0.69327,    -0.38080,    -0.46207,    86.01625},
+                              {-0.05875,     0.79224,    -0.34371,   162.34435},
+                              { 0            0            0            1      } };
+
+
+Matrix coord_trans(M_data);
 
 /**
 * Initializing camera components
@@ -39,11 +50,13 @@ Matrix4x4 coord_trans_4x4(M_data);
 
 void CameraInit()
 {
+    system("./CameraCleanup");
+
     stereo_anl = new StereoAnalyzer(43.0, 640.0, 480.0, 12.0); // actual values
 
 	cam = new IFiWiCamera();
     if (cam->init())
-        IOpenCV* cv = new IOpenCV( cvSize(cam->vf->size[0], cam->vf->size[1]) );
+        cv = new IOpenCV( cvSize(cam->vf->size[0], cam->vf->size[1]) );
     else
         cout << "Initialization error." << endl;
 }
@@ -57,7 +70,7 @@ void ServerInit()
 
     // Inter-process communication: Named Pipe; create the FIFO
     umask(0);
-    mknod(FIFO_FILE, S_IFIFO|0666, 0);
+    mknod(FIFO_FILE, S_IFIFO|0777, 0);
 
     cout << "Waiting for network client connection..";
 
@@ -118,7 +131,7 @@ int main(int argc,char** argv)
 
     while (true)
     {
-            // try to capture image
+        // try to capture image
         if (!cam->capture_image() ||
             // pass the pointer to the left & right images to open_cv interface
             !cv->process_images( cam->imageBufRGB + cam->vf->size[0]*cam->vf->size[1]*3,
@@ -128,30 +141,25 @@ int main(int argc,char** argv)
             break;
         }
 
-        stereo_anl->findLocationVector(cornersL, cornersR, headPosition, lookVector, coord_trans_4x4);
-        lookVector = Point::normalize(lookVector);
+        stereo_anl->findLocationVector(cornersL, cornersR, headPosition, lookVector, coord_trans);
+        lookVector = lookVector.normalize();
 
         /*memcpy(serial_data, (void*)(&headPosition), 3*sizeof(float));
         memcpy(serial_data+3, (void*)(&lookVector), 3*sizeof(float));
         printf("Sample [0]: %g\n", serial_data[0]);*/
         sprintf(line,
                 "%g %g %g %g %g %g\n",
-                headPosition.x, headPosition.y, headPosition.z,
-                lookVector.x, lookVector.y, lookVector.z);
-
+                headPosition.x(), headPosition.y(), headPosition.z(),
+                lookVector.x(), lookVector.y(), lookVector.z());
+        // printf("%s\n", line);
         //if (rand()%100 < 20)
         //    printf("line [%d]: %s", strlen(line), line);
 
-        fptr = fopen(FIFO_FILE, "w");
+        fptr = fopen(FIFO_FILE, "w+");
         fwrite_unlocked(line, 1, strlen(line)+1, fptr);
         fclose(fptr);
-
     }
 
     if (close(connfd) == -1)
         errx(1, NULL);
-
-	delete stereo_anl; stereo_anl = NULL;
-    delete cam; cam = NULL;
-    delete cv; cv = NULL;
 }

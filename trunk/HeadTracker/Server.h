@@ -139,6 +139,7 @@ void data_process(int sockfd)
         fptr = fopen(FIFO_FILE, "r");
         fread_unlocked(buf, MAXLINE, 1, fptr);
         nbytes = strlen(buf);
+        fclose(fptr);
 
         //printf("Received string: %s of %d bytes\n", buf, nbytes);
 

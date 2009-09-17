@@ -7,6 +7,11 @@
 ///-----------------------------------------------------------------------------
 
 #include "dc1394/dc1394.h"
+#include <iostream>
+
+using namespace std;
+
+int gain = 100;
 
 class IFiWiCamera
 {
@@ -59,7 +64,7 @@ public:
 
         if (!camera)
         {
-           printf("Failed to initialize camera with guid %d", cam_list->ids[0].guid);
+           printf("Failed to initialize camera with guid %l", cam_list->ids[0].guid);
            return false;
         }
 
@@ -76,7 +81,9 @@ public:
         if ((err = dc1394_video_get_mode(camera, &vm)) == DC1394_SUCCESS)
             cout << "Video mode: " << vm << endl;
 
-        dc1394_feature_set_value(camera, DC1394_FEATURE_GAIN, gain);
+        // GAIN variable msut be defined outside
+        if ((err = dc1394_feature_set_value(camera, DC1394_FEATURE_GAIN, gain)) != DC1394_SUCCESS)
+            cout << "Could not set gain: " << err << endl;
 
         uint32_t val;
         dc1394speed_t sp;
@@ -121,6 +128,8 @@ public:
     bool capture_image()
     {
         dc1394video_frame_t* vf_temp;
+
+        dc1394_feature_set_mode(camera, DC1394_FEATURE_GAIN, DC1394_FEATURE_MODE_MANUAL);
 
         dc1394_feature_set_value(camera, DC1394_FEATURE_GAIN, gain);
 
