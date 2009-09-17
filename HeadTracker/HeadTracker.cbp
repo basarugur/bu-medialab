@@ -27,6 +27,13 @@
 					<Add option="-s" />
 				</Linker>
 			</Target>
+			<Target title="Static Lib">
+				<Option output="libHeadTracker" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
@@ -35,16 +42,28 @@
 			<Add library="/usr/lib/libdc1394.so" />
 			<Add library="/usr/lib/libcv.so" />
 			<Add library="/usr/lib/libhighgui.so" />
+			<Add library="../SceneModeller_API/src/SceneModeller.so" />
+			<Add library="/usr/lib/libglut.so" />
 		</Linker>
-		<Unit filename="IFiWiCamera.h" />
-		<Unit filename="IOpenCV.h" />
+		<Unit filename="IFiWiCamera.h">
+			<Option compile="1" />
+			<Option link="1" />
+		</Unit>
+		<Unit filename="IOpenCV.h">
+			<Option compile="1" />
+			<Option link="1" />
+		</Unit>
 		<Unit filename="Server.h">
 			<Option compilerVar="CC" />
-			<Option compile="1" />
+			<Option target="Debug" />
+			<Option target="Release" />
 		</Unit>
 		<Unit filename="StereoAnalyzer.cpp" />
 		<Unit filename="StereoAnalyzer.h" />
-		<Unit filename="main.cpp" />
+		<Unit filename="main.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<envvars />

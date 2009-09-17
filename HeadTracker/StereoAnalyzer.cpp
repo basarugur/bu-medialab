@@ -11,7 +11,7 @@ StereoAnalyzer::StereoAnalyzer(void)
 	double _width = 640.0;
 	double _height = 480.0;
 
-	double camdist = 12.0;
+	camdist = 12.0;
 
 	hfow = _hfow * PI / 180.0;
 	width = _width;
@@ -35,7 +35,7 @@ StereoAnalyzer::~StereoAnalyzer(void)
 {
 }
 
-bool StereoAnalyzer::computePosition(CvPoint2D32f left, CvPoint2D32f right, Point& p)
+bool StereoAnalyzer::computePosition(CvPoint2D32f left, CvPoint2D32f right, Point3& p)
 {
 	double alpha;
 
@@ -51,9 +51,7 @@ bool StereoAnalyzer::computePosition(CvPoint2D32f left, CvPoint2D32f right, Poin
 	{
 		//POINT AT INFINITY
 
-		p.x = 0.0;
-		p.y = 0.0;
-		p.z = std::numeric_limits<double>::max();
+		p = Point3( 0.0, 0.0, std::numeric_limits<double>::max() );
 
 		return false;
 	}
@@ -96,13 +94,10 @@ bool StereoAnalyzer::computePosition(CvPoint2D32f left, CvPoint2D32f right, Poin
 
 		temp2 = temp1 * tanbetaleft;
 
-		p.y = temp2 * sin(alpha);
-
-		p.z = temp2 * cos(alpha);
-
-		p.x = (camdist/2) + temp1;
-
-	}
+		p = Point3( (camdist/2) + temp1,
+                    temp2 * sin(alpha),
+                    temp2 * cos(alpha) );
+    }
 
 	else if(dleft > 0.0 && dright > 0.0)
 	{
@@ -110,11 +105,9 @@ bool StereoAnalyzer::computePosition(CvPoint2D32f left, CvPoint2D32f right, Poin
 
 		temp2 = temp1 * tanbetaright;
 
-		p.y = temp2 * sin(alpha);
-
-		p.z = temp2 * cos(alpha);
-
-		p.x = -1 * ((camdist/2) + temp1);
+		p = Point3( -1 * ((camdist/2) + temp1),
+                    temp2 * sin(alpha),
+                    temp2 * cos(alpha) );
 
 	}
 
@@ -126,22 +119,19 @@ bool StereoAnalyzer::computePosition(CvPoint2D32f left, CvPoint2D32f right, Poin
 			{
 				temp2 = camdist * tanbetaright;
 
-				p.y = temp2 * sin(alpha);
+				p = Point3( camdist/2,
+                            temp2 * sin(alpha),
+                            temp2 * cos(alpha) );
 
-				p.z = temp2 * cos(alpha);
-
-				p.x = camdist/2;
 			}
 
 			else if(dleft != 0.0 && dright == 0.0)
 			{
 				temp2 = camdist * tanbetaleft;
 
-				p.y = temp2 * sin(alpha);
-
-				p.z = temp2 * cos(alpha);
-
-				p.x = -1 * (camdist/2);
+				p = Point3( -1 * (camdist/2),
+                            temp2 * sin(alpha),
+                            temp2 * cos(alpha) );
 			}
 
 
@@ -153,19 +143,18 @@ bool StereoAnalyzer::computePosition(CvPoint2D32f left, CvPoint2D32f right, Poin
 
 			temp2 = temp1 * tanbetaright;
 
-			p.y = temp2 * sin(alpha);
+			p = Point3( temp1 - (camdist/2),
+                        temp2 * sin(alpha),
+                        temp2 * cos(alpha) );
 
-			p.z = temp2 * cos(alpha);
-
-			p.x = temp1 - (camdist/2);
 		}
 
 	}
 
 
-	if((((left.y + right.y)/2) - (height/2))>0.0)
+	if( (((left.y + right.y)/2) - (height/2))>0.0)
 	{
-		p.y = -1.0 * p.y;
+		p = Point3( p.x(), -1.0 * p.y(), p.z() );
 	}
 
 	return true;
@@ -173,11 +162,11 @@ bool StereoAnalyzer::computePosition(CvPoint2D32f left, CvPoint2D32f right, Poin
 }
 
 bool StereoAnalyzer::findLocationVector(CvPoint2D32f* leftImagePoints, CvPoint2D32f* rightImagePoints,
-                                        Point& headPosition, Point& lookVector, const Matrix4x4 coord_trans)
+                                        Point3& headPosition, Vector3& lookVector, Matrix coord_trans)
 {
-	Point led1, led2, led3;	//front LED
+	Point3 led1, led2, led3;	//front LED
 
-	if(!computePosition(leftImagePoints[0], rightImagePoints[0], led1))
+    if(!computePosition(leftImagePoints[0], rightImagePoints[0], led1))
 		return false;
 
 	if(!computePosition(leftImagePoints[1], rightImagePoints[1], led2))
@@ -186,23 +175,28 @@ bool StereoAnalyzer::findLocationVector(CvPoint2D32f* leftImagePoints, CvPoint2D
 	if(!computePosition(leftImagePoints[2], rightImagePoints[2], led3))
 		return false;
 
-	//may need to handle
+    //may need to handle
 	//leds positions and orientation
 
 	//double * position = new double[3];
-	headPosition = coord_trans * ((led1 + led2 + led3) * 0.3333333f);
+	Point3 center = (led1 + led2 + led3) * 0.3333333f;
+
+//    cout << "CC: " << center.x() << " " << center.y() << " " << center.z() << endl;
+
+	headPosition = coord_trans * center;
+
+//	cout << "HP: " << headPosition.x() << " " << headPosition.y() << " " << headPosition.z() << endl;
+
 	// adjustment may be needed
 	//headPosition = position;
 
+    //double *  vector = new double[3];
+    Point3 triangle_mid = (led1 + led2) * 0.5;
 
-	//double *  vector = new double[3];
-	lookVector = coord_trans * led3 - coord_trans * ( (led1 + led2) * 0.5f );
-	// adjustment may be needed
-	//lookVector = vector;
+    Vector3 height_vec = coord_trans * led3 - coord_trans * triangle_mid;
 
+	lookVector = height_vec;
 
 	return true;
-
-
 
 }
