@@ -1,6 +1,8 @@
 #ifndef _COMMON_H
 #define _COMMON_H
 
+#include "shaders/Shader.hpp"
+
 #include "../SceneModeller_API/src/core/camera.h"
 #include "../SceneModeller_API/src/core/scene.h"
 

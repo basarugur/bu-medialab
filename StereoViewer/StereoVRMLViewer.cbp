@@ -48,8 +48,8 @@
 			<Add library="/usr/lib/libxerces-c.so" />
 			<Add library="/usr/lib/libjpeg.so" />
 			<Add library="/usr/lib/libpng.so" />
-			<Add library="../HeadTracker/libHeadTracker.a" />
-			<Add library="../SceneModeller_API/src/SceneModeller.so" />
+			<Add library="/home/medialab/Projects/HeadTracker/libHeadTracker.a" />
+			<Add library="/home/medialab/Projects/SceneModeller_API/src/SceneModeller.so" />
 		</Linker>
 		<Unit filename="HeadTrackerClient.cpp" />
 		<Unit filename="HeadTrackerClient.h" />
