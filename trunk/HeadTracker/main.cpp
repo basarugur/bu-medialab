@@ -11,8 +11,8 @@
 #include <iostream>
 #include "StereoAnalyzer.h"
 
-#include "IOpenCV.h"
-#include "IFiWiCamera.h"
+#include "IOpenCV.hpp"
+#include "IFiWiCamera.hpp"
 
 #include "Server.h"
 
