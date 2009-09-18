@@ -1,6 +1,6 @@
 ///-----------------------------------------------------------------------------
 ///
-/// \file	Server.h
+/// \file	Server.hpp
 /// \author	Ebutalib Agayev & Basar Ugur
 /// \brief	Server header containing child process functions
 /// \note
