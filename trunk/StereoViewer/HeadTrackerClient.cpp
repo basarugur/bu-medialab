@@ -15,8 +15,8 @@
 #include <iostream>
 
 #include "../HeadTracker/StereoAnalyzer.h"
-#include "../HeadTracker/IOpenCV.h"
-#include "../HeadTracker/IFiWiCamera.h"
+#include "../HeadTracker/IOpenCV.hpp"
+#include "../HeadTracker/IFiWiCamera.hpp"
 
 #include "HeadTrackerClient.h"
 

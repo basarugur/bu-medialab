@@ -26,7 +26,10 @@ RenderController* IGlut::p_rc;
 
 Light* IGlut::p_light;
 
+Shader* IGlut::p_shader;
+
 int IGlut::submenus[1];
+GLuint IGlut::textures[1];
 
 using namespace glut_env;
 
@@ -37,8 +40,8 @@ IGlut::IGlut(int argc, char** argv)
     cm_win_width = 85;
     cm_win_height = 64;
 
-    px_win_width = 1024;
-    px_win_height = 768;
+    px_win_width = PX_WIN_WIDTH;
+    px_win_height = PX_WIN_HEIGHT;
 
     cm_user_height = 70;
 
@@ -46,7 +49,7 @@ IGlut::IGlut(int argc, char** argv)
 
     deg_user_yaw = 0.0;
 
-    K = 0.1;
+    K = 0.5;
 
     last_x = 0;
     last_y = 0;
@@ -58,6 +61,7 @@ IGlut::IGlut(int argc, char** argv)
     delta_t = 1.f;
     use_camera = false;
     use_wiimote = false;
+    use_shaders = false;
     online_mode = false;
 
     half_eye_sep_x = 0.f;
@@ -69,13 +73,15 @@ IGlut::IGlut(int argc, char** argv)
 
     /// Notice: VRML file should be taken as program argument.
     //CreateScene(p_scene, argv[1]);
-    CreateScene("res/chapel_97-5.wrl");
-    //CreateScene("res/box.wrl");
+    //CreateScene("res/chapel_97-5.wrl");
+    CreateScene("res/boxes.wrl");
 
     p_camera = new Camera( Point3(0, -cm_user_to_screen_center, cm_user_height) );
 
     p_grid = new CanvasGrid( XY_GRID );
     p_grid->setAxesDrawn(false);
+
+    p_shader = new Shader();
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_STEREO);
@@ -100,6 +106,7 @@ IGlut::~IGlut()
     delete p_grid;
     delete p_rc;
     delete p_light;
+    delete p_shader;
 }
 
 void IGlut::Init()
@@ -128,8 +135,29 @@ void IGlut::Init()
 	glCullFace(GL_BACK);
 	glEnable(GL_COLOR_MATERIAL);
 	glShadeModel(GL_FLAT);
+	glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	InitTextures();
+
+    p_shader->setShaders();
 
 	glutMainLoop();
+}
+
+void IGlut::InitTextures()
+{
+    glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &textures[0]);
+
+    glBindTexture(GL_TEXTURE_2D, textures[0]);
+
+    glTexImage2D( GL_TEXTURE_2D, 0, 4, PX_WIN_WIDTH, PX_WIN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, frame_buf);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void IGlut::PrepareMenus()
@@ -503,95 +531,105 @@ void IGlut::Timer(int timer_id)
 void IGlut::Display(void)
 {
     //usleep(25000);
-
     glDrawBuffer(GL_BACK_LEFT);
-    DrawToOneBuffer(half_eye_sep_x, half_eye_sep_y);
+    if (use_shaders)
+    {
+        glReadBuffer(GL_BACK_LEFT);
+        DrawToOneBuffer(half_eye_sep_x, half_eye_sep_y, 1, 2, true);
+        DrawTextureWithShader(half_eye_sep_x, half_eye_sep_y);
+        DrawToOneBuffer(half_eye_sep_x, half_eye_sep_y, 0.1, 1, false);
+    }
+    else
+        DrawToOneBuffer(half_eye_sep_x, half_eye_sep_y, 0.1, 2, true);
+
+    /*GLenum e;
+    while ( (e=glGetError()) != GL_NO_ERROR )
+       cout  << "Error " << e << endl;*/
 
 	glDrawBuffer(GL_BACK_RIGHT);
-    DrawToOneBuffer(-half_eye_sep_x, -half_eye_sep_y);
+	if (use_shaders)
+    {
+        glReadBuffer(GL_BACK_RIGHT);
+        DrawToOneBuffer(-half_eye_sep_x, -half_eye_sep_y, 1, 2, true);
+        DrawTextureWithShader(-half_eye_sep_x, -half_eye_sep_y);
+        DrawToOneBuffer(-half_eye_sep_x, -half_eye_sep_y, 0.1, 1, false);
+    }
+    else
+        DrawToOneBuffer(-half_eye_sep_x, -half_eye_sep_y, 0.1, 2, true);
 }
 
-void IGlut::DrawBaseGrid()
+void IGlut::CopyFrameBufferToTexture()
 {
-    glDisable(GL_LIGHTING);
+    /// Get a copy of framebuffer to texture0
+    glActiveTexture( GL_TEXTURE0 );
+    glBindTexture(GL_TEXTURE_2D, textures[0]);
 
-    float grid_step = 0.1;
-    int half_win_w = 1, //cm_win_width * .5f,
-        half_win_h = 1; // cm_win_height * .5f,
-    float half_user_h = 0.5; //grid_step * 2;
+    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, px_win_width, px_win_height);
 
-    half_win_h = ((float)half_win_h / grid_step) * grid_step;
-    half_win_w = ((float)half_win_w / grid_step) * grid_step;
-
-    glLineWidth(2);
-
-
-    /*glBegin(GL_QUADS);
-        glColor3f(1.f, 0.f, 0.f);
-        glVertex3f(-grid_step, -grid_step, 0);
-        glColor3f(0.f, 0.5f, 0.f);
-        glVertex3f(grid_step, -grid_step, 0);
-        glColor3f(0.f, 0.f, 1.f);
-        glVertex3f(grid_step, grid_step, 0);
-        glVertex3f(-grid_step, grid_step, 0);
-    glEnd();*/
-
-    glBegin(GL_LINES);
-    for(float i=-half_win_w; i<=half_win_w; i+=grid_step)
-        for(float j=-half_win_h; j<=half_win_h; j+=grid_step)
-            for(float k=half_user_h; k<=half_user_h; k+=grid_step)
-            {
-                glVertex3f(i, -half_win_h, k);
-                glVertex3f(i, half_win_h, k);
-
-                glVertex3f(-half_win_w, j, k);
-                glVertex3f(half_win_w, j, k);
-
-                glVertex3f(i, j, 0);
-                glVertex3f(i, j, half_user_h);
-            }
-
-    glEnd();
-    glEnable(GL_LIGHTING);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-/*void IGlut::DrawScene()
+void IGlut::DrawTextureWithShader(float cm_camera_tilt_x, float cm_camera_tilt_y)
 {
-    DrawBaseGrid();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    /*float mult=0.5;
-	for(float y=-*mult;y<=500*mult;y+=200*mult)
-        for(float x=-700*mult;x<=700*mult;x+=200*mult)
-        {
-            glPushMatrix();
+    glUseProgram( p_shader->sh_prog[BLUR] );
 
-            // düzlemin üstüne koy
-            glTranslatef(x, y, 0);
-
-            // küpleri çiz
-            glutSolidCube(50.0*mult);
-
-            glPopMatrix();
-        }*\
+    /// Prepare orthographic 2D projection
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, px_win_width, 0, px_win_height, 0, 1);
+    glMatrixMode(GL_MODELVIEW);
 
     glPushMatrix();
 
-    glColor3f(0.7f, 1.f, 1.f);
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_LIGHTING);
 
-    glRotatef(obj_rot.pitch + 90, 1, 0, 0);
-    glRotatef(obj_rot.roll, 0, 1, 0);
+    /// Use texture0 with the last frame buffer
+    glActiveTexture( GL_TEXTURE0 );
+    glBindTexture(GL_TEXTURE_2D, textures[0]);
 
-    glTranslatef(obj_pos.x, obj_pos.y, obj_pos.z);
+    /// Parameter for translating orthographic coordinates to perspective projection
+    float o2p = 5.f;
+
+    glTranslatef(cm_camera_tilt_x * o2p, cm_camera_tilt_y * o2p, 0.f);
+
+    glNormal3f(0.f, 0.f, 1.f);
+
+    glBegin(GL_QUADS);
+        glMultiTexCoord2f(GL_TEXTURE0, 0, 0); glVertex2f( 0.f, 0.f );
+        glMultiTexCoord2f(GL_TEXTURE0, 1, 0); glVertex2f( px_win_width, 0.f );
+        glMultiTexCoord2f(GL_TEXTURE0, 1, 1); glVertex2f( px_win_width, px_win_height );
+        glMultiTexCoord2f(GL_TEXTURE0, 0, 1); glVertex2f( 0.f, px_win_height );
+    glEnd();
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    glEnable(GL_LIGHTING);
+    glEnable(GL_DEPTH_TEST);
 
     glPopMatrix();
-}*/
-float z_h = 10;
+}
 
-void IGlut::DrawToOneBuffer(float cm_camera_tilt_x, float cm_camera_tilt_y)
+float z_h = 16;
+
+void IGlut::DrawToOneBuffer(float cm_camera_tilt_x, float cm_camera_tilt_y,
+                            float frustum_z_start, float frustum_z_end,
+                            bool first_pass)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	if (first_pass)
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glUseProgram( p_shader->sh_prog[SAME] );
+
+    /** Here, t is used as both the frustum z direction start (= near clipping),
+     *  and scaling parameter for x and y directions
+     *  frustum z direction end is "far clipping" parameter
+     */
+
 	float frusLeft, frusRight, frusBottom, frusTop, frusNear, frusFar,
-          t = 0.1; // frustum scaling parameter
+          t = frustum_z_start;
 
 /*  glViewport(0, win_h/2, win_w, win_h/2);
 
@@ -621,11 +659,11 @@ void IGlut::DrawToOneBuffer(float cm_camera_tilt_x, float cm_camera_tilt_y)
     frusTop = (-(cam_pos.z-cm_win_height * .5) + cm_win_height * .5) * 0.1;
     */
 
-    frusNear = p_camera->position().z() * K;
+    frusNear = p_camera->position().z() * frustum_z_start;
 
-    frusFar = p_camera->position().z() * 2;
+    frusFar = p_camera->position().z() * frustum_z_end;
 
-    // rendele
+    /// Define the frustum
 	glFrustum( frusLeft, frusRight, frusBottom, frusTop, frusNear, frusFar);
 
 	glMatrixMode(GL_MODELVIEW);
@@ -636,7 +674,7 @@ void IGlut::DrawToOneBuffer(float cm_camera_tilt_x, float cm_camera_tilt_y)
                    gl_light_position[2],
                    gl_light_position[1]);
 
-	// sert bak
+	// Assign camera values for gluLookAt
 	Point3 glEyePos(p_camera->position().x() + cm_camera_tilt_x,
                     p_camera->position().y() + cm_camera_tilt_y,
                     p_camera->position().z() );
@@ -651,19 +689,7 @@ void IGlut::DrawToOneBuffer(float cm_camera_tilt_x, float cm_camera_tilt_y)
 	p_camera->setLookAtPoint( glCenterPos );
 	p_camera->setUpVector( glUpVector );
 
-	/*gluLookAt(cam_pos.x+eye_sep_x, cam_pos.y - cm_win_height * .5 + eye_sep_y, cam_pos.z - cm_win_height * .5,
-              cam_pos.x+eye_sep_x, 0.0, cam_pos.z - cm_win_height * .5,
-              0, 0, 1);*/
-
-	/// kullanıcı hizasından ekranın olduğu yere taşı
-	// glTranslatef(0.0, user_to_screen, 0.0);
-
-	/// obsolete:
-	// DrawScene();
-
-    // DrawBaseGrid();
-
-    glTranslatef(0, 0, -z_h);
+	glTranslatef(0, 0, -z_h);
 
     p_scene->draw(p_camera, NULL, SHADED);
 
@@ -673,6 +699,8 @@ void IGlut::DrawToOneBuffer(float cm_camera_tilt_x, float cm_camera_tilt_y)
 
 	glPopMatrix();
 
+    if (use_shaders && first_pass)
+        CopyFrameBufferToTexture();
 }
 
 void IGlut::UpdateUserPositionByMouse(int mouse_x, int mouse_y)

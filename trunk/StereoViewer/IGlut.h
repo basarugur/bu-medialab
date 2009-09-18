@@ -17,6 +17,9 @@
 // For with-mouse simulation purposes: 1024 Pixels = 40 cm
 #define PX_2_CM 0.16
 
+#define PX_WIN_WIDTH 1024
+#define PX_WIN_HEIGHT 768
+
 #define SERVER_IP "79.123.176.157"
 
 class HeadTrackerClient;
@@ -25,6 +28,7 @@ class Camera;
 class CanvasGrid;
 class RenderController;
 class Light;
+class Shader;
 
 using namespace std;
 
@@ -65,20 +69,23 @@ namespace glut_env
     // Different modes of the program:
     static bool use_camera,    /// whether camera is used or not
                 use_wiimote,   /// whether wiimote is used or not
-                online_mode;   /// whether head tracking is applied in online mode
+                online_mode,   /// whether head tracking is applied in online mode
+                use_shaders;   /// whether "blurring far objects" shading will be used
 
     static float half_eye_sep_x, /// half of eye separation in x axis
                  half_eye_sep_y; /// half of eye separation in y axis
 
-    static GLfloat gl_light_position[4] = { 100.0f, 150.0f, 0.0f, 1.0f };
+    static GLfloat gl_light_position[4] = { 10.0f, 10.0f, -20.0f, 1.0f };
     static GLfloat gl_light_intensity[4] = { 0.8f, 0.8f, 0.8f, 1.0f };
-    static GLfloat gl_ambient_intensity[4] = { 0.2f, 0.2f, 0.2f, 1.0f };
+    static GLfloat gl_ambient_intensity[4] = { 0.4f, 0.4f, 0.4f, 1.0f };
 
     static enum {
         TOGGLE_FULLSCREEN = 0,
         TOGGLE_WIIMOTE = 1,
         RENDER_SCENE = 2
     } options;
+
+    static GLubyte frame_buf[PX_WIN_WIDTH][PX_WIN_HEIGHT][4];
 }
 
 class IGlut
@@ -91,6 +98,10 @@ public:
     //-------------------------------------------------------------------------------
     /// \brief Initialization, registering GLUT related callbacks
     static void Init();
+
+    //-------------------------------------------------------------------------------
+    /// \brief Texture-related initializations
+    static void InitTextures();
 
     //-------------------------------------------------------------------------------
     /// \brief Right click menu items preparation
@@ -140,17 +151,24 @@ public:
     void CreateScene(string VRMLfile);
 
     //-------------------------------------------------------------------------------
-    /// \brief Draw the current 3D scene with GL functions (obsolete)
-    // void DrawScene();
+    /// \brief Get a copy of frame buffer to textures[0]
+    static void CopyFrameBufferToTexture();
 
     //-------------------------------------------------------------------------------
-    /// \brief Drawing a reference grid at base, i.e. "y=0" plane.
-    static void DrawBaseGrid();
+    /// \brief Draw fullscreen texture copy of frame buffer with simple shading
+    static void DrawTextureWithShader(float cm_camera_tilt_x, float cm_camera_tilt_y);
 
     //-------------------------------------------------------------------------------
-    /// \brief Disparity preparation for left / right stereo buffers and
+    /// \brief Off-axis frustum preparation for left / right stereo buffers and
     ///         drawing afterwards.
-    static void DrawToOneBuffer(float cm_camera_tilt_x, float cm_camera_tilt_y);
+    /// For shading, drawing of 3D scene is done twice.
+    /// At first pass, frame buffer is cleared so that a clear picture
+    /// of the scene can be copied to the texture.
+    /// At second pass, texture is drawn with shaders, and then
+    /// the scene is drawn again.
+    static void DrawToOneBuffer(float cm_camera_tilt_x, float cm_camera_tilt_y,
+                                float frustum_z_start, float frustum_z_end,
+                                bool first_pass);
 
     //-------------------------------------------------------------------------------
     /// \brief Updating user / camera position by mouse position
@@ -182,6 +200,8 @@ public:
     static CanvasGrid* p_grid;
     static RenderController* p_rc;
     static Light* p_light;
+    static Shader* p_shader;
 
     static int submenus[1];
+    static GLuint textures[1];
 };
