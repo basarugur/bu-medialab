@@ -61,7 +61,7 @@ IGlut::IGlut(int argc, char** argv)
     delta_t = 1.f;
     use_camera = false;
     use_wiimote = false;
-    use_shaders = false;
+    use_shaders = true;
     online_mode = false;
 
     half_eye_sep_x = 0.f;
