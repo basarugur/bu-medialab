@@ -45,19 +45,9 @@
 			<Add library="../SceneModeller_API/src/SceneModeller.so" />
 			<Add library="/usr/lib/libglut.so" />
 		</Linker>
-		<Unit filename="IFiWiCamera.h">
-			<Option compile="1" />
-			<Option link="1" />
-		</Unit>
-		<Unit filename="IOpenCV.h">
-			<Option compile="1" />
-			<Option link="1" />
-		</Unit>
-		<Unit filename="Server.h">
-			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="IFiWiCamera.hpp" />
+		<Unit filename="IOpenCV.hpp" />
+		<Unit filename="Server.hpp" />
 		<Unit filename="StereoAnalyzer.cpp" />
 		<Unit filename="StereoAnalyzer.h" />
 		<Unit filename="main.cpp">

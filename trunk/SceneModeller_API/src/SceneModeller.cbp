@@ -11,6 +11,8 @@
 				<Option object_output="Release Win32" />
 				<Option type="3" />
 				<Option compiler="gcc" />
+				<Option parameters="test.sh" />
+				<Option host_application="bash" />
 				<Option createDefFile="1" />
 				<Option createStaticLib="1" />
 				<Compiler>
@@ -49,6 +51,7 @@
 				<Option object_output="Debug Win32" />
 				<Option type="3" />
 				<Option compiler="gcc" />
+				<Option host_application="stereo_viewer-d" />
 				<Option createDefFile="1" />
 				<Option createStaticLib="1" />
 				<Compiler>

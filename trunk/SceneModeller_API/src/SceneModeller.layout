@@ -2,22 +2,22 @@
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Release Win32" />
 	<File name="CanvasGrid.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="391" topLine="6" />
+		<Cursor position="391" topLine="0" />
 	</File>
 	<File name="CanvasGrid.h" open="0" top="0" tabpos="0">
-		<Cursor position="539" topLine="16" />
+		<Cursor position="281" topLine="6" />
 	</File>
 	<File name="RenderController.cpp" open="0" top="0" tabpos="1">
-		<Cursor position="2371" topLine="27" />
+		<Cursor position="12791" topLine="305" />
 	</File>
 	<File name="RenderController.h" open="0" top="0" tabpos="0">
 		<Cursor position="95" topLine="0" />
 	</File>
 	<File name="SceneDrawer.cpp" open="0" top="0" tabpos="1">
-		<Cursor position="15275" topLine="504" />
+		<Cursor position="26" topLine="0" />
 	</File>
 	<File name="SceneDrawer.h" open="0" top="0" tabpos="7">
-		<Cursor position="575" topLine="0" />
+		<Cursor position="14" topLine="0" />
 	</File>
 	<File name="common.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="80" topLine="0" />
@@ -26,16 +26,37 @@
 		<Cursor position="122" topLine="24" />
 	</File>
 	<File name="core/camera.cpp" open="0" top="0" tabpos="8">
-		<Cursor position="136" topLine="0" />
+		<Cursor position="225" topLine="0" />
 	</File>
 	<File name="core/camera.h" open="0" top="0" tabpos="0">
-		<Cursor position="937" topLine="12" />
+		<Cursor position="935" topLine="14" />
 	</File>
 	<File name="core/circle.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="73" topLine="0" />
+		<Cursor position="2654" topLine="83" />
+	</File>
+	<File name="core/circle.h" open="0" top="0" tabpos="0">
+		<Cursor position="382" topLine="0" />
+	</File>
+	<File name="core/cone.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="3704" topLine="115" />
+	</File>
+	<File name="core/cone.h" open="0" top="0" tabpos="0">
+		<Cursor position="362" topLine="6" />
 	</File>
 	<File name="core/cube.h" open="0" top="0" tabpos="0">
-		<Cursor position="146" topLine="0" />
+		<Cursor position="307" topLine="0" />
+	</File>
+	<File name="core/cylinder.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="3077" topLine="79" />
+	</File>
+	<File name="core/cylinder.h" open="0" top="0" tabpos="0">
+		<Cursor position="403" topLine="0" />
+	</File>
+	<File name="core/disk.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="2394" topLine="68" />
+	</File>
+	<File name="core/disk.h" open="0" top="0" tabpos="0">
+		<Cursor position="393" topLine="0" />
 	</File>
 	<File name="core/face.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="76" topLine="0" />
@@ -47,10 +68,10 @@
 		<Cursor position="763" topLine="20" />
 	</File>
 	<File name="core/gfxobject.cpp" open="0" top="0" tabpos="4">
-		<Cursor position="1304" topLine="24" />
+		<Cursor position="2020" topLine="56" />
 	</File>
 	<File name="core/gfxobject.h" open="0" top="0" tabpos="6">
-		<Cursor position="2108" topLine="62" />
+		<Cursor position="2991" topLine="59" />
 	</File>
 	<File name="core/integrator.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="23" topLine="0" />
@@ -73,8 +94,14 @@
 	<File name="core/normal3.h" open="0" top="0" tabpos="0">
 		<Cursor position="222" topLine="0" />
 	</File>
+	<File name="core/octree.h" open="0" top="0" tabpos="0">
+		<Cursor position="201" topLine="0" />
+	</File>
+	<File name="core/partialdisk.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1981" topLine="63" />
+	</File>
 	<File name="core/partialdisk.h" open="0" top="0" tabpos="3">
-		<Cursor position="904" topLine="14" />
+		<Cursor position="480" topLine="12" />
 	</File>
 	<File name="core/point3.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="19" topLine="0" />
@@ -91,59 +118,92 @@
 	<File name="core/ray.h" open="0" top="0" tabpos="0">
 		<Cursor position="1599" topLine="35" />
 	</File>
+	<File name="core/rectangle.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1169" topLine="26" />
+	</File>
 	<File name="core/rectangle.h" open="0" top="0" tabpos="0">
-		<Cursor position="727" topLine="4" />
+		<Cursor position="384" topLine="4" />
 	</File>
 	<File name="core/sampler.h" open="0" top="0" tabpos="6">
 		<Cursor position="795" topLine="34" />
 	</File>
 	<File name="core/scene.cpp" open="0" top="0" tabpos="4">
-		<Cursor position="13033" topLine="495" />
+		<Cursor position="49" topLine="0" />
 	</File>
 	<File name="core/scene.h" open="0" top="0" tabpos="2">
-		<Cursor position="3185" topLine="120" />
+		<Cursor position="3295" topLine="125" />
 	</File>
-	<File name="core/shape.h" open="0" top="0" tabpos="5">
-		<Cursor position="882" topLine="19" />
+	<File name="core/shape.cpp" open="0" top="0" tabpos="3">
+		<Cursor position="22" topLine="0" />
 	</File>
-	<File name="core/transformation.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="1616" topLine="73" />
+	<File name="core/shape.h" open="0" top="0" tabpos="4">
+		<Cursor position="619" topLine="21" />
+	</File>
+	<File name="core/sphere.cpp" open="0" top="0" tabpos="5">
+		<Cursor position="1465" topLine="0" />
+	</File>
+	<File name="core/sphere.h" open="0" top="0" tabpos="0">
+		<Cursor position="446" topLine="6" />
+	</File>
+	<File name="core/torus.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="3230" topLine="92" />
+	</File>
+	<File name="core/torus.h" open="0" top="0" tabpos="0">
+		<Cursor position="397" topLine="0" />
+	</File>
+	<File name="core/transformation.cpp" open="0" top="0" tabpos="8">
+		<Cursor position="361" topLine="0" />
 	</File>
 	<File name="core/transformation.h" open="0" top="0" tabpos="7">
-		<Cursor position="7125" topLine="283" />
+		<Cursor position="6647" topLine="280" />
+	</File>
+	<File name="core/triangle.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="502" topLine="0" />
 	</File>
 	<File name="core/triangle.h" open="0" top="0" tabpos="9">
-		<Cursor position="3387" topLine="135" />
+		<Cursor position="267" topLine="24" />
 	</File>
-	<File name="core/trianglemesh.cpp" open="0" top="0" tabpos="2">
-		<Cursor position="207" topLine="0" />
+	<File name="core/trianglemesh.cpp" open="0" top="0" tabpos="6">
+		<Cursor position="193" topLine="0" />
 	</File>
-	<File name="core/trianglemesh.h" open="0" top="0" tabpos="3">
-		<Cursor position="142" topLine="39" />
+	<File name="core/trianglemesh.h" open="0" top="0" tabpos="7">
+		<Cursor position="920" topLine="0" />
+	</File>
+	<File name="core/triangleshape.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1123" topLine="19" />
+	</File>
+	<File name="core/triangleshape.h" open="0" top="0" tabpos="0">
+		<Cursor position="430" topLine="0" />
+	</File>
+	<File name="core/twosidedcylinder.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="3926" topLine="116" />
+	</File>
+	<File name="core/twosidedcylinder.h" open="0" top="0" tabpos="0">
+		<Cursor position="440" topLine="0" />
 	</File>
 	<File name="core/vector3.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="20" topLine="0" />
 	</File>
 	<File name="core/vector3.h" open="0" top="0" tabpos="2">
-		<Cursor position="403" topLine="18" />
+		<Cursor position="403" topLine="86" />
 	</File>
 	<File name="core/vertex.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="19" topLine="0" />
 	</File>
 	<File name="core/vertex.h" open="0" top="0" tabpos="0">
-		<Cursor position="547" topLine="0" />
+		<Cursor position="106" topLine="0" />
 	</File>
 	<File name="editing/EditingCamera.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="102" topLine="0" />
+		<Cursor position="512" topLine="9" />
 	</File>
 	<File name="editing/EditingCamera.h" open="0" top="0" tabpos="0">
 		<Cursor position="248" topLine="0" />
 	</File>
 	<File name="formats/rawdevice.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="4578" topLine="151" />
+		<Cursor position="4564" topLine="155" />
 	</File>
 	<File name="formats/stldevice.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="5189" topLine="179" />
+		<Cursor position="5021" topLine="178" />
 	</File>
 	<File name="formats/vrml/AudioClipNode.cpp" open="0" top="0" tabpos="18">
 		<Cursor position="259" topLine="0" />
@@ -188,7 +248,7 @@
 		<Cursor position="2443" topLine="126" />
 	</File>
 	<File name="formats/vrmldevice.cpp" open="0" top="0" tabpos="5">
-		<Cursor position="3173" topLine="159" />
+		<Cursor position="12147" topLine="386" />
 	</File>
 	<File name="formats/vrmldevice.h" open="0" top="0" tabpos="5">
 		<Cursor position="978" topLine="14" />
@@ -203,9 +263,18 @@
 		<Cursor position="25" topLine="0" />
 	</File>
 	<File name="tools/CameraTool.h" open="0" top="0" tabpos="0">
-		<Cursor position="0" topLine="111" />
+		<Cursor position="1667" topLine="56" />
+	</File>
+	<File name="tools/rotationTool.h" open="0" top="0" tabpos="0">
+		<Cursor position="2538" topLine="75" />
+	</File>
+	<File name="tools/scaleTool.h" open="0" top="0" tabpos="0">
+		<Cursor position="1271" topLine="37" />
 	</File>
 	<File name="tools/translationTool.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="22" topLine="0" />
+	</File>
+	<File name="tools/translationTool.h" open="0" top="0" tabpos="0">
+		<Cursor position="5777" topLine="189" />
 	</File>
 </CodeBlocks_layout_file>

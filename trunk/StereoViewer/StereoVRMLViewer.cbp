@@ -50,6 +50,7 @@
 			<Add library="/usr/lib/libpng.so" />
 			<Add library="/home/medialab/Projects/HeadTracker/libHeadTracker.a" />
 			<Add library="/home/medialab/Projects/SceneModeller_API/src/SceneModeller.so" />
+			<Add library="/usr/lib/libGLEW.a" />
 		</Linker>
 		<Unit filename="HeadTrackerClient.cpp" />
 		<Unit filename="HeadTrackerClient.h" />
@@ -60,6 +61,11 @@
 			<Option weight="0" />
 		</Unit>
 		<Unit filename="main.cpp" />
+		<Unit filename="shaders/Shader.hpp" />
+		<Unit filename="shaders/sv_blur.frag" />
+		<Unit filename="shaders/sv_blur.vert" />
+		<Unit filename="shaders/sv_same.frag" />
+		<Unit filename="shaders/sv_same.vert" />
 		<Unit filename="version.h">
 			<Option target="Release" />
 		</Unit>
