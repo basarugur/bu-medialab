@@ -9,6 +9,7 @@
 
 #include "cv.h"
 #include "highgui.h"
+#include <vector>
 #include <algorithm>
 
 #define MAX_CORNER 3
@@ -60,7 +61,7 @@ simple_event reset_corners;
 
 bool comp_CvPoint2D32f( CvPoint2D32f p1, CvPoint2D32f p2 )
 {
-    if ( p1.y == p2.y )
+    if ( fabs(p1.y-p2.y) < 10 )
         return ( p1.x < p2.x );
     else
         return ( p1.y < p2.y );
@@ -281,14 +282,14 @@ public:
         if( imageL->origin )
             y = imageR->height - y;
 
-        if( event == CV_EVENT_LBUTTONDOWN )
+        if( event == CV_EVENT_MBUTTONDOWN )
         {
             find_corners(imageL, cvPoint(x, y), cornersL, prev_cornersL);
 
             find_corners(imageR, cvPoint(x - 20, y), cornersR, prev_cornersR);
         }
 
-        if( event == CV_EVENT_MBUTTONDOWN )
+        if( event == CV_EVENT_LBUTTONDOWN )
         {
             cornersL[new_crn_idxL] = prev_cornersL[new_crn_idxL] = cvPoint2D32f(x, y);
             new_crn_idxL = (++new_crn_idxL)%3;
@@ -303,14 +304,14 @@ public:
         if( imageR->origin )
             y = imageR->height - y;
 
-        if( event == CV_EVENT_LBUTTONDOWN )
+        if( event == CV_EVENT_MBUTTONDOWN )
         {
             find_corners(imageR, cvPoint(x, y), cornersR, prev_cornersR);
 
             find_corners(imageL, cvPoint(x + 20, y), cornersL, prev_cornersL);
         }
 
-        if( event == CV_EVENT_MBUTTONDOWN )
+        if( event == CV_EVENT_LBUTTONDOWN )
         {
             cornersR[new_crn_idxR] = prev_cornersR[new_crn_idxR] = cvPoint2D32f(x, y);
             new_crn_idxR = (++new_crn_idxR)%3;

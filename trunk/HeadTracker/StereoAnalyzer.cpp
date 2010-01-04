@@ -5,6 +5,8 @@
 
 using namespace std;
 
+
+
 StereoAnalyzer::StereoAnalyzer(void)
 {
 	double _hfow = 43.0;
@@ -13,7 +15,7 @@ StereoAnalyzer::StereoAnalyzer(void)
 
 	camdist = 12.0;
 
-	hfow = _hfow * PI / 180.0;
+	hfow = _hfow * M_PI / 180.0;
 	width = _width;
 	height = _height;
 
@@ -22,7 +24,7 @@ StereoAnalyzer::StereoAnalyzer(void)
 
 StereoAnalyzer::StereoAnalyzer(double _hfow, double _width, double _height, double _camdist)
 {
-	hfow = _hfow * PI / 180.0;
+	hfow = _hfow * M_PI / 180.0;
 	width = _width;
 	height = _height;
 
@@ -35,7 +37,7 @@ StereoAnalyzer::~StereoAnalyzer(void)
 {
 }
 
-bool StereoAnalyzer::computePosition(CvPoint2D32f left, CvPoint2D32f right, Point3& p)
+bool StereoAnalyzer::computePosition(CvPoint2D32f left, CvPoint2D32f right, CvPoint3D32f& p)
 {
 	double alpha;
 
@@ -51,7 +53,7 @@ bool StereoAnalyzer::computePosition(CvPoint2D32f left, CvPoint2D32f right, Poin
 	{
 		//POINT AT INFINITY
 
-		p = Point3( 0.0, 0.0, std::numeric_limits<double>::max() );
+		p = cvPoint3D32f( 0.0, 0.0, std::numeric_limits<double>::max() );
 
 		return false;
 	}
@@ -94,9 +96,9 @@ bool StereoAnalyzer::computePosition(CvPoint2D32f left, CvPoint2D32f right, Poin
 
 		temp2 = temp1 * tanbetaleft;
 
-		p = Point3( (camdist/2) + temp1,
-                    temp2 * sin(alpha),
-                    temp2 * cos(alpha) );
+		p = cvPoint3D32f( (camdist * 0.5f) + temp1,
+                          temp2 * sin(alpha),
+                          temp2 * cos(alpha) );
     }
 
 	else if(dleft > 0.0 && dright > 0.0)
@@ -105,9 +107,9 @@ bool StereoAnalyzer::computePosition(CvPoint2D32f left, CvPoint2D32f right, Poin
 
 		temp2 = temp1 * tanbetaright;
 
-		p = Point3( -1 * ((camdist/2) + temp1),
-                    temp2 * sin(alpha),
-                    temp2 * cos(alpha) );
+		p = cvPoint3D32f( -1 * ((camdist/2) + temp1),
+                          temp2 * sin(alpha),
+                          temp2 * cos(alpha) );
 
 	}
 
@@ -119,9 +121,9 @@ bool StereoAnalyzer::computePosition(CvPoint2D32f left, CvPoint2D32f right, Poin
 			{
 				temp2 = camdist * tanbetaright;
 
-				p = Point3( camdist/2,
-                            temp2 * sin(alpha),
-                            temp2 * cos(alpha) );
+				p = cvPoint3D32f( camdist/2,
+                                  temp2 * sin(alpha),
+                                  temp2 * cos(alpha) );
 
 			}
 
@@ -129,9 +131,9 @@ bool StereoAnalyzer::computePosition(CvPoint2D32f left, CvPoint2D32f right, Poin
 			{
 				temp2 = camdist * tanbetaleft;
 
-				p = Point3( -1 * (camdist/2),
-                            temp2 * sin(alpha),
-                            temp2 * cos(alpha) );
+				p = cvPoint3D32f( -1 * (camdist/2),
+                                  temp2 * sin(alpha),
+                                  temp2 * cos(alpha) );
 			}
 
 
@@ -143,9 +145,9 @@ bool StereoAnalyzer::computePosition(CvPoint2D32f left, CvPoint2D32f right, Poin
 
 			temp2 = temp1 * tanbetaright;
 
-			p = Point3( temp1 - (camdist/2),
-                        temp2 * sin(alpha),
-                        temp2 * cos(alpha) );
+			p = cvPoint3D32f( temp1 - (camdist/2),
+                              temp2 * sin(alpha),
+                              temp2 * cos(alpha) );
 
 		}
 
@@ -154,17 +156,20 @@ bool StereoAnalyzer::computePosition(CvPoint2D32f left, CvPoint2D32f right, Poin
 
 	if( (((left.y + right.y)/2) - (height/2))>0.0)
 	{
-		p = Point3( p.x(), -1.0 * p.y(), p.z() );
+		p = cvPoint3D32f( p.x, -1.0 * p.y, p.z );
 	}
 
 	return true;
 
 }
 
-bool StereoAnalyzer::findLocationVector(CvPoint2D32f* leftImagePoints, CvPoint2D32f* rightImagePoints,
-                                        Point3& headPosition, Vector3& lookVector, Matrix coord_trans)
+bool StereoAnalyzer::findLocationVector(CvPoint2D32f* leftImagePoints,
+                                        CvPoint2D32f* rightImagePoints,
+                                        CvPoint3D32f& headPosition,
+                                        CvPoint3D32f& lookVector,
+                                        CvMat& M_coord_trans)
 {
-	Point3 led1, led2, led3;	//front LED
+	CvPoint3D32f led1, led2, led3;	//front LED
 
     if(!computePosition(leftImagePoints[0], rightImagePoints[0], led1))
 		return false;
@@ -175,27 +180,46 @@ bool StereoAnalyzer::findLocationVector(CvPoint2D32f* leftImagePoints, CvPoint2D
 	if(!computePosition(leftImagePoints[2], rightImagePoints[2], led3))
 		return false;
 
-    //may need to handle
-	//leds positions and orientation
+    // may need to handle
+	// leds positions and orientation
 
-	//double * position = new double[3];
-	Point3 center = (led1 + led2 + led3) * 0.3333333f;
+	float center[4] = { (led1.x + led2.x + led3.x) * 0.3333333f,
+                        (led1.y + led2.y + led3.y) * 0.3333333f,
+                        (led1.z + led2.z + led3.z) * 0.3333333f,
+                        1.f };
 
-//    cout << "CC: " << center.x() << " " << center.y() << " " << center.z() << endl;
+    CvMat V_center = cvMat(4, 1, CV_32FC1, center);
 
-	headPosition = coord_trans * center;
+//  cout << "CC: " << center.x() << " " << center.y() << " " << center.z() << endl;
+
+    CvMat *V_head_position = cvCreateMat( 4, 1, CV_32FC1 );
+
+    cvMatMul( &M_coord_trans, &V_center, V_head_position );
+
+    // Set homogeneous coordinates:
+    float invLast = cvmGet( V_head_position, 3, 0 );
+
+    headPosition = cvPoint3D32f( cvmGet( V_head_position, 0, 0 ) * invLast,
+                                 cvmGet( V_head_position, 1, 0 ) * invLast,
+                                 cvmGet( V_head_position, 2, 0 ) * invLast );
 
 //	cout << "HP: " << headPosition.x() << " " << headPosition.y() << " " << headPosition.z() << endl;
 
-	// adjustment may be needed
-	//headPosition = position;
+	float triangle_altitude[4] = { led3.x - (led1.x + led2.x) * 0.5f,
+                                   led3.y - (led1.y + led2.y) * 0.5f,
+                                   led3.z - (led1.z + led2.z) * 0.5f,
+                                   1.f };
 
-    //double *  vector = new double[3];
-    Point3 triangle_mid = (led1 + led2) * 0.5;
+    CvMat V_triangle_altitude = cvMat( 4, 1, CV_32FC1, triangle_altitude );
 
-    Vector3 height_vec = coord_trans * led3 - coord_trans * triangle_mid;
+    cvMatMul( &M_coord_trans, &V_triangle_altitude, &V_triangle_altitude );
 
-	lookVector = height_vec;
+    // Set homogeneous coordinates:
+    invLast = cvmGet( &V_triangle_altitude, 3, 0 );
+
+	lookVector = cvPoint3D32f( cvmGet( &V_triangle_altitude, 0, 0 ) * invLast,
+                               cvmGet( &V_triangle_altitude, 1, 0 ) * invLast,
+                               cvmGet( &V_triangle_altitude, 2, 0 ) * invLast );
 
 	return true;
 

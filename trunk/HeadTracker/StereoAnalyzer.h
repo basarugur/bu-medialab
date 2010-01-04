@@ -9,17 +9,16 @@
 
 
 #include "cv.h"
-#include "../SceneModeller_API/src/core/matrix.h"
 
 class StereoAnalyzer
 {
 public:
 	StereoAnalyzer(void);
 	StereoAnalyzer(double _hfow, double _width, double _height, double _camdist);
-	bool computePosition(CvPoint2D32f left, CvPoint2D32f right, Point3& p);
+	bool computePosition(CvPoint2D32f left, CvPoint2D32f right, CvPoint3D32f& p);
 
 	bool findLocationVector(CvPoint2D32f* leftImagePoints, CvPoint2D32f* rightImagePoints,
-                             Point3& headPosition, Vector3& lookVector, Matrix coord_trans);
+                            CvPoint3D32f& headPosition, CvPoint3D32f& lookVector, CvMat& coord_trans);
 
 	~StereoAnalyzer(void);
 

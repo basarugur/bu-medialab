@@ -14,7 +14,7 @@
 #include "IOpenCV.hpp"
 #include "IFiWiCamera.hpp"
 
-#include "Server.h"
+#include "Server.hpp"
 
 #define PI 3.141592654
 #define PI_HALF 1.570796327
@@ -23,8 +23,8 @@ StereoAnalyzer* stereo_anl;
 IFiWiCamera* cam;
 IOpenCV* cv;
 
-Point3 headPosition;    // actual 3D points
-Vector3 lookVector;     // look vector of the user
+CvPoint3D32f headPosition;    // actual 3D points
+CvPoint3D32f lookVector;     // look vector of the user
 
 /*float M_data[4][4] = { {0.76537,    0.47926,  0.45804, -114.63},
                        {0.57352,   -0.57671, -0.65950,  123.04},
@@ -36,13 +36,12 @@ Vector3 lookVector;     // look vector of the user
                               {-0.065157,  0.52556, -0.37574,  158.82},
                               { 0,          0,        0,        1} };*/
 
-static float M_data[4][4] = { { 0.64985,    -0.40669,    -0.60315,    69.29356},
-                              {-0.69327,    -0.38080,    -0.46207,    86.01625},
-                              {-0.05875,     0.79224,    -0.34371,   162.34435},
-                              { 0            0            0            1      } };
+static float M_data[16] = {  0.64985,    -0.40669,    -0.60315,    69.29356,
+                            -0.69327,    -0.38080,    -0.46207,    86.01625,
+                            -0.05875,     0.79224,    -0.34371,   162.34435,
+                             0,           0,           0,           1       };
 
-
-Matrix coord_trans(M_data);
+CvMat M_coord_trans = cvMat(4, 4, CV_32FC1, M_data);
 
 /**
 * Initializing camera components
@@ -141,16 +140,23 @@ int main(int argc,char** argv)
             break;
         }
 
-        stereo_anl->findLocationVector(cornersL, cornersR, headPosition, lookVector, coord_trans);
-        lookVector = lookVector.normalize();
+        stereo_anl->findLocationVector(cornersL, cornersR, headPosition, lookVector, M_coord_trans);
+
+        float inverse_lv_length = 1.f / sqrt ( lookVector.x * lookVector.x +
+                                               lookVector.y * lookVector.y +
+                                               lookVector.z * lookVector.z );
+
+        lookVector = cvPoint3D32f( lookVector.x * inverse_lv_length,
+                                   lookVector.y * inverse_lv_length,
+                                   lookVector.z * inverse_lv_length );
 
         /*memcpy(serial_data, (void*)(&headPosition), 3*sizeof(float));
         memcpy(serial_data+3, (void*)(&lookVector), 3*sizeof(float));
         printf("Sample [0]: %g\n", serial_data[0]);*/
         sprintf(line,
                 "%g %g %g %g %g %g\n",
-                headPosition.x(), headPosition.y(), headPosition.z(),
-                lookVector.x(), lookVector.y(), lookVector.z());
+                headPosition.x, headPosition.y, headPosition.z,
+                lookVector.x, lookVector.y, lookVector.z );
         // printf("%s\n", line);
         //if (rand()%100 < 20)
         //    printf("line [%d]: %s", strlen(line), line);
