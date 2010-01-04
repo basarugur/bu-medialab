@@ -30,29 +30,34 @@ static float M_data[4][4] = { {0.76537,    0.47926,  0.45804, -114.63},
                               {-0.065157,  0.52556, -0.37574,  158.82},
                               { 0,          0,        0,        1} }; */
 
-static float M_data[4][4] = { { 0.64985,    -0.40669,    -0.60315,    69.29356},
-                              {-0.69327,    -0.38080,    -0.46207,    86.01625},
-                              {-0.05875,     0.79224,    -0.34371,   162.34435},
-                              { 0,           0,           0,           1      } };
+static float M_data[16] = {  0.64985,    -0.40669,    -0.60315,    69.29356,
+                            -0.69327,    -0.38080,    -0.46207,    86.01625,
+                            -0.05875,     0.79224,    -0.34371,   162.34435,
+                             0,           0,           0,           1       };
 
 class StereoAnalyzer;
 class IFiWiCamera;
 class IOpenCV;
+
+struct CvPoint3D32f;
+struct CvMat;
 
 class HeadTrackerClient
 {
 public:
     HeadTrackerClient(const std::string& ip, bool online_mode);
     ~HeadTrackerClient();
+
     bool read_online();
     bool read_offline();
+
     StereoAnalyzer* stereo_anl;
     IFiWiCamera* cam;
     IOpenCV* cv;
 
-    Point3 headPosition;    // actual 3D position
-    Vector3 lookVector;     // look vector of the user
-    Matrix *coord_trans;
+    CvPoint3D32f* headPosition;    // actual 3D position
+    CvPoint3D32f* lookVector;      // look vector of the user
+    CvMat* M_coord_trans;
 
 private:
     std::string remote_ip;

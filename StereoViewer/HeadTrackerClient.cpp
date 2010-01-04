@@ -91,9 +91,13 @@ static ssize_t writen(int fd, const void *vptr, size_t n)
 
 HeadTrackerClient::HeadTrackerClient(const string& ip, bool online_mode): remote_ip(ip)
 {
-    headPosition = Point3(0, -30, 250);
-    lookVector = Vector3(0, 1, 0);
-    coord_trans = new Matrix(M_data);
+    headPosition = new CvPoint3D32f;
+    lookVector = new CvPoint3D32f;
+    M_coord_trans = cvCreateMat( 4, 4, CV_32FC1 );
+
+    *headPosition = cvPoint3D32f(0, -30, 250);
+    *lookVector = cvPoint3D32f(0, 1, 0);
+    *M_coord_trans = cvMat( 4, 4, CV_32FC1, M_data );
 
     if (!online_mode)
     {
@@ -127,7 +131,10 @@ HeadTrackerClient::~HeadTrackerClient()
     delete stereo_anl; stereo_anl = NULL;
     delete cam; cam = NULL;
     delete cv; cv = NULL;
-    delete coord_trans; coord_trans = NULL;
+
+    delete headPosition; headPosition = NULL;
+    delete lookVector; lookVector = NULL;
+    delete M_coord_trans; M_coord_trans = NULL;
 }
 
 bool HeadTrackerClient::read_online()
@@ -152,8 +159,8 @@ bool HeadTrackerClient::read_online()
     }
     else // Valid data!
     {
-        headPosition = Point3( tempo[0], tempo[1], tempo[2] );
-        lookVector = Vector3( tempo[3], tempo[4], tempo[5] );
+        *headPosition = cvPoint3D32f( tempo[0], tempo[1], tempo[2] );
+        *lookVector = cvPoint3D32f( tempo[3], tempo[4], tempo[5] );
         cout << tempo[0] << " " << tempo[1] << " " << tempo[2] << endl;
     }
 
@@ -171,8 +178,15 @@ bool HeadTrackerClient::read_offline()
         throw runtime_error("[-] OpenCV process exited");
     }
 
-    stereo_anl->findLocationVector(cornersL, cornersR, headPosition, lookVector, *coord_trans);
-    lookVector = lookVector.normalize();
+    stereo_anl->findLocationVector(cornersL, cornersR, *headPosition, *lookVector, *M_coord_trans);
+
+    float inverse_lv_length = 1.f / sqrt ( lookVector->x * lookVector->x +
+                                           lookVector->y * lookVector->y +
+                                           lookVector->z * lookVector->z );
+
+    *lookVector = cvPoint3D32f( lookVector->x * inverse_lv_length,
+                                lookVector->y * inverse_lv_length,
+                                lookVector->z * inverse_lv_length );
 
     //cout << "HP:" << headPosition.x() << " " << headPosition.y() << " " << headPosition.z() << endl;
     //cout << "LV:" << lookVector.x() << " " << lookVector.y() << " " << lookVector.z() << endl;

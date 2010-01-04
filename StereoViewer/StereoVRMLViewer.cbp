@@ -51,6 +51,7 @@
 			<Add library="/home/medialab/Projects/HeadTracker/libHeadTracker.a" />
 			<Add library="/home/medialab/Projects/SceneModeller_API/src/SceneModeller.so" />
 			<Add library="/usr/lib/libGLEW.a" />
+			<Add library="/usr/lib/libglui.a" />
 		</Linker>
 		<Unit filename="HeadTrackerClient.cpp" />
 		<Unit filename="HeadTrackerClient.h" />

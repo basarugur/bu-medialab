@@ -12,7 +12,7 @@
 #define PI 3.141592654
 #define PI_HALF 1.570796327
 
-#define HALF_EYE_SEP_CM 2
+#define HALF_EYE_SEP_CM 5
 
 // For with-mouse simulation purposes: 1024 Pixels = 40 cm
 #define PX_2_CM 0.16
@@ -67,7 +67,7 @@ namespace glut_env
     static float delta_t;
 
     // Different modes of the program:
-    static bool use_camera,    /// whether camera is used or not
+    static bool use_stereo_camera,    /// whether stereo camera is used or not
                 use_wiimote,   /// whether wiimote is used or not
                 online_mode,   /// whether head tracking is applied in online mode
                 use_shaders;   /// whether "blurring far objects" shading will be used
@@ -148,7 +148,11 @@ public:
 
     //-------------------------------------------------------------------------------
     /// \brief Creates a drawable 3D scene
-    void CreateScene(string VRMLfile);
+    static void CreateScene(string VRMLfile);
+
+    //-------------------------------------------------------------------------------
+    /// \brief GLUI interface control callback
+    static void GLUIControl(int ui_item_id);
 
     //-------------------------------------------------------------------------------
     /// \brief Get a copy of frame buffer to textures[0]

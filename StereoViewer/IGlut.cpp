@@ -2,7 +2,9 @@
 
 #include "IGlut.h"
 #include "HeadTrackerClient.h"
+#include "cv.h"
 #include "wiimote.h"
+#include "GL/glui.h"
 
 #include <fstream>
 #include <stdexcept>
@@ -16,9 +18,9 @@ extern char wii_msg[255]; // to use in opengl context
 
 HeadTrackerClient* IGlut::p_htc;
 
-Scene* IGlut::p_scene;
+Scene* IGlut::p_scene = NULL;
 
-Camera* IGlut::p_camera;
+Camera* IGlut::p_camera = NULL;
 
 CanvasGrid* IGlut::p_grid;
 
@@ -27,6 +29,9 @@ RenderController* IGlut::p_rc;
 Light* IGlut::p_light;
 
 Shader* IGlut::p_shader;
+
+GLUI* glui = NULL;
+GLUI_FileBrowser* fb;
 
 int IGlut::submenus[1];
 GLuint IGlut::textures[1];
@@ -59,9 +64,9 @@ IGlut::IGlut(int argc, char** argv)
     Buttons[2] = 0;
 
     delta_t = 1.f;
-    use_camera = false;
+    use_stereo_camera = false;
     use_wiimote = false;
-    use_shaders = true;
+    use_shaders = false;
     online_mode = false;
 
     half_eye_sep_x = 0.f;
@@ -69,14 +74,9 @@ IGlut::IGlut(int argc, char** argv)
 
     p_htc = NULL;
 
-    p_scene = new Scene();
-
     /// Notice: VRML file should be taken as program argument.
-    //CreateScene(p_scene, argv[1]);
     //CreateScene("res/chapel_97-5.wrl");
     CreateScene("res/boxes.wrl");
-
-    p_camera = new Camera( Point3(0, -cm_user_to_screen_center, cm_user_height) );
 
     p_grid = new CanvasGrid( XY_GRID );
     p_grid->setAxesDrawn(false);
@@ -248,17 +248,50 @@ void IGlut::SelectOption(int opt)
     }
 }
 
+void IGlut::GLUIControl(int ui_item_id)
+{
+    switch (ui_item_id)
+    {
+        case 1:
+            char fn[127] = "res/";
+            strcat( fn, fb->get_file() );
+            CreateScene( fn );
+            glui->close();
+
+            glutTimerFunc(20, Timer, 0);
+            break;
+    }
+}
+
 void IGlut::Keyboard(unsigned char key, int x, int y)
 {
-    if (key == 'g' || key == 'G')
+    if (key == 'f' || key == 'F')
     {
         SelectOption( TOGGLE_FULLSCREEN );
     }
+    else if (key == 'o' || key == 'O')
+    {
+
+        glui = GLUI_Master.create_glui("Open File..", 0);
+
+        GLUI_Panel *ep = new GLUI_Panel(glui, "", true);
+
+        fb = new GLUI_FileBrowser(ep, "", GLUI_PANEL_EMBOSSED, 1, GLUIControl);
+        new GLUI_Button(ep, "Open..", 2, GLUIControl);
+
+        fb->set_w( 320 );
+        fb->set_h( 240 );
+        fb->fbreaddir( "res/" );
+
+        int main_window = glui->get_glut_window_id();
+
+        glui->set_main_gfx_window(main_window);
+    }
     else if (key == 'c' || key == 'C')
     {
-        use_camera = !use_camera;
+        use_stereo_camera = !use_stereo_camera;
 
-        if (use_camera) // Reinitialize head:
+        if (use_stereo_camera) // Reinitialize head:
         {
             if (p_htc == NULL)
                 InitHeadTracker();
@@ -269,8 +302,8 @@ void IGlut::Keyboard(unsigned char key, int x, int y)
     else if (key == 'd' || key == 'D')
     {
         // let maximum delta_t be 1.f
-        /*if ( (delta_t = delta_t + 0.1f) > 1.f )
-            delta_t = 0.1f;*/
+        if ( (delta_t = delta_t + 0.1f) > 1.f )
+            delta_t = 0.1f;
     }
     else if (key == 'w' || key == 'W')
     {
@@ -443,6 +476,14 @@ void IGlut::CreateScene(string VRMLfile)
 
     */
 
+    if (p_scene != NULL)
+    {
+        delete p_scene;
+        delete p_camera;
+    }
+
+    p_scene = new Scene();
+
     VrmlDevice vrml_dev;
 
     vrml_dev.loadScene(VRMLfile, p_scene);
@@ -466,8 +507,8 @@ void IGlut::CreateScene(string VRMLfile)
         cout << "CN: " << gobj->getChildList().size() << endl;
     }
 
-     /// skip this part;
-    if (p_scene->cameras().size() != 0)
+    /// skip this part;
+    /*if (p_scene->cameras().size() != 0)
     {
         // blender setup
         p_camera = p_scene->cameras()[0];
@@ -489,18 +530,20 @@ void IGlut::CreateScene(string VRMLfile)
         //p_camera->setPosition( Point3(0, 5, 5) );
         //p_camera->setLookAtPoint( Point3(0, 0, 0) );
         //p_camera->setUpVector( Vector3(0, 1, 0).normalize() );
-    }
+    }*/
 
+    p_camera = new Camera( Point3(0, -cm_user_to_screen_center, cm_user_height) );
 
     //	vrml_dev.saveToFile("output.wrl", p_scene);
 }
 
 void IGlut::Timer(int timer_id)
 {
+
     if (use_wiimote)
         update_scene_by_wiimote( p_scene, last_x, last_y );
 
-    if (use_camera && p_htc != NULL)
+    if (use_stereo_camera && p_htc != NULL)
     {
         try
         {
@@ -519,17 +562,20 @@ void IGlut::Timer(int timer_id)
         }
     }
 
-    if ( glutGetWindow())
+    if ( glutGetWindow() == 1 )
 	{
 	    glutPostRedisplay(); // triggers a display event
         glutSwapBuffers();
 	}
+	else
+        glutSetWindow( 1 );
 
     glutTimerFunc(20, Timer, 0);
 }
 
 void IGlut::Display(void)
 {
+
     //usleep(25000);
     glDrawBuffer(GL_BACK_LEFT);
     if (use_shaders)
@@ -722,23 +768,23 @@ void IGlut::UpdateUserPositionByMouse(int mouse_x, int mouse_y)
 
 void IGlut::UpdateUserPositionByTracking()
 {
-    deg_user_yaw = atan2( p_htc->lookVector.y(), p_htc->lookVector.x() );
+    deg_user_yaw = atan2( p_htc->lookVector->y, p_htc->lookVector->x );
 
     /**
     * DO NOT ASSIGN NEW VALUES DIRECTLY
     * add the difference with a delta
     */
-    //cam_pos.x += ( p_htc->headPosition.x - cam_pos.x ) * delta_t;
+    //cam_pos.x += ( p_htc->headPosition->x - cam_pos.x ) * delta_t;
 
-    //cout << p_htc->lookVector.x() << ", " << p_htc->lookVector.y() << endl;
+    //cout << p_htc->lookVector->x() << ", " << p_htc->lookVector->y() << endl;
     /// constant x;
     // p_camera->position().setX( -80 );
     p_camera->position().setX( p_camera->position().x() +
-                               ( p_htc->headPosition.x() - p_camera->position().x() ) * delta_t );
+                               ( p_htc->headPosition->x - p_camera->position().x() ) * delta_t );
 
     p_camera->position().setY( p_camera->position().y() +
-                               ( p_htc->headPosition.y() - p_camera->position().y() ) * delta_t );
-    //cam_pos.z += ( p_htc->headPosition.z - cam_pos.z ) * delta_t;
+                               ( p_htc->headPosition->y - p_camera->position().y() ) * delta_t );
+    //cam_pos.z += ( p_htc->headPosition->z - cam_pos.z ) * delta_t;
 
     half_eye_sep_x = HALF_EYE_SEP_CM * sin(deg_user_yaw);
     half_eye_sep_y = HALF_EYE_SEP_CM * -cos(deg_user_yaw);
@@ -786,7 +832,7 @@ void IGlut::InitHeadTracker()
 
 void IGlut::CloseHeadTracker()
 {
-    use_camera = false;
+    use_stereo_camera = false;
     delete p_htc;
     p_htc = NULL;
 }
