@@ -1,0 +1,63 @@
+# Introduction #
+
+We want the code to be structured from the beginning. Everybody has started something but a reference design document for the general structure of the code would be useful. We can work, discuss and build on top of this.
+
+# Structure #
+
+We shall only put the suitable _class members_, then data structure can be easily transformed later. Everybody can implement their own _class methods_ separately.
+
+**core.h**
+```
+class Vector3D
+{
+    float x, y, z;
+}
+
+class Face
+{
+    vector<int> indices;
+}
+
+class Line3D
+{
+    Vector3D origin, direction;
+}
+
+class Rotation3D
+{
+    float angle, ax, ay, az;
+}
+```
+
+**geometry3d.h**
+```
+struct Material // simple material definition, not "appearance"
+{
+    Vector3D diffuseColor,
+             specularColor,
+             ambientIntensity;
+
+    GLuint texture_id; // none: -1
+}
+
+class Geometry3D
+{
+    vector< Vector3D > points, normals, colors;
+    vector< vector<Face> > faces; // separate arrays for each n-gons (tri, quad, ..) 
+    Material material;
+
+    vector< Geometry* > children;
+    Vector3D translation, scale;
+    Rotation3D rotation; 
+
+    void draw();
+}
+```
+
+**scene3d.h**
+```
+class Scene3D
+{
+    Geometry3D root;
+}
+```
